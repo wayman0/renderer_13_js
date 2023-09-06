@@ -62,9 +62,12 @@ export default function rasterize(model, pt, vp)
 
     const radius = pt.radius;
 
-    for( let y_ = Math.trunc(y - radius); y_ <= Math.trunc(y + radius); ++y_)
+    //for( let y_ = Math.trunc(y - radius); y_ <= Math.trunc(y + radius); ++y_)
+    //for (let x_ = Math.trunc(x - radius); x_ <= Math.trunc(x + radius); ++x_)
+
+    for(let y_ = Math.trunc(y) - radius; y_ <= Math.trunc(y) + radius; ++y_)
     {
-        for (let x_ = Math.trunc(x - radius); x_ <= Math.trunc(x + radius); ++x_)
+        for(let x_ = Math.trunc(x) - radius; x_ <= Math.trunc(x) + radius; ++x_)
         {
             if (rastDebug)
             {
