@@ -4,115 +4,151 @@
  * See LICENSE for details.
 */
 
+/**
+   Create a wireframe model of a partial right circular cone with its
+   base parallel to the xz-plane and its apex on the positive y-axis.
+<p>
+   By a partial cone we mean a cone over a circular sector of the
+   cone's base and also cutting off the top part of the cone (the
+   part between the apex and a circle of latitude) leaving a frustum
+   of the (partial) cone.
+
+   @see Cone
+   @see ConeFrustum
+   @see CircleSector
+   @see DiskSector
+   @see RingSector
+   @see CylinderSector
+   @see SphereSector
+   @see TorusSector
+*/
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
+import format from "../StringFormat";
 
-export default class ConeSector extends Model
+export default class ConeSector extends Model 
 {
-    /**@type{number}*/r
-    /**@type{number}*/h
-    /**@type{number}*/t
-    /**@type{number}*/theta1
-    /**@type{number}*/theta2
-    /**@type{number}*/n
-    /**@type{number}*/k
+   /**@type {number} */ #r;
+   /**@type {number} */ #h;
+   /**@type {number} */ #t;
+   /**@type {number} */ #theta1;
+   /**@type {number} */ #theta2;
+   /**@type {number} */ #n;
+   /**@type {number} */ #k;
 
-    /**
-     *
-     * @param {number} rad
-     * @param {number} height
-     * @param {number} top
-     * @param {number} t1
-     * @param {number} t2
-     * @param {number} n
-     * @param {number} k
-     */
-    constructor(rad=1, height=1, top = height, t1=Math.PI/2, t2=Math.PI/2, n=15, k=8)
-    {
-        super(undefined, undefined, undefined, "Cone Sector: r = " + rad + "h = " + height +
-                                                            "t = " + top + "theta1 = " + t1 +
-                                                            "theta2 = " + t2 + "n = " + n + "k = " + k);
+   /**
+      Create a part of the cone with its base in the xz-plane,
+      a base radius of {@code r}, height {@code  h}, and apex
+      on the y-axis.
+   <p>
+      If {@code 0 < t < h}, then the partial cone is a frustum
+      with its base in the xz-plane and the top of the frustum at
+      {@code y = t}.
+   <p>
+      The partial cone is a cone over the circular sector
+      from angle {@code theta1} to angle {@code theta2} (in the
+      counterclockwise direction). In other words, the (partial)
+      circles of latitude in the model extend from angle
+      {@code theta1} to angle {@code theta2} (in the
+      counterclockwise direction).
+   <p>
+      The last two parameters determine the number of lines of longitude
+      (not counting one edge of any removed sector) and the number of
+      (partial) circles of latitude (not counting the top edge of the
+      frustum) in the model.
+   <p>
+      If there are {@code n} circles of latitude in the model (including
+      the bottom edge but not the top edge of the frustum), then each
+      line of longitude will have {@code n+1} line segments. If there are
+      {@code k} lines of longitude (not counting one edge of any removed
+      sector), then each (partial) circle of latitude will have {@code k}
+      line segments.
+   <p>
+      There must be at least four lines of longitude and at least
+      two circles of latitude.
 
-        if (typeof rad != "number"    ||
-            typeof height != "number" ||
-            typeof top != "number" ||
-            typeof t1 != "number"  ||
-            typeof t2 != "number"  ||
-            typeof n != "number"   ||
-            typeof k != "number")
-                throw new Error("All parameters must be numerical");
+      @param {number} [r=1]       radius of the base in the xz-plane
+      @param {number} [h=1]       height of the apex on the y-axis
+      @param {number} [t=1]       top of the frustum of the come
+      @param {number} [theta1=Math.PI/2]    beginning longitude angle of the sector (in radians)
+      @param {number} [theta2=3*Math.PI/2]  ending longitude angle of the sector (in radians)
+      @param {number} [n=16]       number of circles of latitude around the cone
+      @param {number} [k=8]        number of lines of longitude
+      @param {string} name         name of the cone sector for use to differentiate between cone and conesector.
+   */
+   constructor(r=1, h=1, t=1, theta1=Math.PI/2, theta2= 3*Math.PI/2, n=16, k=8, name = format("Cone Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)", r, h, t, theta1, theta2, n, k))
+   {
+      super(undefined, undefined, name);
 
-        if(n < 2) throw new Error("N must be greater than 2");
-        if(k < 4) throw new Error("K must be greater than 4");
-        if(height < top) throw new Error("Height must be greater than top");
+      if (n < 2)
+         throw new Error("n must be greater than 1");
+      if (k < 4)
+         throw new Error("k must be greater than 3");
+      if (h < t)
+         throw new Error("h must be greater than or equal to t");
 
-        this.r = rad;
-        this.h = height;
-        this.t = top;
-        this.theta1 = t1;
-        this.theta2 = t2;
-        this.n = n;
-        this.k = k;
+      theta1 = theta1 % (2*Math.PI);
+      theta2 = theta2 % (2*Math.PI);
+      if (theta1 < 0) theta1 = 2*Math.PI + theta1;
+      if (theta2 < 0) theta2 = 2*Math.PI + theta2;
+      if (theta2 <= theta1) theta2 = theta2 + 2*Math.PI;
 
-        this.theta1 = this.theta1 % (2*Math.PI);
-        this.theta2 = this.theta2 % (2*Math.PI);
-        if (this.theta1 < 0) this.theta1 = 2*Math.PI + this.theta1;
-        if (this.theta2 < 0) this.theta2 = 2*Math.PI + this.theta2;
-        if (this.theta2 <= this.theta1) this.theta2 = this.theta2 + 2*Math.PI;
+      this.#r = r;
+      this.#h = h;
+      this.#t = t;
+      this.#theta1 = theta1;
+      this.#theta2 = theta2;
+      this.#n = n;
+      this.#k = k;
 
-        const dH = this.h / (this.n - 1);
-        const dTheta = (this.theta2 - this.theta1)/(this.k - 1);
+      // Create the cone's geometry.
 
-        /**@type {number[][]} */
-        //const vertInd = new Array(new Array());
-        const vertInd = new Array(n);
-        for (let x = 0; x < vertInd.length; x += 1)
-        {
-            vertInd[x] = new Array(k);
-        }
+      const deltaH = t / (n - 1),
+            deltaTheta = (theta2 - theta1) / (k - 1);
 
-        let index = 0;
+      // An array of indexes to be used to create line segments.
+      //final int[][] indexes = new int[n][k];
+      const indexes = new Array(n);
+      for(let i = 0; i < indexes.length; i+= 1)
+         indexes[i] = new Array(k);
 
-        for (let j = 0; j < k; ++j) // choose an angle of longitude
-        {
-            let c = Math.cos(this.theta1 + j * dTheta);
-            let s = Math.sin(this.theta1 + j * dTheta);
+      // Create all the vertices (from the bottom up).
+      let index = 0;
+      for(let j = 0; j < k; ++j) // choose an angle of longitude
+      {
+         const c = Math.cos(theta1 + j * deltaTheta),
+               s = Math.sin(theta1 + j * deltaTheta);
+         for(let i = 0; i < n; ++i) // choose a circle of latitude
+         {
+            const slantRadius = r * (1 - i * deltaH / h);
+            
+            this.addVertex(new Vertex( slantRadius * c,
+                                       i * deltaH,
+                                       slantRadius * s) );
+            indexes[i][j] = index++;
+         }
+      }
 
-            for (let i = 0; i < n; ++i) // choose a circle of latitude
-            {
-                const slantRadius = this.r * (1 - i * dH / this.h);
-                this.addVertex( new Vertex( slantRadius * c,
-                                            i * dH,
-                                            slantRadius * s) );
-                vertInd[i][j] = index++;
-            }
-        }
+      this.addVertex( new Vertex(0, 0, 0) ); // bottom center
+      const bottomCenterIndex = index;
+      ++index;
 
-        this.addVertex(new Vertex(0, this.h, 0));
-        const heightIndex = index++;
+      // Create all the horizontal (partial) circles of latitude around the cone.
+      for(let i = 0; i < n; ++i)
+      {
+         for(let j = 0; j < k - 1; ++j)
+            this.addPrimitive(LineSegment.buildVertex(indexes[i][j], indexes[i][j+1]));
+      }
 
-        this.addVertex(new Vertex(0, 0, 0));
-        const baseIndex = index++;
+      // Create the slanted lines of longitude from the base to the
+      // top circle of latitude, and the triangle fan in the base.
+      for(let j = 0; j < k; ++j)
+      {
+         this.addPrimitive(LineSegment.buildVertex(bottomCenterIndex, indexes[0][j]));
 
-        for (let x = 0; x < n; x += 1)
-        {
-            for (let y = 0; y < k-1; y += 1)
-            {
-                this.addPrimitive(LineSegment.buildVertex(vertInd[x][y],
-                                                          vertInd[x][y]+1));
-            }
-        }
-
-        for (let x = 0; x < k; x += 1)
-        {
-            this.addPrimitive(LineSegment.buildVertex(baseIndex, vertInd[0][x]));
-
-            for (let y = 0; y < n-1; y += 1)
-            {
-                this.addPrimitive(LineSegment.buildVertex(vertInd[y][x],
-                                                          vertInd[y+1][x]));
-            }
-        }
-    }
-}
+         for(let i = 0; i < n - 1; ++i)
+            this.addPrimitive(LineSegment.buildVertex(indexes[i][j], indexes[i+1][j]));
+      }
+   }
+}//ConeSector

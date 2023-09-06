@@ -55,22 +55,21 @@
 
    @see Torus
 */
-
-//@ts-check
+//@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import {format} from "../scene/util/UtilExport.js";
+import format from "../StringFormat";
 
-export default class TorusSector extends Model
+export default class TorusSector extends Model 
 {
-   r1;
-   r2;
-   theta1;
-   theta2;
-   phi1;
-   phi2;
-   n;
-   k;
+   /**@type {number} */ #r1;
+   /**@type {number} */ #r2;
+   /**@type {number} */ #theta1;
+   /**@type {number} */ #theta2;
+   /**@type {number} */ #phi1;
+   /**@type {number} */ #phi2;
+   /**@type {number} */ #n;
+   /**@type {number} */ #k;
 
    /**
       Create a partial torus with a partial circle of revolution with
@@ -98,42 +97,32 @@ export default class TorusSector extends Model
       There must be at least four circles of longitude and at least
       four circles of latitude.
 
-      @param {number} r1      radius of the circle of revolution
-      @param {number} r2      radius of the cross section circle (circle of longitude)
-      @param {number} theta1  beginning longitude angle for the circle of revolution
-      @param {number} theta2  ending longitude angle for the circle of revolution
-      @param {number} phi1    beginning latitude angle for the cross section circle
-      @param {number} phi2    ending latitude angle for the cross section circle
-      @param {number} n       number of circles of latitude
-      @param {number} k       number of circles of longitude
-      @throws IllegalArgumentException if {@code n} is less than 4
-      @throws IllegalArgumentException if {@code k} is less than 4
+      @param {number} [r1    =.75]  radius of the circle of revolution
+      @param {number} [r2    =.25]  radius of the cross section circle (circle of longitude)
+      @param {number} [theta1=Math.PI/2]    beginning longitude angle for the circle of revolution
+      @param {number} [theta2=3*Math.PI/2]  ending longitude angle for the circle of revolution
+      @param {number} [phi1  =Math.PI]    beginning latitude angle for the cross section circle
+      @param {number} [phi2  =2*Math.PI]  ending latitude angle for the cross section circle
+      @param {number} [n     =6]  number of circles of latitude
+      @param {number} [k     =8]  number of circles of longitude
    */
-   constructor(r1 = .75,
-               r2 = .25,
-               theta1 = Math.PI/2,
-               theta2 = 3 * Math.PI/2,
-               phi1 = Math.PI,
-               phi2 = 2*Math.PI,
-               n = 6,
-               k = 8)
+   constructor(r1=.75, r2=.25, theta1=Math.PI/2, theta2=3*Math.PI/2, phi1=Math.PI, phi2 = 2*Math.PI, n=6, k=8)
    {
-      super(undefined, undefined, undefined, format("Torus Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)",
-                                                                  r1, r2, theta1, theta2, phi1, phi2, n, k));
+      super(undefined, undefined, format("Torus Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)", r1, r2, theta1, theta2, phi1, phi2, n, k));
 
       if (n < 4)
          throw new Error("n must be greater than 3");
       if (k < 4)
          throw new Error("k must be greater than 3");
 
-      this.r1 = r1;
-      this.r2 = r2;
-      this.theta1 = theta1;
-      this.theta2 = theta2;
-      this.phi1 = phi1;
-      this.phi2 = phi2;
-      this.n = n;
-      this.k = k;
+      this.#r1 = r1;
+      this.#r2 = r2;
+      this.#theta1 = theta1;
+      this.#theta2 = theta2;
+      this.#phi1 = phi1;
+      this.#phi2 = phi2;
+      this.#n = n;
+      this.#k = k;
 
       // Create the torus's geometry.
 
@@ -141,12 +130,10 @@ export default class TorusSector extends Model
       const deltaTheta = (theta2 - theta1) / (k - 1);
 
       // An array of vertices to be used to create line segments.
-      /**@type {Vertex[][]} */
+      /** @type {Vertex[][]} */
       const v = new Array(n);
-      for (let x = 0; x < v.length; x += 1)
-      {
-         v[x] = new Array(k);
-      }
+      for(let i = 0; i < v.length; i += 1)
+         v[i] = new Array(k);
 
       // Create all the vertices.
       for (let j = 0; j < k; ++j) // choose a rotation around the y-axis
@@ -163,31 +150,27 @@ export default class TorusSector extends Model
          }
       }
 
-      // Add all of the vertices to this model.
+      // this.add all of the vertices to this model.
       for (let i = 0; i < n; ++i)
       {
          for (let j = 0; j < k; ++j)
-         {
             this.addVertex( v[i][j] );
-         }
       }
 
       // Create the vertical (partial) cross-section circles.
       for (let j = 0; j < k; ++j) // choose a rotation around the y-axis
       {
          for (let i = 0; i < n - 1; ++i) // go around a cross section circle
-         {
-            this.addPrimitive(LineSegment.buildVertex((i * k) + j, ((i+1) * k) + j));
-         }
+            //                                 v[i][j]      v[i+1][j]
+            this.addPrimitive(LineSegment.buildVertex( (i * k) + j, ((i+1) * k) + j ));
       }
 
       // Create all the horizontal (partial) circles around the torus.
       for (let i = 0; i < n; ++i) //choose a rotation around the cross section
       {
          for (let j = 0; j < k - 1; ++j) // go around a horizontal circle
-         {
-            this.addPrimitive(LineSegment.buildVertex((i * k) + j, (i * k) + (j+1)));
-         }
+            //                                v[i][j]       v[i][j+1]
+            this.addPrimitive(LineSegment.buildVertex( (i * k) + j, (i * k) + (j+1) ));
       }
    }
 }//TorusSector

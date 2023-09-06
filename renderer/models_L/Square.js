@@ -28,22 +28,21 @@
                    |
 }</pre>
 */
-
-//@ts-check
+//@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import {format} from "../scene/util/UtilExport.js";
+import format from "../StringFormat";
 
 export default class Square extends Model
 {
    /**
       Create a square in the xy-plane with corners {@code (�r, �r, 0)}.
 
-      @param {number} r  determines the corners of the square
+      @param {number} [r=1]  determines the corners of the square
    */
-   constructor(r = 1)
+   constructor(r=1)
    {
-      super(undefined, undefined, undefined, format("Square(%.2f)", r));
+      super(undefined, undefined, format("Square(%.2f)", r));
 
       if (r <= 0)
          throw new Error("r must be greater than 0");

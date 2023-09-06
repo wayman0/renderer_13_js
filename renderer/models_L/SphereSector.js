@@ -71,21 +71,20 @@
    @see CylinderSector
    @see TorusSector
 */
-
-//@ts-check
+//@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import {format} from "../scene/util/UtilExport.js";
+import format from "../StringFormat";
 
 export default class SphereSector extends Model
 {
-   r;
-   theta1;
-   theta2;
-   phi1;
-   phi2;
-   n;
-   k;
+   /**@type {number} */ #r;
+   /**@type {number} */ #theta1;
+   /**@type {number} */ #theta2;
+   /**@type {number} */ #phi1;
+   /**@type {number} */ #phi2;
+   /**@type {number} */ #n;
+   /**@type {number} */ #k;
 
    /**
       Create a part of the sphere of radius r centered at the origin.
@@ -113,20 +112,17 @@ export default class SphereSector extends Model
       There must be at least four lines of longitude and at least
       three circles of latitude.
 
-      @param r       radius of the sphere
-      @param theta1  beginning longitude angle (in radians) of the spherical wedge
-      @param theta2  ending longitude angle (in radians) of the spherical wedge
-      @param phi1    beginning latitude angle (in radians) of the spherical segment
-      @param phi2    ending latitude angle (in radians) of the spherical segment
-      @param n       number of circles of latitude, not counting the edges of a spherical segment
-      @param k       number of lines of longitude, not counting one edge of a spherical wedge
-      @throws IllegalArgumentException if {@code n} is less than 3
-      @throws IllegalArgumentException if {@code k} is less than 4
+      @param {number} [r     =1]  radius of the sphere
+      @param {number} [theta1=Math.PI/2]    beginning longitude angle (in radians) of the spherical wedge
+      @param {number} [theta2=3*Math.PI/2]  ending longitude angle (in radians) of the spherical wedge
+      @param {number} [phi1  =0]  beginning latitude angle (in radians) of the spherical segment
+      @param {number} [phi2  =Math.PI]  ending latitude angle (in radians) of the spherical segment
+      @param {number} [n     =17]  number of circles of latitude, not counting the edges of a spherical segment
+      @param {number} [k     =8]  number of lines of longitude, not counting one edge of a spherical wedge
    */
-   constructor(r, theta1, theta2, phi1, phi2, n, k)
+   constructor(r=1, theta1=Math.PI/2, theta2 = 3*Math.PI/2, phi1 = 0, phi2 = Math.PI, n=17, k=8)
    {
-      super(undefined, undefined, undefined, format("Sphere Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)",
-                                                                     r, theta1, theta2, phi1, phi2, n, k));
+      super(undefined, undefined, format("Sphere Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)", r, theta1, theta2, phi1, phi2, n, k));
 
       if (n < 3)
          throw new Error("n must be greater than 2");
@@ -139,33 +135,30 @@ export default class SphereSector extends Model
       if (theta2 < 0) theta2 = 2*Math.PI + theta2;
       if (theta2 <= theta1) theta2 = theta2 + 2*Math.PI;
 
-      this.r = r;
-      this.theta1 = theta1;
-      this.theta2 = theta2;
-      this.phi1 = phi1;
-      this.phi2 = phi2;
-      this.n = n;
-      this.k = k;
+      this.#r = r;
+      this.#theta1 = theta1;
+      this.#theta2 = theta2;
+      this.#phi1 = phi1;
+      this.#phi2 = phi2;
+      this.#n = n;
+      this.#k = k;
 
       // Create the sphere section's geometry.
 
-      const deltaPhi   =     (phi2 - phi1) / (n - 1);
+      const deltaPhi = (phi2 - phi1) / (n - 1);
       const deltaTheta = (theta2 - theta1) / (k - 1);
 
       // An array of vertices to be used to create line segments.
       /**@type {Vertex[][]} */
       const v = new Array(n);
-      for (let x = 0; x < v.length; x += 1)
-      {
-         v[x] = new Array(k);
-      }
+      for(let i = 0; i < v.length; i += 1)
+         v[i] = new Array(k);
 
       // Create all the vertices.
       for (let j = 0; j < k; ++j) // choose an angle of longitude
       {
          const c1 = Math.cos(theta1 + j * deltaTheta);
          const s1 = Math.sin(theta1 + j * deltaTheta);
-
          for (let i = 0; i < n; ++i) // choose an angle of latitude
          {
             const c2 = Math.cos(phi1 + i * deltaPhi);
@@ -176,31 +169,27 @@ export default class SphereSector extends Model
          }
       }
 
-      // Add all of the vertices to this model.
+      // this.add all of the vertices to this model.
       for (let i = 0; i < n; ++i)
       {
          for (let j = 0; j < k; ++j)
-         {
             this.addVertex( v[i][j] );
-         }
       }
 
       // Create the horizontal (partial) circles of latitude around the sphere.
       for (let i = 0; i < n; ++i)
       {
          for (let j = 0; j < k - 1; ++j)
-         {
+            //                                v[i][j]        v[i][j+1]
             this.addPrimitive(LineSegment.buildVertex( (i * k) + j,  (i * k) + (j+1) ));
-         }
       }
 
       // Create the vertical lines of longitude from the top edge to the bottom edge.
       for (let j = 0; j < k; ++j)
       {
          for (let i = 0; i < n - 1; ++i)
-         {
+            //                                v[i][j]        v[i+1][j]
             this.addPrimitive(LineSegment.buildVertex( (i * k) + j, ((i+1) * k) + j ));
-         }
       }
    }
 }//SphereSector

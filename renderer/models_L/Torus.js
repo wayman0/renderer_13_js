@@ -50,17 +50,17 @@
 
    @see TorusSector
 */
-//@ts-check
+import {TorusSector} from "./ModelsExport.js";
+import {format} from "../scene/util/StringFormat.js";
 
-import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import {format} from "../scene/util/UtilExport.js";
+import {Vertex, LineSegment} from "../scene/SceneExport.js";
 
-export default class Torus extends Model
+export default class Torus extends TorusSector
 {
-   r1;
-   r2;
-   n;
-   k;
+   // /**@type {number} */ #r1;
+   // /**@type {number} */ #r2;
+   // /**@type {number} */ #n;
+   // /**@type {number} */ #k;
 
    /**
       Create a torus with a circle of revolution with radius {@code r1}
@@ -78,83 +78,83 @@ export default class Torus extends Model
       There must be at least three circles of longitude and at least
       three circles of latitude.
 
-      @param {number} r1  radius of the circle of revolution
-      @param {number} r2  radius of the cross section circle (circle of longitude)
-      @param {number} n   number of circles of latitude
-      @param {number} k   number of circles of longitude
+      @param {number} [r1=.75]  radius of the circle of revolution
+      @param {number} [r2=.25]  radius of the cross section circle (circle of longitude)
+      @param {number} [n =12]  number of circles of latitude
+      @param {number} [k =16]  number of circles of longitude
    */
-   constructor(r1 = .75, r2 = .25, n = 12, k = 16)
+   constructor(r1=.75, r2=.25, n=12, k=16)
    {
-      super(undefined, undefined, undefined, format("Torus(%.2f,%.2f,%d,%d)", r1, r2, n, k));
-
+      super(r1, r2, 0, 2*Math.PI, 0, 2*Math.PI, n, k);
+      this.name = (format("Torus(%.2f,%.2f,%d,%d)", r1, r2, n, k));
+      
+      /*
       if (n < 3)
          throw new Error("n must be greater than 2");
       if (k < 3)
          throw new Error("k must be greater than 2");
 
-      this.r1 = r1;
-      this.r2 = r2;
-      this.n = n;
-      this.k = k;
+      this.#r1 = r1;
+      this.#r2 = r2;
+      this.#n = n;
+      this.#k = k;
 
       // Create the torus's geometry.
+
       const deltaPhi   = (2 * Math.PI) / n;
       const deltaTheta = (2 * Math.PI) / k;
+      */
 
       // An array of vertices to be used to create line segments.
-      /**@type {Vertex[][]} */
-      const v = new Array(n);
-      for (let x = 0; x < v.length; x += 1)
-      {
-         v[x] = new Array(k);
-      }
-
+      // /**@type {Vertex[][]} */
+      // const v = new Array(n);
+      // for(let i = 0; i < v.length; i += 1)
+      //    v[i] = new Array(k);
+      
+      /*
       // Create all the vertices.
       for (let j = 0; j < k; ++j) // choose a rotation around the y-axis
       {
          const c1 = Math.cos(j * deltaTheta);
          const s1 = Math.sin(j * deltaTheta);
-
          for (let i = 0; i < n; ++i)  // go around a cross section circle
          {
             const c2 = Math.cos(i * deltaPhi);
             const s2 = Math.sin(i * deltaPhi);
-
             v[i][j] = new Vertex( (r1 + r2*s2) * c1,
                                         r2*c2,
                                  -(r1 + r2*s2) * s1 );
          }
       }
 
-      // Add all of the vertices to this model.
+      // this.add all of the vertices to this model.
       for (let i = 0; i < n; ++i)
       {
          for (let j = 0; j < k; ++j)
-         {
             this.addVertex( v[i][j] );
-         }
       }
 
       // Create the vertical cross-section circles.
       for (let j = 0; j < k; ++j) // choose a rotation around the y-axis
       {
          for (let i = 0; i < n - 1; ++i) // go around a cross section circle
-         {
+            //                                v[i][j]       v[i+1][j]
             this.addPrimitive(LineSegment.buildVertex( (i * k) + j, ((i+1) * k) + j ));
-         }
-
+         
+         // close the circle
          this.addPrimitive(LineSegment.buildVertex( ((n-1) * k) + j, (0 * k) + j ));
-      }
+      }  //                                 v[n-1][j]       v[0][j]
 
       // Create all the horizontal circles around the torus.
       for (let i = 0; i < n; ++i) //choose a rotation around the cross section
       {
          for (let j = 0; j < k - 1; ++j) // go around a horizontal circle
-         {
+            //                                v[i][j]       v[i][j+1]
             this.addPrimitive(LineSegment.buildVertex( (i * k) + j, (i * k) + (j+1) ));
-         }
-
+         
+         // close the circle
          this.addPrimitive(LineSegment.buildVertex( (i * k) + (k-1), (i * k) + 0 ));
-      }
+      }  //                                v[i][k-1]       v[i][0]
+      */
    }
 }//Torus

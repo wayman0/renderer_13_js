@@ -2,22 +2,21 @@
  * Renderer Models. The MIT License.
  * Copyright (c) 2022 rlkraft@pnw.edu
  * See LICENSE for details.
-*
+*/
 
 /**
    Create a wireframe model of a square in the xy-plane centered at the origin.
 */
-
-//@ts-check
+//@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import {format} from "../scene/util/UtilExport.js";
+import format from "../StringFormat";
 
 export default class SquareGrid extends Model
 {
-   r;
-   n;
-   k;
+   /**@type {number} */ #r;
+   /**@type {number} */ #n;
+   /**@type {number} */ #k;
 
    /**
       Create a square in the xy-plane with corners {@code (�r, �r, 0)} and
@@ -29,13 +28,13 @@ export default class SquareGrid extends Model
       If there are {@code k} grid lines parallel to the y-axis, then each
       grid line parallel to the x-axis will have {@code k+1} line segments.
 
-      @param {number} r  determines the corners of the square
-      @param {number} n  number of grid lines parallel to the x-axis
-      @param {number} k  number of grid lines parallel to the y-axis
+      @param {number} [r=1]  determines the corners of the square
+      @param {number} [n=1]  number of grid lines parallel to the x-axis
+      @param {number} [k=1]  number of grid lines parallel to the y-axis
    */
-   constructor(r = 1, n = 4, k = 4)
+   constructor(r=1,n=1, k=1)
    {
-      super(undefined, undefined, undefined, format("Square Grid(%.2f,%d,%d)", r, n, k));
+      super(undefined, undefined, format("Square Grid(%.2f,%d,%d)", r, n, k));
 
       if (n < 0)
          throw new Error("n must be greater than or equal to 0");
@@ -44,9 +43,9 @@ export default class SquareGrid extends Model
       if (r <= 0)
          throw new Error("r must be greater than 0");
 
-      this.r = r;
-      this.n = n;
-      this.k = k;
+      this.#r = r;
+      this.#n = n;
+      this.#k = k;
 
       // Create the square's geometry.
 
@@ -56,47 +55,39 @@ export default class SquareGrid extends Model
       // An array of vertices to be used to create the line segments.
       /**@type {Vertex[][]} */
       const v = new Array(n+2);
-      for (let x = 0; x < v.length; x += 1)
-      {
-         v[x] = new Array(k+2);
-      }
+      for(let i = 0; i < v.length; i += 1)
+         v[i] = new Array(k+2);
 
       // Create all the vertices.
       for (let i = 0; i <= n + 1; ++i)
       {
          for (let j = 0; j <= k + 1; ++j)
-         {
+            // from top-to-bottom and left-to-right
             v[i][j] = new Vertex(r - j * xStep, -r + i * yStep, 0);
-         }
       }
 
-      // Add all of the vertices to this model.
+      // this.add all of the vertices to this model.
       for (let i = 0; i < n + 2; ++i)
       {
          for (let j = 0; j < k + 2; ++j)
-         {
             this.addVertex( v[i][j] );
-         }
       }
 
       // Create the line segments parallel to the x-axis.
       for (let i = 0; i < n + 2; ++i)
       {
          for (let j = 0; j < k + 1; ++j)
-         {
-            this.addPrimitive(LineSegment.buildVertex((i*(k+2)) + j,        // v[i][j  ]
-                                                      (i*(k+2)) + (j+1) )); // v[i][j+1]
-	     }
+            this.addPrimitive(LineSegment.buildVertex( (i*(k+2)) + j,        // v[i][j  ]
+                                          (i*(k+2)) + (j+1) )); // v[i][j+1]
       }
 
       // Create the line segments parallel to the y-axis.
       for (let j = 0; j < k + 2; ++j)
       {
          for (let i = 0; i < n + 1; ++i)
-         {
-            this.addPrimitive(LineSegment.buildVertex((i*(k+2)) + j,        // v[i  ][j]
-                                                      ((i+1)*(k+2)) + j )); // v[i+1][j]
-	     }
+            this.addPrimitive(LineSegment.buildVertex( (i*(k+2)) + j,    // v[i  ][j]
+                                      ((i+1)*(k+2)) + j )); // v[i+1][j]
       }
+
    }
 }//SquareGrid
