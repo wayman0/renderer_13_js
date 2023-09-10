@@ -33,7 +33,8 @@ position[0][2] = Position.buildFromModel(new ConeFrustum(0.5, 1.0, 1.0, 10, 10))
 ModelShading.setColor(position[0][2].getModel(), Color.orange);
 
 // row 1
-position[1][0] = Position.buildFromModel(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2));
+position[1][0] = Position.buildFromModel(new Octahedron(2, 2, 2, 2, 2, 2));
+//position[1][0] = Position.buildFromModel(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2));
 ModelShading.setColor(position[1][0].getModel(), Color.green);
 
 position[1][1] = Position.buildFromModel(new Box(1.0, 1.0, 1.0));

@@ -39,7 +39,7 @@ cubeModel.addPrimitive( LineSegment.buildVertexColors(0, 1, 0, 1),
 let cubePos = Position.buildFromModelName(cubeModel, "Cube Position");
 cubePos.setMatrix(Matrix.translate(0, 0, -5));
 
-let scene = new Scene("InteractiveCube_R10");
+let scene = Scene.buildFromName("InteractiveCube_R10");
 scene.addPosition(cubePos);
 
 let fb = new FrameBuffer(500, 500);

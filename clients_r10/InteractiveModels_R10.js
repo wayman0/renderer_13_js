@@ -7,7 +7,7 @@
 //@ts-check
 
 import {Scene, Position, Matrix} from "../renderer/scene/SceneExport.js";
-import {Sphere, Cylinder, Torus, Cube, PanelXY, PanelXZ} from "../renderer/models_L/ModelsExport.js";
+import {Sphere, Cylinder, Torus, Cube, PanelXY, PanelXZ, Cube2} from "../renderer/models_L/ModelsExport.js";
 import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {renderFB} from "../renderer/pipeline/PipelineExport.js";
@@ -21,7 +21,8 @@ const scene = Scene.buildFromName("InteractiveModels_R10");
 scene.addPosition(Position.buildFromModel(new Sphere(1.0, 30, 30)));
 scene.addPosition(Position.buildFromModel(new Cylinder(0.5, 1.0, 20, 20)));
 scene.addPosition(Position.buildFromModel(new Torus(0.75, 0.25, 25, 25)));
-scene.addPosition(Position.buildFromModel(new Cube(1)));
+//scene.addPosition(Position.buildFromModel(new Cube(1)));
+scene.addPosition(Position.buildFromModel(new Cube2(15, 15, 15)));
 
 // Give each model a random color.
 

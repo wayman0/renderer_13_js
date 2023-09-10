@@ -28,8 +28,8 @@ const coneFrustMod = new ConeFrustum(.5, 1, 1, 10, 10);
 ModelShading.setColor(coneFrustMod, Color.green);
 const coneFrustPos = new Position(coneFrustMod, Matrix.translate(3, 0, 5), "Cone Frustum Position");
 
-
-const octMod = Octahedron.buildMeshOctahedron(3, 3, 3, 3, 3, 3);
+const octMod = new Octahedron(3, 3, 3, 3, 3, 3);
+//const octMod = Octahedron.buildMeshOctahedron(3, 3, 3, 3, 3, 3);
 ModelShading.setColor(octMod, Color.pink);
 const octPos = new Position(octMod, Matrix.translate(-3, 0, 0), "Octahedron Position");
 

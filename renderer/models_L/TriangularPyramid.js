@@ -40,10 +40,10 @@ export default class TriangularPyramid extends Model
 
       @param {number} [r=(Math.sqrt(3)/Math.sqrt(2))/Math.sqrt(3)]  radius of circle in xz-plane that the equilateral base is inscribed in
       @param {number} [h=(Math.sqrt(3)/Math.sqrt(2))*(Math.sqrt(2)/Math.sqrt(3))]  coordinate on the y-axis of the apex
-      @param {number} n  number of lines of latitude around the body of the pyramid
-      @param {number} k  number of triangles in the triangle fan at the top of each side
+      @param {number} [n=1]  number of lines of latitude around the body of the pyramid
+      @param {number} [k=1]  number of triangles in the triangle fan at the top of each side
    */
-   constructor(r=(Math.sqrt(3)/Math.sqrt(2))/Math.sqrt(3), h=(Math.sqrt(3)/Math.sqrt(2))*(Math.sqrt(2)/Math.sqrt(3)), n, k)
+   constructor(r=(Math.sqrt(3)/Math.sqrt(2))/Math.sqrt(3), h=(Math.sqrt(3)/Math.sqrt(2))*(Math.sqrt(2)/Math.sqrt(3)), n=1, k=1)
    {
       super(undefined, undefined, undefined, format("Triangular_Pyramid(%.2f,%.2f,%d,%d)", r,   h,   n, k));
 

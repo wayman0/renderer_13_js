@@ -14,7 +14,7 @@ import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {renderFB} from "../renderer/pipeline/PipelineExport.js";
 import {format} from "../renderer/scene/util/UtilExport.js";
 
-const scene = new Scene("InteractiveModelsAll_R10");
+const scene = Scene.buildFromName("InteractiveModelsAll_R10");
 // Instantiate at least one of every Model class.
 // 2D models
 scene.addPosition(new Position(new Shapes.Square(1.0)));
@@ -28,12 +28,21 @@ scene.addPosition(new Position(new Shapes.Ring(1.0, 0.25, 3, 16)));
 scene.addPosition(new Position(new Shapes.RingSector(1.0, 0.25, Math.PI/2, 3*Math.PI/2, 3, 8)));
 // cubes
 scene.addPosition(new Position(new Shapes.Box(1.0, 1.0, 1.0)));
-scene.addPosition(new Position(new Shapes.Cube()));
+scene.addPosition(new Position(new Shapes.Cube("Cube")));
+scene.addPosition(new Position(new Shapes.Cube2(4, 5, 6)));
+scene.addPosition(new Position(new Shapes.Cube2(4, 5, 6)));
+scene.addPosition(new Position(new Shapes.Cube2(4, 5, 6)));
+scene.addPosition(new Position(new Shapes.Cube2(4, 5, 6)));
+scene.addPosition(new Position(new Shapes.Cube2(40, 50, 60)));
+scene.addPosition(new Position(new Shapes.Cube3(12, 14, 15)));
+scene.addPosition(new Position(new Shapes.Cube4(12, 14, 15)));
+
 // polyhedra
 scene.addPosition(new Position(new Shapes.Tetrahedron()));
 scene.addPosition(new Position(new Shapes.Tetrahedron(20, 40)));
-scene.addPosition(new Position(new Shapes.Octahedron()));
-scene.addPosition(new Position(Shapes.Octahedron.buildMeshOctahedron(20, 20, 20, 20, 20, 20)));
+scene.addPosition(new Position(new Shapes.Octahedron(1)));
+scene.addPosition(new Position(new Shapes.Octahedron(20, 20, 20, 20, 20, 20)));
+//scene.addPosition(new Position(Shapes.Octahedron.buildMeshOctahedron(20, 20, 20, 20, 20, 20)));
 scene.addPosition(new Position(new Shapes.Icosahedron()));
 scene.addPosition(new Position(new Shapes.Dodecahedron()));
 // pyramids
@@ -43,7 +52,10 @@ scene.addPosition(new Position(new Shapes.PyramidFrustum(1.0, 2.0, 0.5, 4, 5)));
 scene.addPosition(new Position(new Shapes.TriangularPyramid(Math.sqrt(3)/Math.sqrt(2))));
 scene.addPosition(new Position(new Shapes.TriangularPyramid(1.0, 1.0, 7, 7)));
 scene.addPosition(new Position(new Shapes.TriangularPrism(0.6, 0.5, 0.5, 3, true)));
-scene.addPosition(new Position(new Shapes.ViewFrustum()));
+scene.addPosition(new Position(new Shapes.ViewFrustumModel()));
+//scene.addPosition(new Position(new Shapes.ViewFrustum()));
+
+
 // cones
 scene.addPosition(new Position(new Shapes.Cone(1.0, 1.0, 10, 16)));
 scene.addPosition(new Position(new Shapes.ConeSector(1.0, 1.0, 0.5, 0, 2*Math.PI, 5, 16)));

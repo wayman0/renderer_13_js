@@ -15,7 +15,8 @@ import {format} from "../renderer/scene/util/UtilExport.js";
 
 const scene = Scene.buildFromName("Two Interactive Models R10");
 
-scene.addPosition(Position.buildFromModelName(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2), "Octahedron Position"));
+scene.addPosition(Position.buildFromModelName(new Octahedron(2, 2, 2, 2, 2, 2), "Octahedron Position"));
+//scene.addPosition(Position.buildFromModelName(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2), "Octahedron Position"));
 scene.addPosition(Position.buildFromModelName(new TriangularPyramid(), "Triangular Pyramid Position"));
 
 for(const p of scene.positionList)
