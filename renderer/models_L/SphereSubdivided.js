@@ -14,7 +14,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class SphereSubdivided extends Model
 {
@@ -36,7 +36,7 @@ export default class SphereSubdivided extends Model
    */
    constructor(n=4, hole=false, sierpinski=false)
    {
-      super(undefined, undefined, format("Sphere Subdivided(%d)", n));
+      super(undefined, undefined, undefined, format("Sphere Subdivided(%d)", n));
 
       if (n < 0)
          throw new Error("n must be greater than or equal to 0");

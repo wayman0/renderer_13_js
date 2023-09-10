@@ -16,7 +16,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default  class Pyramid extends Model 
 {
@@ -41,7 +41,7 @@ export default  class Pyramid extends Model
    */
    constructor(s=2, h=1, n=15, k=4, grid=false)
    {
-      super(undefined, undefined, format("Pyramid(%.2f,%.2f,%d,%d)", s, h, n, k));
+      super(undefined, undefined, undefined, format("Pyramid(%.2f,%.2f,%d,%d)", s, h, n, k));
 
       if (n < 1)
          throw new Error("n must be greater than 0");

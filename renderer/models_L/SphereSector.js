@@ -74,7 +74,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class SphereSector extends Model
 {
@@ -122,7 +122,7 @@ export default class SphereSector extends Model
    */
    constructor(r=1, theta1=Math.PI/2, theta2 = 3*Math.PI/2, phi1 = 0, phi2 = Math.PI, n=17, k=8)
    {
-      super(undefined, undefined, format("Sphere Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)", r, theta1, theta2, phi1, phi2, n, k));
+      super(undefined, undefined, undefined, format("Sphere Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)", r, theta1, theta2, phi1, phi2, n, k));
 
       if (n < 3)
          throw new Error("n must be greater than 2");

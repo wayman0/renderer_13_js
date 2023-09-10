@@ -43,7 +43,7 @@
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class Cube2 extends Model
 {
@@ -59,7 +59,7 @@ export default class Cube2 extends Model
    */
    constructor(xGrid=1, yGrid=1, zGrid=1)
    {
-      super(undefined, undefined, format("Cube2(%d,%d,%d)", xGrid, yGrid, zGrid));
+      super(undefined, undefined, undefined, format("Cube2(%d,%d,%d)", xGrid, yGrid, zGrid));
 
       if (xGrid < 0)
          throw new Error("xGrid must be greater than or equal to 0");

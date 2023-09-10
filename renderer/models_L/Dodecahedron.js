@@ -27,7 +27,7 @@
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class Dodecahedron extends Model
 {
@@ -44,7 +44,7 @@ export default class Dodecahedron extends Model
    */
    constructor()
    {
-      super(undefined, undefined, "Dodecahedron");
+      super(undefined, undefined, undefined, "Dodecahedron");
 
       // Create the dodecahedron's geometry.
       // It has 20 vertices and 30 edges.

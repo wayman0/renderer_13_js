@@ -54,7 +54,7 @@ export default class Cube extends Model
    */
    constructor(name)
    {
-      super(undefined, undefined, name);
+      super(undefined, undefined, undefined, name);
 
       // Create 8 vertices.
       this.addVertex(new Vertex(-1, -1, -1), // 4 vertices around the bottom face

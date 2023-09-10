@@ -18,7 +18,7 @@
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class CircleSector extends Model
 {
@@ -52,7 +52,7 @@ export default class CircleSector extends Model
    */
    constructor(r =1, theta1=0, theta2=Math.PI, n=8, name = format("CircleSector(%.2f,%.2f,%.2f,%d)", r, theta1, theta2, n))
    {
-      super(undefined, undefined, name);
+      super(undefined, undefined, undefined, name);
 
       if (n < 4)
          throw new Error("n must be greater than 3");

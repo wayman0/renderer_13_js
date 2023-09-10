@@ -22,7 +22,7 @@
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class DiskSector extends Model 
 {
@@ -54,7 +54,7 @@ export default class DiskSector extends Model
    */
    constructor(r=1, theta1=0, theta2=Math.PI, n=6, k=8, name = format("Disk Sector(%.2f,%.2f,%.2f,%d,%d)", r, theta1, theta2, n, k))
    {
-      super(undefined, undefined, name);
+      super(undefined, undefined, undefined, name);
 
       if (n < 1)
          throw new Error("n must be greater than 0");

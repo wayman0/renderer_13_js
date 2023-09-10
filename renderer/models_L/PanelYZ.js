@@ -10,7 +10,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class PanelYZ extends Model
 {
@@ -24,7 +24,7 @@ export default class PanelYZ extends Model
    */
    constructor(yMin=-1, yMax=1, zMin=-1, zMax=1, x=0)
    {
-      super(undefined, undefined, "PanelYZ");
+      super(undefined, undefined, undefined, "PanelYZ");
 
       // Create the checkerboard panel's geometry.
 

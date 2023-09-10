@@ -31,7 +31,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class Square extends Model
 {
@@ -42,7 +42,7 @@ export default class Square extends Model
    */
    constructor(r=1)
    {
-      super(undefined, undefined, format("Square(%.2f)", r));
+      super(undefined, undefined, undefined, format("Square(%.2f)", r));
 
       if (r <= 0)
          throw new Error("r must be greater than 0");

@@ -19,7 +19,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class TriangularPrism extends Model
 {
@@ -105,22 +105,25 @@ export default class TriangularPrism extends Model
       @param {number} [r=.5/Math.sqrt(3)]  radius of circle in xz-plane that the equilateral triangle is insc
       @param {number} [h=.6]  the body of the prism runs from h to -h in the y-direction
       @param {number} [h2=r*Math.tan(Math.atan(Math.sqrt(2)))]  height of each tetrahedron at the ends of the
-      @param {number} n  number of lines of latitude around the body of the prism
+      @param {number} [n=3]  number of lines of latitude around the body of the prism
       @param {boolean} [bothHalves=true]  determines if both halves or only the top half gets created
    */
-   constructor(r=.5, h=.6, h2=r*Math.tan(Math.atan(Math.sqrt(2))), n, bothHalves=true)
+   constructor(r=.5, h=.6, h2=r*Math.tan(Math.atan(Math.sqrt(2))), n=3, bothHalves=true)
    {
-      super(undefined, undefined, undefined, undefined, format("Triangular Prism(%.2f,%.2f,%.2f,%d)", r, h, h, n));
+      super(undefined, undefined, undefined, format("Triangular Prism(%.2f,%.2f,%.2f,%d)", r, h, h, n));
       
       if(n < 0)
          throw new Error("n must be greater than or equal to 0");
+
       // Create the prism's geometry.
       const sqrt3 = Math.sqrt(3.0);
       let v0, v1, v2, v3, v4, v5, v6, v7;
+
       // Three vertices around the top.
       v0 = new Vertex( r,    h,    0);
       v1 = new Vertex(-r/2,  h,  r*0.5*sqrt3);
       v2 = new Vertex(-r/2,  h, -r*0.5*sqrt3);
+
       // Three vertices around the bottom.
       if (bothHalves)
       {

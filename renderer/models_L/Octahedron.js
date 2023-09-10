@@ -22,7 +22,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class Octahedron extends Model 
 {
@@ -145,7 +145,7 @@ export default class Octahedron extends Model
    */
    constructor(n1a, n1b=n1a, n2a=0, n2b=0, n3a=0, n3b=0)
    {
-      super(undefined, undefined, format("Octahedron(%d,%d,%d,%d,%d,%d)",n1a,n1b,n2a,n2b,n3a,n3b));
+      super(undefined, undefined, undefined, format("Octahedron(%d,%d,%d,%d,%d,%d)",n1a,n1b,n2a,n2b,n3a,n3b));
 
       if (n1a < 0)
          throw new Error("n1 must be greater than or equal to 0");

@@ -65,7 +65,7 @@ export default class CylinderSector extends Model
    */
    constructor(r=1, h=1, theta1=Math.PI/2, theta2=3*Math.PI/2, n=15, k=8, name = format("Cylinder Sector(%.2f,%.2f,%.2f,%.2f,%d,%d)", r, h, theta1, theta2, n, k))
    {
-      super(undefined, undefined, name);
+      super(undefined, undefined, undefined, name);
 
       if (n < 2)
          throw new Error("n must be greater than 1");

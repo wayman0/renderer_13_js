@@ -19,7 +19,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default  class RingSector extends Model
 {
@@ -53,7 +53,7 @@ export default  class RingSector extends Model
    */
    constructor(r1=1, r2=.33, theta1=0, theta2=Math.PI, n=5, k=7)
    {
-      super(undefined, undefined, format("Ring Sector(%.2f,%.2f,%.2f,%.2f,%d,%d)", r1, r2, theta1, theta2, n, k));
+      super(undefined, undefined, undefined, format("Ring Sector(%.2f,%.2f,%.2f,%.2f,%d,%d)", r1, r2, theta1, theta2, n, k));
 
       if (n < 2)
          throw new Error("n must be greater than 1");

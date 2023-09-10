@@ -21,7 +21,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class Tetrahedron extends Model 
 {
@@ -155,7 +155,7 @@ export default class Tetrahedron extends Model
    */
    constructor(m0=1, m1=1, m2=1, m3=1)
    {
-      super(undefined, undefined, format("Tetrahedron(%d,%d,%d,%d)", m0, m1, m2, m3));
+      super(undefined, undefined, undefined, format("Tetrahedron(%d,%d,%d,%d)", m0, m1, m2, m3));
 
       if (m0 < 0)
          throw new Error("m0 must be greater than or equal to 0");

@@ -10,7 +10,7 @@
 //@ts-check 
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class SquareGrid extends Model
 {
@@ -34,7 +34,7 @@ export default class SquareGrid extends Model
    */
    constructor(r=1,n=1, k=1)
    {
-      super(undefined, undefined, format("Square Grid(%.2f,%d,%d)", r, n, k));
+      super(undefined, undefined, undefined, format("Square Grid(%.2f,%d,%d)", r, n, k));
 
       if (n < 0)
          throw new Error("n must be greater than or equal to 0");

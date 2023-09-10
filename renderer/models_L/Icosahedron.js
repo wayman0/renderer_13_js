@@ -27,7 +27,7 @@
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import format from "../StringFormat";
+import {format} from "../scene/util/StringFormat.js";
 
 export default class Icosahedron extends Model
 {
@@ -44,7 +44,7 @@ export default class Icosahedron extends Model
    */
    constructor()
    {
-      super(undefined, undefined, "Icosahedron");
+      super(undefined, undefined, undefined, "Icosahedron");
 
       // Create the icosahedron's geometry.
       // It has 12 vertices and 30 edges.
