@@ -6,18 +6,18 @@ export default class GRSModel extends Model
 {
     /**
      * Create a model using the given grs file data
-     * @param {string} fileName the name of the grs file to use
+     * @param {string} fileName the relative path and filename of the grs file
      */
     constructor(fileName) 
     {
-        super(undefined, undefined, undefined, "GRS Model");
+        super(undefined, undefined, undefined, "GRS Model: " + fileName);
 
         // Open the GRS Model
         let grsName = fileName;
 
         // Make an AJAX request to retrieve the GRS file
         let xhttp = new XMLHttpRequest();
-        let data;
+        let data = undefined;
         xhttp.onreadystatechange = function() 
         {
             if (this.readyState == 4 && this.status == 200)
@@ -28,7 +28,7 @@ export default class GRSModel extends Model
         xhttp.send();
 
         // Get the geometry from the GRS file.
-        if(typeof data == "undefined")
+        if(data == undefined)
             throw new Error("Unable to access file")
         else
         {

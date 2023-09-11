@@ -30,7 +30,7 @@ export {default as Octahedron} from "./Octahedron.js";
 export {default as Tetrahedron} from "./Tetrahedron.js";
 
 export {default as GRSModel} from "./GRSModel.js";
-
+export {default as OBJModel} from "./OBJModel.js";
 
 export {default as PanelXY} from "./PanelXY.js";
 export {default as PanelXZ} from "./PanelXZ.js";
