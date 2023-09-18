@@ -104,9 +104,56 @@ readLine.on("close", () => {console.log("file closed");})
 
     static async createOBJModel(fileName)
     {
-        const returnVal = await OBJModelNode.#buildModel(fileName);
+        //const returnVal = await OBJModelNode.#buildModel(fileName);
+        //console.log("ObjModelNode using await instanceof model: " + (returnVal instanceof Model))
+        
+        /*
+        const returnPromise = OBJModelNode.#buildModel(fileName);
+        let asyncFinished = false;
 
-        return returnVal;
+        returnPromise.then(() => {asyncFinished = true;})
+
+        // this while loop executes forever, never returns
+
+        // cpu usage is around 30 to 40 percent
+        // disk usage is around 90 to 100 %, but that is to be expected
+        // because we are asynchronously reading the obj files
+
+        // since disk usage is running around its max, why 
+        // doesn't the async code ever finish when the while loop is running?
+        // shouldn't it finish, set asyncFinished to be true and exit the forever
+        // while loop?  especially because the program should be split between all cpus?
+        while(asyncFinished == false)
+        {}
+
+        return returnPromise
+        */
+
+        
+        const returnPromise = OBJModelNode.#buildModel(fileName);
+        let asyncFinished = false;
+
+        returnPromise.then(() => {asyncFinished = true;})
+
+        if(!asyncFinished)
+        {
+            // do some busy work 
+            // why does this stop the program from running?
+            // i looked at cpu usage in task manager, only 30 to 40 %
+            // disk is only around 0 to 10 percent jumped to 25% once
+            // why does this and the while loop use the disk differently?
+            let y = 0;
+            for(let x = 0; x < 10000000000000000000; x += .01)
+                y += x;
+        }        
+        else
+        {
+            console.log(asyncFinished);
+        }
+        
+
+        //return returnVal;
+        //return await OBJModelNode.#buildModel(fileName);
     }
 
     static async #buildModel(fileName)
@@ -178,8 +225,6 @@ readLine.on("close", () => {console.log("file closed");})
         console.log(vList.length);
         console.log(pList.length);       
 
-        OBJModelNode.model = new OBJModelNode(vList, pList, undefined, name);
-
         return new OBJModelNode(vList, pList, undefined, name);
     }
 }// end class
@@ -189,5 +234,10 @@ readLine.on("close", () => {console.log("file closed");})
 //await OBJModelNode.createOBJModel("../../assets/apple.obj");
 // OBJModelNode.createOBJModel("../../assets/apple.obj");
 
-let myModel = OBJModelNode.model;
-console.log(myModel.vertexList.length + "\n" + myModel.primitiveList.length + "\n" + myModel.name);
+//let myModel = OBJModelNode.model;
+//console.log(myModel.vertexList.length + "\n" + myModel.primitiveList.length + "\n" + myModel.name);
+
+let myModel = OBJModelNode.createOBJModel("../../assets/apple.obj");
+console.log("What objModelNode returns: " + myModel);
+
+//console.log(myModel.vertexList.length + "\n" + myModel.primitiveList.length + "\n" + myModel.name);
