@@ -14,7 +14,7 @@ export default class FrameBuffer
     /**@type {number} #height the height of this framebuffer*/ #height;
     /**@type {Color} #bgColorFB the default color of the framebuffer*/ #bgColorFB;
 //    /**@type {Color[]} #pixelBuffer the actual pixel data for this framebuffer*/ #pixelBuffer;
-    /**@type {byte[]} #pixelBuffer the actual pixel data for this framebuffer stored as bytes*/ #pixelBuffer
+    /**@type {Uint8Array[]} #pixelBuffer the actual pixel data for this framebuffer stored as bytes*/ #pixelBuffer
     /**@type {Viewport} #vp the viewport for this framebuffer */ #vp;
 
     /**
@@ -60,7 +60,7 @@ export default class FrameBuffer
         // should this be a UInt8Array, or a new ArrayBuffer
         // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
         // see: https://stackoverflow.com/questions/11025414/how-to-declare-an-array-of-byte-in-javascript
-        this.#pixelBuffer = new UInt8Array(this.#width * this.#height * 4);
+        this.#pixelBuffer = new Uint8Array(this.#width * this.#height * 4);
         
         this.#vp = Viewport.buildParent(this);
 
@@ -212,6 +212,10 @@ export default class FrameBuffer
         return this.#vp;
     }
 
+    get pixelBuffer()
+    {
+        return this.#pixelBuffer;
+    }
 
     /**
      * Set this {@code FrameBuffer} default {Viewport} to be this whole this {@code FrameBuffer}
@@ -347,7 +351,7 @@ export default class FrameBuffer
             this.#pixelBuffer[index] = color;
     */
 
-        const c = color.convert2Int();
+        const c = Color.convert2Int(color);
       
         const r = c.getRed();
         const g = c.getGreen();
@@ -451,10 +455,14 @@ export default class FrameBuffer
         result += "\n";
         for (let i = 0; i < this.height; ++i)
         {
-            for (let j = 0; j < this.width; ++j)
+            for (let j = 0; j < this.width; j += 4)
             {
-                const c = this.#pixelBuffer[(i*this.width) + j];
-                const color = Color.buildColor(c);
+                const r = this.#pixelBuffer[((i*this.width) + j) + 0];
+                const g = this.#pixelBuffer[((i*this.width) + j) + 1];
+                const b = this.#pixelBuffer[((i*this.width) + j) + 2];
+                const a = this.#pixelBuffer[((i*this.width) + j) + 3];
+                
+                const color = new Color(r, g, b, a);
 
                 result += format("%3d ", color.getRed());
                 result += format("%3d ", color.getGreen());

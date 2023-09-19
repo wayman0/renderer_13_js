@@ -45,6 +45,20 @@ export function renderFB(scene, fb)
     render(scene, fb.vp);
 }
 
+export function renderFB2(scene, fb2)
+{
+    const fb = new FrameBuffer(fb2.width, fb2.height, fb2.bgColorFB);
+    fb.setViewport(fb2.vp.width, fb2.vp.height, fb2.vp.upperLeftX, fb2.vp.upperLeftY);
+
+    for(let x = 0; x < fb2.width; x += 1)
+    {
+        for(let y = 0; y < fb2.height; y += 1)
+            fb.setPixelFB(x, y, fb2.getPixelFB(x, y));
+    }
+
+    render(scene, fb.vp);
+}
+
 /**
  *  Mutate the {@link FrameBuffer}'s default {@link FrameBuffer.Viewport}
     so that it holds the rendered image of the {@link Scene} object.

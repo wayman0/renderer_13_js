@@ -10,8 +10,13 @@ import {TriangularPrism, Cylinder, ConeFrustum, Octahedron, Box,
         ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ} from "../renderer/models_L/ModelsExport.js";
 import {Scene, Position, Matrix, Camera} from "../renderer/scene/SceneExport.js";
 import * as ModelShading from "../renderer/scene/util/UtilExport.js";
-import {renderFB} from "../renderer/pipeline/PipelineExport.js";
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
+import {renderFB} from "../renderer/pipeline/PipelineExport.js";
+
+// edited
+// import {renderFB2} from "../renderer/pipeline/Pipelineexport.js";
+//import {default as FrameBuffer2} from "../renderer/framebuffer/FrameBufferv2.js";
+
 //import {keyPressed, printHelp, display, setScene, setFB} from "./InteractiveUtilities.js";
 
 
@@ -150,12 +155,20 @@ function display()
     const fb = new FrameBuffer(w, h);
     renderFB(scene, fb);
 
+    //const fb = new FrameBuffer2(w, h);
+    //renderFB2(scene, fb);
+
+    //ctx.getImageData().data = fb.pixelBuffer;
+    //ctx.putImageData();
+
     /*
        This is not a good idea.
        We are copying a lot of data for every frame!
        We need to make the framebuffer implementation
        more friendly to the JavaScript canvas element.
     */
+
+    
     const pixelData = new Uint8ClampedArray(fb.width * fb.height * 4);
     for (let y = 0; y < fb.height; y += 1)
     {
@@ -178,6 +191,7 @@ function display()
                                    fb.height),
                                    fb.vp.vp_ul_x,
                                    fb.vp.vp_ul_y);
+    
 }
 
 
