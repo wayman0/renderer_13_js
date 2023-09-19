@@ -13,9 +13,13 @@ export default class FrameBuffer
     /**@type {number} #width the width of a framebuffer*/ #width;
     /**@type {number} #height the height of this framebuffer*/ #height;
     /**@type {Color} #bgColorFB the default color of the framebuffer*/ #bgColorFB;
-//    /**@type {Color[]} #pixelBuffer the actual pixel data for this framebuffer*/ #pixelBuffer;
-    /**@type {Uint8Array[]} #pixelBuffer the actual pixel data for this framebuffer stored as bytes*/ #pixelBuffer
     /**@type {Viewport} #vp the viewport for this framebuffer */ #vp;
+
+    //    /**@type {Color[]} #pixelBuffer the actual pixel data for this framebuffer*/ #pixelBuffer;
+    
+    /**@type {Uint8Array} #pixelBuffer the actual pixel data for this framebuffer */ #pixelBuffer;
+
+    ///** #pixelBuffer the actual pixel data for this framebuffer stored as bytes*/ #pixelBuffer
 
     /**
     A {@code FrameBuffer} represents a two-dimensional array of pixel data.
@@ -60,9 +64,13 @@ export default class FrameBuffer
         // should this be a UInt8Array, or a new ArrayBuffer
         // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
         // see: https://stackoverflow.com/questions/11025414/how-to-declare-an-array-of-byte-in-javascript
+        
         this.#pixelBuffer = new Uint8Array(this.#width * this.#height * 4);
         
-        this.#vp = Viewport.buildParent(this);
+        //@ts-ignore
+        // can ignore this error because fb2 and fb have the exact same methods
+        // but due to my type checking cannot include this line
+        //this.#vp = Viewport.buildParent(this);
 
         this.clearFB(this.#bgColorFB);
     }
@@ -299,8 +307,9 @@ export default class FrameBuffer
                             "(" + x + ", " + y + ") " +
                             "[w= " + this.getWidthFB() + ", h= " + this.getHeightFB() + "]");
       
-        let startPixelData = y*this.#width + x;
-      
+        //const startPixelData = y*this.#width + x;
+        const startPixelData = this.width * 4 * y + 4 * x;
+
         const r = this.#pixelBuffer[startPixelData + 0];
         const g = this.#pixelBuffer[startPixelData + 1];
         const b = this.#pixelBuffer[startPixelData + 2];
@@ -330,7 +339,19 @@ export default class FrameBuffer
         x = Math.round(x);
         y = Math.round(y);
 
-        const index = y * this.getWidthFB() + x;
+        //const index = y * this.getWidthFB() + x; // wrong indexing
+        //const index = y * this.getWidthFB() * 4 + x; // wrong indexing
+        //const index = y * this.getWidthFB() * 4 + (x + 4); // wrong indexing
+        //const index = y * this.getWidthFB() * 4 + (x + 3); // kinda right, skips alot pixels though
+        //const index = y * this.getWidthFB() * 4;// kinda right skips a lot of pixels
+
+        // to access row 3 pixel 0:
+        // 3 * width * 4: each row is the width * 4, and we need three rows
+
+        // to access row 3 pixel 1:
+        // 3 * width * 4 + 1 * 4: each row is width * 4, three rows, and second pixel starts at 4, instead of 1
+
+        const index = this.getWidthFB() * 4 * y + x * 4;
 
         if (index >= this.#pixelBuffer.length)
             throw new Error("FrameBuffer: Bad pixel coordinate " +
@@ -350,7 +371,6 @@ export default class FrameBuffer
         else
             this.#pixelBuffer[index] = color;
     */
-
         const c = Color.convert2Int(color);
       
         const r = c.getRed();
@@ -362,6 +382,17 @@ export default class FrameBuffer
         this.#pixelBuffer[index + 1] = g;
         this.#pixelBuffer[index + 2] = b;
         this.#pixelBuffer[index + 3] = a;
+
+        // this seems to properly input the colors into the pixelbuffer
+        // but when the pixel buffer is printed out it is wrong
+        // becase we were improperly indexing into the pixelBuffer
+        //console.log("index: " + index + " x: " + x + " y: " + y + " " + color.toString());
+        //console.log(  this.#pixelBuffer[index + 0] + ", " 
+        //            + this.#pixelBuffer[index + 1] + ", "
+        //            + this.#pixelBuffer[index + 2] + ", "
+        //            + this.#pixelBuffer[index + 3]);
+       
+        
         //this.#pixelBuffer[index] = Color.convert2Int(color);
     }
 
@@ -455,12 +486,12 @@ export default class FrameBuffer
         result += "\n";
         for (let i = 0; i < this.height; ++i)
         {
-            for (let j = 0; j < this.width; j += 4)
+            for (let j = 0; j < this.width; j += 1)
             {
-                const r = this.#pixelBuffer[((i*this.width) + j) + 0];
-                const g = this.#pixelBuffer[((i*this.width) + j) + 1];
-                const b = this.#pixelBuffer[((i*this.width) + j) + 2];
-                const a = this.#pixelBuffer[((i*this.width) + j) + 3];
+                const r = this.#pixelBuffer[((i*this.width) + j) ];
+                const g = this.#pixelBuffer[((i*this.width) + j) ];
+                const b = this.#pixelBuffer[((i*this.width) + j) ];
+                const a = this.#pixelBuffer[((i*this.width) + j) ];
                 
                 const color = new Color(r, g, b, a);
 
@@ -565,6 +596,7 @@ export default class FrameBuffer
 
     static main()
     {
+        /*
         console.log("Making Framebuffer 1 = new FrameBuffer(10, 10)");
         const fb1 = new FrameBuffer(10, 10);
 
@@ -665,5 +697,36 @@ export default class FrameBuffer
         console.log("");
         console.log("fb3.convertblue2FB().dumpfb2file(fb3-blue.ppm");
         fb3.convertBlue2FB().dumpFB2File("FB3-BLUE.ppm");
+        */
+
+        const fb = new FrameBuffer(1000, 1000, Color.CYAN);
+
+        // notice that the set pixel output is correct
+        fb.clearFBDefault();
+
+        // but the pixelbuffer outputed is wrong, why?
+        // because everytime we call setPixel(x, y), we don't
+        // account for the offset of 4 so setPixel(1, 1)
+        // and setPixel(2, 1) will interfere with eachother?
+        
+        //console.log(fb.pixelBuffer);
+
+        /*
+        for(let x = 0; x < fb.pixelBuffer.length; x += 4)
+        {
+            console.log(  fb.pixelBuffer[x + 0] + ", " 
+                        + fb.pixelBuffer[x + 1] + ", "
+                        + fb.pixelBuffer[x + 2] + ", "
+                        + fb.pixelBuffer[x + 3]);
+        }
+        */
+        //console.log(fb.toString());
+
+        console.log(fb.getPixelFB(1, 1).toString());
+        console.log(fb.getPixelFB(3, 2).toString());
+
+        fb.dumpFB2File("CYANfb.ppm");
+        //fb.convertBlue2FB().dumpFB2File("CYANFBconvertBlue.ppm");
+
     }
 }
