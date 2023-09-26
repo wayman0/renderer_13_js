@@ -1,4 +1,3 @@
-
 /*
  * Renderer Models. The MIT License.
  * Copyright (c) 2022 rlkraft@pnw.edu
@@ -18,7 +17,7 @@
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import { format } from "../scene/util/StringFormat";
+import {format} from "../scene/util/UtilExport.js";
 
 export default class ParametricSurface extends Model
 {

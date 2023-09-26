@@ -15,7 +15,7 @@
 //@ts-check
 
 import {LineSegment, Model, Vertex} from "../scene/SceneExport.js";
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 
 export default class ParametricCurve extends Model
 {

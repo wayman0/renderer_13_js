@@ -25,7 +25,7 @@
 //@ts-check
 
 import {Model, Vertex, LineSegment} from "../scene/SceneExport.js";
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 
 export default class ConeSector extends Model 
 {

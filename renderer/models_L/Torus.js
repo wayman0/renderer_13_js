@@ -51,7 +51,7 @@
    @see TorusSector
 */
 import {TorusSector} from "./ModelsExport.js";
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 
 import {Vertex, LineSegment} from "../scene/SceneExport.js";
 

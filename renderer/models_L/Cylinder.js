@@ -21,7 +21,7 @@
 //@ts-check
 
 import {CylinderSector} from "./ModelsExport.js";
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 //import { LineSegment, Vertex } from "../scene/SceneExport.js";
 
 export default class Cylinder extends CylinderSector

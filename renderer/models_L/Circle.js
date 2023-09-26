@@ -11,7 +11,7 @@
 //@ts-check
 
 import {CircleSector} from "./ModelsExport.js";
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 
 export default class Circle extends CircleSector
 {

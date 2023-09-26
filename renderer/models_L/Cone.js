@@ -21,7 +21,7 @@
 //@ts-check
 
 import {ConeSector} from "./ModelsExport.js";
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 
 export default class Cone extends ConeSector
 {

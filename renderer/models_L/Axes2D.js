@@ -11,7 +11,7 @@
 
 import {LineSegment, Model, Vertex} from "../scene/SceneExport.js";
 import {Color} from "../framebuffer/FramebufferExport.js";
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 
 export default class Axes2D extends Model
 {

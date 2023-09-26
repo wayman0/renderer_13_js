@@ -15,7 +15,7 @@
 */
 //@ts-check 
 
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 import {RingSector} from "./ModelsExport.js";
 
 export default class Ring extends RingSector

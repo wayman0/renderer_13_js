@@ -6,8 +6,7 @@
 
 //@ts-check
 
-import {TriangularPrism, Cylinder, ConeFrustum, Octahedron, Box,
-        ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ} from "../renderer/models_L/ModelsExport.js";
+import {TriangularPrism, Cylinder, ConeFrustum, Octahedron, Box, ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ} from "../renderer/models_L/ModelsExport.js";
 import {Scene, Position, Matrix, Camera} from "../renderer/scene/SceneExport.js";
 import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";

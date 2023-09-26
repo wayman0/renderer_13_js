@@ -16,7 +16,7 @@
 */
 //@ts-check
 import {ParametricSurface} from "./ModelsExport.js";
-import {format} from "../scene/util/StringFormat.js";
+import {format} from "../scene/util/UtilExport.js";
 
 export default class SurfaceOfRevolution extends ParametricSurface
 {
