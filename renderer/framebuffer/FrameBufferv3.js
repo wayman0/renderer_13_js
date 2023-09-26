@@ -584,11 +584,11 @@ export default class FrameBuffer
         // Use dynamic import and then
         // use synchronous API to avoid file corruption.
         import('node:fs').then(fs => {
-          fs.writeFileSync(filename, format,
+          fs.writeFileSync(filename, format, //@ts-ignore
                        err => {if (err) throw err;});
         });
         import('node:fs').then(fs => {
-          fs.appendFileSync(filename, Buffer.from(colorData),
+          fs.appendFileSync(filename, Buffer.from(colorData), //@ts-ignore
                        err => {if (err) throw err;});
         });
     }

@@ -17,7 +17,7 @@ export default class FrameBuffer
 
     //    /**@type {Color[]} #pixelBuffer the actual pixel data for this framebuffer*/ #pixelBuffer;
     
-    /**@type {Uint8Array} #pixelBuffer the actual pixel data for this framebuffer */ #pixelBuffer;
+    /**@type {Buffer} #pixelBuffer the actual pixel data for this framebuffer */ #pixelBuffer;
 
     ///** #pixelBuffer the actual pixel data for this framebuffer stored as bytes*/ #pixelBuffer
 
@@ -65,7 +65,7 @@ export default class FrameBuffer
         // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
         // see: https://stackoverflow.com/questions/11025414/how-to-declare-an-array-of-byte-in-javascript
         
-        this.#pixelBuffer = new Uint8Array(this.#width * this.#height * 4);
+        this.#pixelBuffer = Buffer.alloc(this.#width * this.#height * 4);
         
         //@ts-ignore
         // can ignore this error because fb2 and fb have the exact same methods

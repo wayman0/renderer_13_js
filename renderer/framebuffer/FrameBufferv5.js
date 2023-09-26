@@ -17,7 +17,7 @@ export default class FrameBuffer
 
     //    /**@type {Color[]} #pixelBuffer the actual pixel data for this framebuffer*/ #pixelBuffer;
     
-    /**@type {Uint8Array} #pixelBuffer the actual pixel data for this framebuffer */ #pixelBuffer;
+    /**@type {Uint8ClampedArray} #pixelBuffer the actual pixel data for this framebuffer */ #pixelBuffer;
 
     ///** #pixelBuffer the actual pixel data for this framebuffer stored as bytes*/ #pixelBuffer
 
@@ -65,7 +65,7 @@ export default class FrameBuffer
         // see: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer
         // see: https://stackoverflow.com/questions/11025414/how-to-declare-an-array-of-byte-in-javascript
         
-        this.#pixelBuffer = new Uint8Array(this.#width * this.#height * 4);
+        this.#pixelBuffer = new Uint8ClampedArray(this.#width * this.#height * 4);
         
         //@ts-ignore
         // can ignore this error because fb2 and fb have the exact same methods
@@ -596,7 +596,6 @@ export default class FrameBuffer
 
     static main()
     {
-        /*
         console.log("Making Framebuffer 1 = new FrameBuffer(10, 10)");
         const fb1 = new FrameBuffer(10, 10);
 
@@ -606,8 +605,8 @@ export default class FrameBuffer
 
         console.log("");
         console.log("Making fb3 = FB.buildVP(new VP(3, 3, fb1, 0, 0, Color.blue))");
-        const vp1 = new Viewport(3, 3, fb1, 0, 0, Color.magenta);
-        const fb3 = FrameBuffer.buildVP(vp1);
+        //const vp1 = new Viewport(3, 3, fb1, 0, 0, Color.magenta);
+        //const fb3 = FrameBuffer.buildVP(vp1);
 
         console.log("");
         console.log("fb1.getWidth(): ");
@@ -625,13 +624,13 @@ export default class FrameBuffer
         console.log("fb2.height");
         console.log(fb2.height);
 
-        console.log("");
-        console.log("fb3.getBAckgroundColor()");
-        console.log(fb3.getBackgroundColorFB().toString());
+        //console.log("");
+        //console.log("fb3.getBAckgroundColor()");
+        //console.log(fb3.getBackgroundColorFB().toString());
 
-        console.log("");
-        console.log("fb3.bgColor");
-        console.log(fb3.bgColorFB.toString());
+        //console.log("");
+        //console.log("fb3.bgColor");
+        //console.log(fb3.bgColorFB.toString());
 
         console.log("");
         console.log("fb2.setVP(2, 2, 1, 1)");
@@ -682,9 +681,9 @@ export default class FrameBuffer
         console.log("fb2.dumpFB2File(fb2.ppm");
         fb2.dumpFB2File("FB2.ppm");
 
-        console.log("");
-        console.log('fb3.dumpfb2file(fb3.ppm)');
-        fb3.dumpFB2File("FB3.ppm");
+        //console.log("");
+        //console.log('fb3.dumpfb2file(fb3.ppm)');
+        //fb3.dumpFB2File("FB3.ppm");
 
         console.log("");
         console.log("fb1.convertRed2FB().dumpfb2file(fb1-red.ppm");
@@ -694,39 +693,8 @@ export default class FrameBuffer
         console.log("fb2.convertGreen2FB().dumpfb2file(fb2-green.ppm");
         fb2.convertGreen2FB().dumpFB2File("FB2-GREEN.ppm");
 
-        console.log("");
-        console.log("fb3.convertblue2FB().dumpfb2file(fb3-blue.ppm");
-        fb3.convertBlue2FB().dumpFB2File("FB3-BLUE.ppm");
-        */
-
-        const fb = new FrameBuffer(1000, 1000, Color.CYAN);
-
-        // notice that the set pixel output is correct
-        fb.clearFBDefault();
-
-        // but the pixelbuffer outputed is wrong, why?
-        // because everytime we call setPixel(x, y), we don't
-        // account for the offset of 4 so setPixel(1, 1)
-        // and setPixel(2, 1) will interfere with eachother?
-        
-        //console.log(fb.pixelBuffer);
-
-        /*
-        for(let x = 0; x < fb.pixelBuffer.length; x += 4)
-        {
-            console.log(  fb.pixelBuffer[x + 0] + ", " 
-                        + fb.pixelBuffer[x + 1] + ", "
-                        + fb.pixelBuffer[x + 2] + ", "
-                        + fb.pixelBuffer[x + 3]);
-        }
-        */
-        //console.log(fb.toString());
-
-        console.log(fb.getPixelFB(1, 1).toString());
-        console.log(fb.getPixelFB(3, 2).toString());
-
-        fb.dumpFB2File("CYANfb.ppm");
-        //fb.convertBlue2FB().dumpFB2File("CYANFBconvertBlue.ppm");
-
+        //console.log("");
+        //console.log("fb3.convertblue2FB().dumpfb2file(fb3-blue.ppm");
+        //fb3.convertBlue2FB().dumpFB2File("FB3-BLUE.ppm");
     }
 }
