@@ -7,6 +7,7 @@
 //@ts-check
 
 import {TriangularPrism, Cylinder, ConeFrustum, Octahedron, Box, ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ} from "../renderer/models_L/ModelsExport.js";
+// @ts-ignore
 import {Scene, Position, Matrix, Camera} from "../renderer/scene/SceneExport.js";
 import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
@@ -113,6 +114,7 @@ let played = true;
 document.addEventListener('keypress', keyPressed);
 
 const resizer = new ResizeObserver(display);
+// @ts-ignore
 resizer.observe(document.getElementById("resizer"));
 
 let k = 0;
@@ -123,22 +125,184 @@ displayNextFrame();
 
 function displayNextFrame()
 {
-    timer = setInterval(function()
+    // both of these are before fb and vp modifications
+    // with rotate models
+    // fps = 1000/5    roughly 150 to 200 wall clock time
+    // fps = 1000/500  roughly 150 to 200 wall clock time
+    // fps = 1000/1000 roughly 150 to 200 wall clock time
+
+    // without rotate models, so we can see how long display on its own takes
+    // fps = 1000/5    roughly 200 ish, wall clock time
+    // fps = 1000/100  roughly 150 to 200 wall clock time
+    // fps = 1000/500  roughly 150ish wall clock time
+    // fps = 1000/1000 roughly 150ish wall clock time
+
+    // fps = 10        roughly 150 to 200 wall clock time
+
+    // after fb and vp modifications
+    // with rotate models
+    // fps = 1000/5     roughly around 100
+    timer = setInterval(function() 
     {
-		const startTime = new Date().getTime();
-          rotateModels();
-          display();
+        const startTime = new Date().getTime();
+        rotateModels();
+        display();
         const stopTime = new Date().getTime();
-        console.log("Wall-clock time: " + (stopTime - startTime));
-    }, 1000/5);  // seem to be limited to about 5 frames per second?
+        console.log("Wall-clock time: " + (stopTime-startTime));
+    }, 1000/5);
 }
 
+// the old way of writing each element to the data array was 44ish
 
+/* 
+the whole timing for each aspect of this function is:
+Getting the resizer time: 0
+Geometries_online_R9a.js:174 Get pixels: 0
+Geometries_online_R9a.js:180 set canvas dimenstions: 0
+Geometries_online_R9a.js:187 make fb: 139
+Geometries_online_R9a.js:195 Rendering time: 5
+Geometries_online_R9a.js:215 Writing to canvas time: 0
+Geometries_online_R9a.js:218 whole function: 144
+Geometries_online_R9a.js:146 Wall-clock time: 144
+
+we need to make writing to the framebuffer faster 
+because each initialization is slow
+what if when we make a fb we get rid of 
+ 'this.clearFB(this.#bgColorFB);'
+so that each time the framebuffer is created is faster
+since we aren't writing to every pixel in it when it is
+created
+and rendering is fast, only around 5ish
+
+with the clearFB code in constructor commented out
+run time is:
+Getting the resizer time: 0
+Geometries_online_R9a.js:193 Get pixels: 0
+Geometries_online_R9a.js:199 set canvas dimenstions: 0
+Geometries_online_R9a.js:206 make fb: 132
+Geometries_online_R9a.js:214 Rendering time: 9
+Geometries_online_R9a.js:225 Writing to canvas time: 0
+Geometries_online_R9a.js:228 whole function: 141
+Geometries_online_R9a.js:146 Wall-clock time: 141
+
+when clearFB is commented out why is make fb so long still?
+because when we create the vp, it writes every pixel in fb
+into the vp
+
+is there a way to avoid writing pixels into a vp upon creation?
+
+inside fb constructor we call vp.buildParent()
+which calls vp constructor which calls vp.clearVP()
+and then after vp.clearVP() is called
+buildParent writes all fb pixels into vp, 
+seems a little counter intuitive, can we get rid of 
+ 'vp.clearVP' like in fb?
+
+run time with no fb.clearFB in constructor
+and not vp.clearVP in constructor
+Getting the resizer time: 0
+Geometries_online_R9a.js:219 Get pixels: 0
+Geometries_online_R9a.js:225 set canvas dimenstions: 0
+Geometries_online_R9a.js:232 make fb: 94
+Geometries_online_R9a.js:240 Rendering time: 5
+Geometries_online_R9a.js:251 Writing to canvas time: 1
+Geometries_online_R9a.js:254 whole function: 101
+Geometries_online_R9a.js:146 Wall-clock time: 101
+made it faster but we lost the background color
+becase it is never written in vp or fb
+
+can we make clearing the fb and clearing vp faster?
+
+maybe instead of trying to write each rgba value
+just create a new Uint8clampedarray() 
+with a default value say 255, so all
+rgba values will be 255 which is white
+so that wouldn't work unless we want white background
+the problem is that a has to be 255 in order
+for the color to show up decently but black is 0 for the
+rgb values and what happens when bgColor isn't the
+same value for rgb 
+
+what if we compressed each rgba into one 4 byte integer
+and made color use the compressed rgba 4 byte integer implementation
+then instead of writing size * 4 we only write size times
+but then we have to uncompress before writing to the canvas
+and writing to canvas takes around 44 ish 
+if we save more than 44ish by compressing then
+compressing would be worth it because then we would
+just write the fb into a new uint8array
+
+since writing to fb with no fb and vp code commented out is 140 ish
+we write 2 times to each rgba element which means each clear call
+takes around 70ish, if we divide this by 4 becase we are making 1 call
+per color instead of 4 we get around 20ish 
+so we save around 20ish per call to clearFB and or clearVP
+since each one of those is called 1 time per initialization
+we save 40ish and cost of writing to data is 40ish so we don't save
+any time 
+
+we could try every time we call clear fb make a new empty array
+and then use the spread operator keep adding the color to be added
+instead of calling write pixel size times but we would need a for 
+loop to loop through and 'spread' each pixel into the fb
+see page 157 for spread 
+
+or we could try for every time clear fb is called make a new empty array
+and use push() to keep adding the same color, but we need a loop for this
+because we need to push for each pixel in the fb
+see page 161 and 162
+
+what if we just dont clear both vp and fb but only one?
+when we make a fb it sets is pixelBuffer to be one color
+then instantiates its vp to be the whole fb, clears using the
+vp default color, so it rewrites the fb pixelBuffer to be 
+the vp's default color, but the vp's default color in the fb 
+constructor is the fb default color so we could get rid of one of these
+but which one? 
+if we get rid of the fbs clearFB call the whole fb will
+be cleared due to creating a vp to be the whole fb and the vp clearing
+the fb's pixelBuffer using the fb's default color, and when a vp
+is created on its own it will still set itself to be its own default
+color which may not be the framebuffers default color.
+if we get rid of the vps clearVP call the fb will be cleared
+create a vp, let the vp be whatever color the fb is, this won't
+work if the vp needs to be a different color say dark gray and the
+fb is supposed to be black. Also if we get rid of this call then when
+we make just a viewport it wont be set and the user will have to call
+clearvp itself so either way clearVP gets called, so this won't work
+
+running display() with fb.clearFB() commented out and the 
+redundant double for loop in vp.buildParent commented out
+Getting the resizer time: 0
+Geometries_online_R9a.js:297 Get pixels: 0
+Geometries_online_R9a.js:303 set canvas dimenstions: 0
+Geometries_online_R9a.js:310 make fb: 42
+Geometries_online_R9a.js:318 Rendering time: 5
+Geometries_online_R9a.js:329 Writing to canvas time: 0
+Geometries_online_R9a.js:332 whole function: 48
+Geometries_online_R9a.js:146 Wall-clock time: 48
+
+I don't think we can take out any more code from fb or vp
+without any major complications so this is probably as fast
+as the fb and vp classes will become
+*/
 function display()
 {
+    let funcStartTime = new Date().getTime();
+    
+    // geting the resizer time is 0
+    let resStartTime = new Date().getTime();
+
     const resizer = document.getElementById("resizer");
     const w = resizer?.offsetWidth;
     const h = resizer?.offsetHeight;
+    
+    let resEndTime = new Date().getTime();
+    console.log("Getting the resizer time: " + (resEndTime - resStartTime));
+
+
+    // this takes about 1 
+    let pixStartTime = new Date().getTime();
 
     // @ts-ignore
     const ctx = document.getElementById("pixels").getContext("2d");
@@ -147,50 +311,52 @@ function display()
        console.log("cn.getContext(2d) is null");
        return;
     }
+    
+    let pixEndTime = new Date().getTime();
+    console.log("Get pixels: " + (pixEndTime - pixStartTime));
 
+    let setCanStartTime = new Date().getTime();
+    
     ctx.canvas.width = w;
     ctx.canvas.height = h;
+    
+    let setCanEndTime = new Date().getTime();
+    console.log("set canvas dimenstions: " + (setCanEndTime - setCanStartTime));
 
+
+    let makeFBStartTime = new Date().getTime();
+    
+    // @ts-ignore
     const fb = new FrameBuffer(w, h);
+    
+    let makeFBEndTime = new Date().getTime();
+    console.log("make fb: " + (makeFBEndTime-makeFBStartTime));
+
+    // rendering time is around 5, 
+    // i don't think we can shrink this time down any
+
+    let rendStartTime = new Date().getTime();
+    
     renderFB(scene, fb);
-
-    //const fb = new FrameBuffer2(w, h);
-    //renderFB2(scene, fb);
-
-    //ctx.getImageData().data = fb.pixelBuffer;
-    //ctx.putImageData();
-
-    /*
-       This is not a good idea.
-       We are copying a lot of data for every frame!
-       We need to make the framebuffer implementation
-       more friendly to the JavaScript canvas element.
-    */
-
     
-    const pixelData = new Uint8ClampedArray(fb.width * fb.height * 4);
-    for (let y = 0; y < fb.height; y += 1)
-    {
-       for (let x = 0; x < fb.width; x += 1)
-       {
-          const index = y * (4*fb.width) + (4*x);
-          const r = fb.getPixelFB(x, y).getRed();
-          const g = fb.getPixelFB(x, y).getGreen();
-          const b = fb.getPixelFB(x, y).getBlue();
-          const a = fb.getPixelFB(x, y).getAlpha();
+    let rendEndTime = new Date().getTime();
+    console.log("Rendering time: " + (rendEndTime - rendStartTime));
 
-          pixelData[index + 0] = r;
-          pixelData[index + 1] = g;
-          pixelData[index + 2] = b;
-          pixelData[index + 3] = a;
-       }
-    }
-    ctx.putImageData(new ImageData(pixelData,
-                                   fb.width,
-                                   fb.height),
-                                   fb.vp.vp_ul_x,
-                                   fb.vp.vp_ul_y);
+    // this is the code from the other r9
+    // it appears to run about 2 times as fast but is still not perfectly smooth
+    // wall clock time is around 150 ish
+    // instead of 400 ish with copying data
+
+    // the time to for this is around 0 to 1
+    let writeStartTime = new Date().getTime();
     
+    ctx.putImageData(new ImageData(fb.pixelBuffer,fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
+    
+    let writeEndTime = new Date().getTime();
+    console.log("Writing to canvas time: " + (writeEndTime - writeStartTime));
+
+    let funcEndTime = new Date().getTime();
+    console.log("whole function: " + (funcEndTime - funcStartTime));
 }
 
 
@@ -227,7 +393,10 @@ function rotateModels()
       }
    }
 
-    if(k === 360) k = 0; else k++;
+    if(k === 360) 
+        k = 0; 
+    else 
+        k++;
 }
 
 

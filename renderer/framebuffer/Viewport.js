@@ -75,6 +75,7 @@ export default class Viewport
         this.#bgColorVP = color;
         this.#parent = parent;
 
+        //we need to keep this clear call for when vp is made on its own
         this.clearVP(this.#bgColorVP);
     }
 
@@ -96,6 +97,20 @@ export default class Viewport
                                 0,
                                 parent.getBackgroundColorFB());
 
+        /*
+        we don't need this code it is just repeating setting the 
+        fb to be its own color
+        since this function uses the fbs data
+        and calls vp constructor and the vp
+        constructor calls clearVP which rewrites
+        any pixel data inside its bounds to be
+        the given color, and the given color is the 
+        fb's bg color and the vp is the whole size of the fb
+        any fb data is erased as soon as this fucntion is called
+        so writing the fbs data into the vp is redundant
+        */
+       
+        /*
         for (let x = 0; x < parent.getWidthFB(); x += 1)
         {
             for (let y = 0; y < parent.getHeightFB(); y += 1)
@@ -103,7 +118,7 @@ export default class Viewport
                 vp.setPixelVP(x, y, parent.getPixelFB(x, y));
             }
         }
-
+        */
         return vp;
     }
 
