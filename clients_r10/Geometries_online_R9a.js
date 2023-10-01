@@ -13,13 +13,6 @@ import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {renderFB} from "../renderer/pipeline/PipelineExport.js";
 
-// edited
-// import {renderFB2} from "../renderer/pipeline/Pipelineexport.js";
-//import {default as FrameBuffer2} from "../renderer/framebuffer/FrameBufferv2.js";
-
-//import {keyPressed, printHelp, display, setScene, setFB} from "./InteractiveUtilities.js";
-
-
 // Create the Scene object that we shall render.
 const scene = Scene.buildFromName("Geometries_online_R8");
 

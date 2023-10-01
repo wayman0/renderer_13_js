@@ -73,11 +73,12 @@ export default function rasterize(model, ls, vp)
         logMessage(format("(x1_pp, y1_pp) = (%9.4f, %9.4f)", x1, y1));
     }
 
-    x0 = Math.round(x0), x1 = Math.round(x1);
-    y0 = Math.round(y0), y1 = Math.round(y1);
+    // commented these out becase I got a bad pixel coordinate online
+    //x0 = Math.round(x0), x1 = Math.round(x1);
+    //y0 = Math.round(y0), y1 = Math.round(y1);
 
-    //x0 = Math.trunc(x0), x1 = Math.trunc(x1);
-    //y0 = Math.trunc(y0), y1 = Math.trunc(y1);
+    x0 = Math.trunc(x0), x1 = Math.trunc(x1);
+    y0 = Math.trunc(y0), y1 = Math.trunc(y1);
 
     //console.log("(%d, %d), (%d, %d)", x0, y0, x1, y1);
 

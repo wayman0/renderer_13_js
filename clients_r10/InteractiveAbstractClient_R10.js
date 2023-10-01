@@ -8,9 +8,14 @@
 
 import {Scene, Model, Position, Matrix, Camera, Vertex} from "../renderer/scene/SceneExport.js";
 import {Point, LineSegment} from "../renderer/scene/primitives/PrimitiveExport.js";
-import {PointCloud, MeshMaker, ModelShading} from "../renderer/scene/util/UtilExport.js";
-import {render, renderFB, clipDebug, rastDebug, doAntiAliasing, doGamma, doNearClipping} from "../renderer/pipeline/PipelineExport.js"
-import {FrameBuffer, Viewport} from "../renderer/framebuffer/FramebufferExport.js";
+import {make as PointCloud} from "../renderer/scene/util/UtilExport.js";
+import * as ModelShading from "../renderer/scene/util/UtilExport.js";
+import {render, renderFB, clipDebug, setClipDebug, 
+        rastDebug, setRastDebug, doAntiAliasing, setDoAntiAliasing, 
+        doGamma, setDoGamma, doNearClipping, setDoNearClipping} from "../renderer/pipeline/PipelineExport.js"
+import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
+import {format} from "../renderer/scene/util/UtilExport.js";
+
 
 export let letterbox = false;
 export let aspectRatio = 1.0;
@@ -40,6 +45,11 @@ export let pointSize = 0;
 export let takeScreenshot = false;
 export let screenshotNumber = 0;
 
+export function setScene(s)
+{
+    scene = s;
+}
+
 export function keyPressed(e)
 {
     const c = e.key;
@@ -47,23 +57,23 @@ export function keyPressed(e)
     if('h' == c)
         printHelpMessage();
     else if('d' == c && e.altKey)
-        console.log("\n" + scene.getPosition(currentModel().getMode().toString()))
+        console.log("\n" + scene.getPosition(currentModel).getModel().toString())
     else if('d' == c)//change the debug info
     {
         if(debugWholeScene)
         {
             scene.debug = !scene.debug;
-            clipDebug = scene.debug;
+            setClipDebug(scene.debug);
         }
         else
         {
             const p = scene.getPosition(currentModel);
             p.debug = !p.debug;
-            clipDebug = p.debug;
+            setClipDebug(p.debug);
         }
     }
     else if('D' == c)
-        rastDebug = !rastDebug;
+        setRastDebug(!rastDebug);
     else if('/' == c)
     {
         scene.getPosition(currentModel).visible = interactiveModelsAllVisible;
@@ -86,12 +96,12 @@ export function keyPressed(e)
     }
     else if('a' == c)
     {
-        doAntiAliasing = !doAntiAliasing;
+        setDoAntiAliasing(!doAntiAliasing);
         console.log("Anti aliasing is turned " + doAntiAliasing ? "On":"Off");
     }
     else if('g' == c)
     {
-        doGamma = !doGamma;
+        setDoGamma(!doGamma);
         console.log("Gamma correction is turned " + doGamma ? "On":"Off");
     }
     else if('p' == c)
@@ -110,9 +120,9 @@ export function keyPressed(e)
         }
         else
         {
-            const model = scene.getPosition(curretnModel).getModel();
+            const model = scene.getPosition(currentModel).getModel();
             savedModel = model;
-            scene.getPosition(currentModel).setModel(PointCloud.make(model, pointSize));
+            scene.getPosition(currentModel).setModel(PointCloud(model, pointSize));
         }
     }
     else if('l' == c)
@@ -126,7 +136,7 @@ export function keyPressed(e)
         near += .01;
     else if('b' == c)
     {
-        doNearClipping = !doNearClipping;
+        setDoNearClipping(!doNearClipping);
         console.log("Near plane clipping is turned: " + doNearClipping ? "On":"Off");
     }
     else if('r' == c)
@@ -139,10 +149,12 @@ export function keyPressed(e)
         fovy += .5;
     else if('M' == c)
         showCamera = !showCamera;
+    else if('m' == c)
+        showMatrix = !showMatrix;
     else if('c' == c)
         ModelShading.setRandomColor(scene.getPosition(currentModel).getModel());
     else if('C' == c)
-        ModelShading.setRandomColors(scene.getPosition(currentModel).getModel());
+        ModelShading.setRandomColor(scene.getPosition(currentModel).getModel());
     else if('e' == c && e.altKey)
         ModelShading.setRandomVertexColor(scene.getPosition(currentModel).getModel());
     else if('e' == c)
@@ -162,7 +174,8 @@ export function keyPressed(e)
 
     // these two depend on implementation in html
     //displayWindow(c);
-    //setUpViewing();
+    
+    setUpViewing();
 }
 
 export function setTransformations(c)
@@ -272,4 +285,62 @@ export function printHelpMessage()
     console.log("Use the 'P' key to convert the current model to a point cloud.");
     console.log("Use the '+' key to save a \"screenshot\" of the framebuffer.");
     console.log("Use the 'h' key to redisplay this help message.");
+}
+
+export function setUpViewing()
+{
+    // Set up the camera's view volume.
+    if (scene.getCamera().perspective)
+       scene.getCamera().projPerspective(fovy, aspectRatio, near);
+    else
+       scene.getCamera().projOrtho(fovy, aspectRatio, near);
+
+    // get the size of the resizer so we know what size to make the fb
+    const resizer = document.getElementById("resizer");
+    const w = resizer?.offsetWidth;
+    const h = resizer?.offsetHeight;
+
+    //@ts-ignore
+    const fb = new FrameBuffer(w, h, Color.black);
+
+    // Create a viewport with the correct aspect ratio.
+    if ( letterbox )
+    {
+        //@ts-ignore
+        if ( aspectRatio <= w/h )
+        {
+            //@ts-ignore
+            const width = (h * aspectRatio); const xOffset = (w - width) / 2;
+            fb.setViewport(xOffset, 0, width, h);
+        }
+        else
+        {
+            //@ts-ignore
+            const height = (w / aspectRatio); const yOffset = (h - height) / 2;
+            fb.setViewport(0, yOffset, w, height);
+        }
+
+        fb.clearFBDefault();
+        fb.vp.clearVPDefault();
+    }
+    else // The viewport is the whole framebuffer.
+    {
+        fb.setViewport(fb.width, fb.height, 0, 0);
+        fb.vp.clearVPDefault();
+    }
+
+    render(scene, fb.vp);
+
+    if (takeScreenshot)
+    {
+        fb.dumpFB2File(format("Screenshot%03d.png", screenshotNumber));
+        ++screenshotNumber;
+        takeScreenshot = false;
+    }
+    
+    // @ts-ignore
+    const ctx = document.getElementById("pixels").getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+    ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
 }
