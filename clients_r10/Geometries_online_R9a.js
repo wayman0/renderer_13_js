@@ -142,6 +142,10 @@ function displayNextFrame()
     // after fb and vp modifications
     // with rotate models
     // fps = 1000/5     roughly around 100
+
+    // after clearFB redone
+    // with rotate models roughtly 20 to 30 wall clock time
+    // so fps should be around 50
     timer = setInterval(function() 
     {
         const startTime = new Date().getTime();
@@ -149,7 +153,7 @@ function displayNextFrame()
         display();
         const stopTime = new Date().getTime();
         console.log("Wall-clock time: " + (stopTime-startTime));
-    }, 1000/5);
+    }, 1000/50);
 }
 
 // the old way of writing each element to the data array was 44ish
@@ -285,6 +289,16 @@ Geometries_online_R9a.js:146 Wall-clock time: 48
 I don't think we can take out any more code from fb or vp
 without any major complications so this is probably as fast
 as the fb and vp classes will become
+
+with write fb redone and clearvp commented out but clearfb used:
+Getting the resizer time: 0
+Geometries_online_R9a.js:316 Get pixels: 0
+Geometries_online_R9a.js:324 set canvas dimenstions: 0
+Geometries_online_R9a.js:333 make fb: 2
+Geometries_online_R9a.js:343 Rendering time: 14
+Geometries_online_R9a.js:356 Writing to canvas time: 0
+Geometries_online_R9a.js:359 whole function: 16
+Geometries_online_R9a.js:151 Wall-clock time: 16
 */
 function display()
 {

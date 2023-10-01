@@ -63,11 +63,7 @@ export default class FrameBuffer
         this.#pixelBuffer = new Uint8ClampedArray(this.#width * this.#height * 4);
         this.#vp = Viewport.buildParent(this);
 
-        // we don't need this line of code
-        // because when we make the vp, it is the size
-        // of the fb and the vp will clear itself which
-        // is the fb so this is redundant
-        //this.clearFB(this.#bgColorFB);
+        this.clearFB(this.#bgColorFB);
     }
 
 
@@ -269,12 +265,28 @@ export default class FrameBuffer
         if (color instanceof Color == false)
             throw new Error("Color must be a Color");
 
+        /*
         for (let x = 0; x < this.getWidthFB(); x += 1)
         {
             for (let y = 0; y < this.getHeightFB(); y += 1)
             {
                 this.setPixelFB(x, y, color);
             }
+        }
+        */
+
+        // this code should be 4 times faster than above double for loop
+        // because instead of looping over every number in the pixelBuffer
+        // we loop over every pixel in the pixelBuffer
+        // so instead of looping over every single number
+        // we acces every fourth number, the start of each pixel
+        const c = Color.convert2Int(color);
+        for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
+        {
+            this.#pixelBuffer[startPixel + 0] = c.getRed();
+            this.#pixelBuffer[startPixel + 1] = c.getGreen();
+            this.#pixelBuffer[startPixel + 2] = c.getBlue();
+            this.#pixelBuffer[startPixel + 3] = c.getAlpha();
         }
     }
 
@@ -591,6 +603,24 @@ export default class FrameBuffer
 
     static main()
     {
+
+        /*
+        let startTime = new Date().getTime();
+        const fb = new FrameBuffer(600, 600, Color.black);
+        let stopTime = new Date().getTime();
+
+        console.log("FB make : " + (stopTime - startTime));
+
+        for(let x = 0; x < 50; x += 1)
+        {
+            for(let y = 0; y < 50; y += 1)
+                fb.setPixelFB(x, y, new Color(y * 5, y * 5, y*5));
+        }
+
+        fb.dumpFB2File("gray.ppm");
+        */
+       
+        /*
         console.log("Making Framebuffer 1 = new FrameBuffer(10, 10)");
         const fb1 = new FrameBuffer(10, 10);
 
@@ -691,6 +721,7 @@ export default class FrameBuffer
         console.log("");
         console.log("fb3.convertblue2FB().dumpfb2file(fb3-blue.ppm");
         fb3.convertBlue2FB().dumpFB2File("FB3-BLUE.ppm");
+        */
     }
 }
 
