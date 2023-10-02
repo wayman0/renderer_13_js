@@ -91,13 +91,23 @@ const  aspect = 2.0;
 const  near2   = 1.0;
 scene.getCamera().projPerspectiveFOVY(fov, aspect, near2);
 
+scene.debug = false;
+
 import * as interactiveUtilites from "./InteractiveAbstractClient_R10.js";
 
 interactiveUtilites.setScene(scene);
+interactiveUtilites.setFB(new FrameBuffer(100, 100, Color.black));
 
+const resizer = new ResizeObserver(interactiveUtilites.windowResized());
+
+//@ts-ignore
+resizer.observe(document.getElementById("resizer"));
+
+document.addEventListener('keypress', keyPressed);
 function keyPressed(event)
 {   
-    interactiveUtilites.keyPressed(event);
+    console.log("Geometries key pressed " + event.key);
+    interactiveUtilites.handleKeyInput(event);
 }
 
 interactiveUtilites.setUpViewing();

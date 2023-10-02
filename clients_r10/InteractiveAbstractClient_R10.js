@@ -45,13 +45,23 @@ export let pointSize = 0;
 export let takeScreenshot = false;
 export let screenshotNumber = 0;
 
+export let fb;
+
 export function setScene(s)
 {
+    //console.log("setting scene \n" + s.toString())
     scene = s;
 }
 
-export function keyPressed(e)
+export function setFB(fb)
 {
+    fb = fb;
+}
+
+export function handleKeyInput(e)
+{
+    console.log("keyPressed " + e.key);
+
     const c = e.key;
 
     if('h' == c)
@@ -180,6 +190,8 @@ export function keyPressed(e)
 
 export function setTransformations(c)
 {
+    console.log("setTransformations");
+
     if('=' == c)
     {
         scale = 1.0;
@@ -287,8 +299,33 @@ export function printHelpMessage()
     console.log("Use the 'h' key to redisplay this help message.");
 }
 
+export function windowResized(bgfb = Color.black, bgvp = new Color(125, 125, 125))
+{
+    console.log("resizing: ");
+
+    //console.log(Color.gray instanceof Color);
+
+    // Get the new size of the canvas
+    const resizer = document.getElementById("resizer");
+    const w = resizer?.offsetWidth;
+    const h = resizer?.offsetHeight;
+
+    // Create a new FrameBuffer that fits the canvas
+    //const bg1 = fb.getBackgroundColorFB();
+    //const bg2 = fb.getViewport().getBackgroundColorVP();
+    
+    //@ts-ignore
+    fb = new FrameBuffer(w, h, bgfb);
+    fb.vp.setBackgroundColorVP(bgvp);
+    
+
+    setUpViewing();
+}
+
 export function setUpViewing()
 {
+    console.log("setUpViewing");
+
     // Set up the camera's view volume.
     if (scene.getCamera().perspective)
        scene.getCamera().projPerspective(fovy, aspectRatio, near);
@@ -301,7 +338,7 @@ export function setUpViewing()
     const h = resizer?.offsetHeight;
 
     //@ts-ignore
-    const fb = new FrameBuffer(w, h, Color.black);
+    fb = new FrameBuffer(w, h, Color.black);
 
     // Create a viewport with the correct aspect ratio.
     if ( letterbox )
@@ -320,12 +357,17 @@ export function setUpViewing()
             fb.setViewport(0, yOffset, w, height);
         }
 
+        // see if the aspect ratio code is the problem
+        // it isn't
+        //fb.setViewport(w, h, 0, 0);
+
         fb.clearFBDefault();
         fb.vp.clearVPDefault();
     }
     else // The viewport is the whole framebuffer.
     {
-        fb.setViewport(fb.width, fb.height, 0, 0);
+        //@ts-ignore
+        fb.setViewport(w, h, 0, 0);
         fb.vp.clearVPDefault();
     }
 

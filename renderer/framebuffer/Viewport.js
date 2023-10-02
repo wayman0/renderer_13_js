@@ -314,6 +314,8 @@ export default class Viewport
      */
     setBackgroundColorVP(color)
     {
+        console.log(color instanceof Color);
+        
         if (color instanceof Color == false)
             throw new Error("Color is not of type Color");
 
@@ -349,12 +351,23 @@ export default class Viewport
         if (color instanceof Color == false)
             throw new Error("Color is not of type Color");
 
+        /*
         for (let x = 0; x < this.getWidthVP(); x += 1)
         {
             for (let y = 0; y < this.getHeightVP(); y += 1)
             {
                 this.setPixelVP(x, y, color);
             }
+        }
+        */
+
+        const c = Color.convert2Int(color);
+        for(let startPixel = 0; startPixel < this.getWidthVP() * this.getHeightVP() * 4; startPixel += 4)
+        {
+            this.parent.pixelBuffer[startPixel + 0] = c.getRed();
+            this.parent.pixelBuffer[startPixel + 1] = c.getGreen();
+            this.parent.pixelBuffer[startPixel + 2] = c.getBlue();
+            this.parent.pixelBuffer[startPixel + 3] = c.getAlpha();
         }
     }
 
