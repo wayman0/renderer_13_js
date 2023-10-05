@@ -92,14 +92,10 @@ export default class Camera
         if (typeof persp != "boolean")
             throw new Error("Perspective must be a boolean");
 
-        if (persp)
-        {
+        if(persp)
             this.projPerspective(l, r, b, t, near);
-		}
         else
-        {
             this.projOrtho(l, r, b, t, near);
-		}
     }
 
 

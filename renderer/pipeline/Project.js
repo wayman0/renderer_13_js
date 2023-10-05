@@ -84,13 +84,9 @@ export default function project(model, camera)
         const v = model.vertexList[x];
 
         if (camera.perspective)
-        {
             newVertexList[x] = new Vertex(v.x/-v.z, v.y/-v.z, -1);
-        }
         else
-        {
             newVertexList[x] = new Vertex(v.x, v.y, 0);
-        }
     }
 
     return new Model(newVertexList,

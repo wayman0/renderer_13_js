@@ -299,10 +299,10 @@ function clipOneTime(model, ls)
     let vOutside;
     let vOx; let vOy;
     let vIx; let vIy;
-    let t;
-    let x;
-    let y;
-    let vIndexNew;
+    let t = undefined;
+    let x = undefined;
+    let y = undefined;
+    let vIndexNew = undefined;
 
     if (x0 > 1)
     {
@@ -346,7 +346,7 @@ function clipOneTime(model, ls)
 
         t = (-1 - vOx) / (vIx - vOx);
         x = -1;  // prevent rounding errors
-        y = (1 - t) * vOy + t * vIy;
+        y = (1 - t) * vOy + t * vIy;   
     }
     else if (y0 > 1)  // ls crosses the line y = 1
     {

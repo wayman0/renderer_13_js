@@ -61,10 +61,9 @@ export default function view2camera(model, camera)
     const r = camera.right;
     const b = camera.bottom;
     const t = camera.top;
-    const near = - camera.n;
+    const near = -camera.n;
 
     const newVertexList = new Array();
-
     for (let x = 0; x < model.vertexList.length; x += 1)
     {
         const v = model.vertexList[x];

@@ -8,17 +8,10 @@
 
 import {TriangularPrism, Cylinder, ConeFrustum, Octahedron, Box, ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ} from "../renderer/models_L/ModelsExport.js";
 // @ts-ignore
-import {Scene, Position, Matrix, Camera} from "../renderer/scene/SceneExport.js";
+import {Scene, Position, Matrix, Camera, Model, Vertex, Primitive, LineSegment} from "../renderer/scene/SceneExport.js";
 import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {renderFB} from "../renderer/pipeline/PipelineExport.js";
-    
-// edited
-// import {renderFB2} from "../renderer/pipeline/Pipelineexport.js";
-//import {default as FrameBuffer2} from "../renderer/framebuffer/FrameBufferv2.js";
-
-//import {keyPressed, printHelp, display, setScene, setFB} from "./InteractiveUtilities.
-    
+import {LineClip, renderFB, setDebugScene} from "../renderer/pipeline/PipelineExport.js";
     
 // Create the Scene object that we shall render.
 const scene = Scene.buildFromName("Geometries_online_R8");
@@ -40,7 +33,7 @@ ModelShading.setColor(position[0][2].getModel(), Color.orange);
 
 // row 1
 position[1][0] = Position.buildFromModel(new Octahedron(2, 2, 2, 2, 2, 2));
-//position[1][0] = Position.buildFromModel(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2,
+//position[1][0] = Position.buildFromModel(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2));
 ModelShading.setColor(position[1][0].getModel(), Color.green);
 
 position[1][1] = Position.buildFromModel(new Box(1.0, 1.0, 1.0));
@@ -83,30 +76,25 @@ for (let i = position.length - 1;  i >= 0; --i) // from back to front
    for (let j = 0; j < position[i].length; ++j)
    {
       scene.addPosition(position[i][j]);
+      position[i][j].matrix2Identity()
+                 .mult( Matrix.translate(0, -3, -10) )
+                 .mult( Matrix.translate(-4+4*j, 0, 6-3*i) )
    }
 }
-
-const  fov    = 90.0;
-const  aspect = 2.0;
-const  near2   = 1.0;
-scene.getCamera().projPerspectiveFOVY(fov, aspect, near2);
-
-scene.debug = false;
 
 import * as interactiveUtilites from "./InteractiveAbstractClient_R10.js";
 
 interactiveUtilites.setScene(scene);
-interactiveUtilites.setFB(new FrameBuffer(100, 100, Color.black));
+interactiveUtilites.setAspectRatio(2);
+interactiveUtilites.setFOVY(90);
+interactiveUtilites.setNear(1);
 
-const resizer = new ResizeObserver(interactiveUtilites.windowResized());
-
-//@ts-ignore
+const resizer = new ResizeObserver(interactiveUtilites.windowResized);
 resizer.observe(document.getElementById("resizer"));
 
 document.addEventListener('keypress', keyPressed);
 function keyPressed(event)
 {   
-    console.log("Geometries key pressed " + event.key);
     interactiveUtilites.handleKeyInput(event);
 }
 

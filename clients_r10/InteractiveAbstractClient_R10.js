@@ -25,7 +25,7 @@ export let showCamera = false;
 export let showWindow = false;
 
 export let showMatrix = false;
-export let pushback = -2.0;
+export let pushback = undefined;
 export let xTranslation = 0.0;
 export let yTranslation = 0.0;
 export let zTranslation = 0.0
@@ -45,23 +45,36 @@ export let pointSize = 0;
 export let takeScreenshot = false;
 export let screenshotNumber = 0;
 
-export let fb;
+export let fb = new FrameBuffer(100, 100, Color.black);
 
+/**@param {Scene} s the scene to be used*/
 export function setScene(s)
 {
-    //console.log("setting scene \n" + s.toString())
     scene = s;
 }
 
-export function setFB(fb)
+export function setPushBack(z)
 {
-    fb = fb;
+    pushback = z;
+}
+
+export function setAspectRatio(asp)
+{
+    aspectRatio = asp;
+}
+
+export function setFOVY(fovy)
+{
+    fovy = fovy;
+}
+
+export function setNear(n)
+{
+    near = n;
 }
 
 export function handleKeyInput(e)
 {
-    console.log("keyPressed " + e.key);
-
     const c = e.key;
 
     if('h' == c)
@@ -190,8 +203,6 @@ export function handleKeyInput(e)
 
 export function setTransformations(c)
 {
-    console.log("setTransformations");
-
     if('=' == c)
     {
         scale = 1.0;
@@ -217,7 +228,7 @@ export function setTransformations(c)
     else if('z' == c)
         zTranslation -= .1;
     else if('Z' == c)
-        zTranslation != .1;
+        zTranslation += .1;
     else if('u' == c)
         xRotation -= 2;
     else if('U' == c)
@@ -231,14 +242,26 @@ export function setTransformations(c)
     else if('W' == c)
         zRotation += 2;
 
+
+    // round to the nearest tenth otherwise we get 
+    // translate .999 or .799
+    xTranslation = roundTenth(xTranslation);
+    yTranslation = roundTenth(yTranslation);
+    zTranslation = roundTenth(zTranslation);
+
     const modelP = scene.getPosition(currentModel);
 
+    // if pushback wasn't set or isn't a number use the positions z translation
+    if(pushback == undefined || typeof pushback != "number")
+        pushback = modelP.getMatrix().v4.z;
+
+    //@ts-ignore
     modelP.matrix2Identity().mult(Matrix.translate(0, 0, pushback))
-                           .mult(Matrix.translate(xTranslation, yTranslation, zTranslation))
-                           .mult(Matrix.rotateX(xRotation))
-                           .mult(Matrix.rotateY(yRotation))
-                           .mult(Matrix.rotateZ(zRotation))
-                           .mult(Matrix.scale(scale));
+                            .mult(Matrix.translate(xTranslation, yTranslation, zTranslation))
+                            .mult(Matrix.rotateX(xRotation))
+                            .mult(Matrix.rotateY(yRotation))
+                            .mult(Matrix.rotateZ(zRotation))
+                            .mult(Matrix.scale(scale));
 }
 
 export function displayMatrix(c)
@@ -299,38 +322,31 @@ export function printHelpMessage()
     console.log("Use the 'h' key to redisplay this help message.");
 }
 
-export function windowResized(bgfb = Color.black, bgvp = new Color(125, 125, 125))
+export function windowResized()
 {
-    console.log("resizing: ");
-
-    //console.log(Color.gray instanceof Color);
-
     // Get the new size of the canvas
     const resizer = document.getElementById("resizer");
     const w = resizer?.offsetWidth;
     const h = resizer?.offsetHeight;
 
-    // Create a new FrameBuffer that fits the canvas
-    //const bg1 = fb.getBackgroundColorFB();
-    //const bg2 = fb.getViewport().getBackgroundColorVP();
+    // Create a new FrameBuffer that fits the canvas    
+    const bg1 = fb.getBackgroundColorFB();
+    const bg2 = fb.getViewport().getBackgroundColorVP();
     
     //@ts-ignore
-    fb = new FrameBuffer(w, h, bgfb);
-    fb.vp.setBackgroundColorVP(bgvp);
+    fb = new FrameBuffer(w, h, bg1);
+    fb.vp.setBackgroundColorVP(bg2);
     
-
     setUpViewing();
 }
 
 export function setUpViewing()
 {
-    console.log("setUpViewing");
-
     // Set up the camera's view volume.
     if (scene.getCamera().perspective)
-       scene.getCamera().projPerspective(fovy, aspectRatio, near);
+       scene.getCamera().projPerspectiveFOVY(fovy, aspectRatio, near);
     else
-       scene.getCamera().projOrtho(fovy, aspectRatio, near);
+       scene.getCamera().projOrthoFOVY(fovy, aspectRatio, near);
 
     // get the size of the resizer so we know what size to make the fb
     const resizer = document.getElementById("resizer");
@@ -357,10 +373,6 @@ export function setUpViewing()
             fb.setViewport(0, yOffset, w, height);
         }
 
-        // see if the aspect ratio code is the problem
-        // it isn't
-        //fb.setViewport(w, h, 0, 0);
-
         fb.clearFBDefault();
         fb.vp.clearVPDefault();
     }
@@ -385,4 +397,9 @@ export function setUpViewing()
     ctx.canvas.width = w;
     ctx.canvas.height = h;
     ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
+}
+
+function roundTenth(num)
+{
+    return Math.round(num * 10)/10;
 }

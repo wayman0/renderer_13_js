@@ -313,9 +313,7 @@ export default class Viewport
      * @param {Color} color this {Viewport} new background color
      */
     setBackgroundColorVP(color)
-    {
-        console.log(color instanceof Color);
-        
+    {        
         if (color instanceof Color == false)
             throw new Error("Color is not of type Color");
 
@@ -362,12 +360,12 @@ export default class Viewport
         */
 
         const c = Color.convert2Int(color);
-        for(let startPixel = 0; startPixel < this.getWidthVP() * this.getHeightVP() * 4; startPixel += 4)
+        for(let pixel = 0; pixel < this.getWidthVP() * this.getHeightVP()*4; pixel += 4)
         {
-            this.parent.pixelBuffer[startPixel + 0] = c.getRed();
-            this.parent.pixelBuffer[startPixel + 1] = c.getGreen();
-            this.parent.pixelBuffer[startPixel + 2] = c.getBlue();
-            this.parent.pixelBuffer[startPixel + 3] = c.getAlpha();
+            this.parent.pixelBuffer[pixel + 0] = c.getRed();
+            this.parent.pixelBuffer[pixel + 1] = c.getGreen();
+            this.parent.pixelBuffer[pixel + 2] = c.getBlue();
+            this.parent.pixelBuffer[pixel + 3] = c.getAlpha();
         }
     }
 
