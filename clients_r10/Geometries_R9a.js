@@ -14,71 +14,93 @@ import {renderFB, setDoAntiAliasing, setDoGamma, setRastDebug} from "../renderer
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {format} from "../renderer/scene/util/UtilExport.js";
 
-// Create the Scene object that we shall render.
-const scene = Scene.buildFromName("Geometries_R9");
-
-// Create a two-dimensional array of Positions holding Models.
-const position = new Array(3);
-for(let i = 0; i < 3; i += 1)
-    position[i] = new Array(3);
-
-// row 0 (first row in first image)
-position[0][0] = Position.buildFromModel(new TriangularPrism(1.0, 1.0, 10, 30));
-ModelShading.setColor(position[0][0].getModel(), Color.green);
-
-position[0][1] = Position.buildFromModel(new Cylinder(0.5, 1.0, 30, 30));
-ModelShading.setColor(position[0][1].getModel(), Color.blue);
-
-position[0][2] = Position.buildFromModel(new ConeFrustum(0.5, 1.0, 1.0, 10, 10));
-ModelShading.setColor(position[0][2].getModel(), Color.orange);
-
-// row 1
-position[1][0] = Position.buildFromModel(new Octahedron(2, 2, 2, 2, 2, 2));
-//position[1][0] = Position.buildFromModel(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2));
-ModelShading.setColor(position[1][0].getModel(), Color.green);
-
-position[1][1] = Position.buildFromModel(new Box(1.0, 1.0, 1.0));
-ModelShading.setRandomPrimitiveColor(position[1][1].getModel());
-
-position[1][2] = Position.buildFromModel(
-        new ParametricCurve(
-                    (t) => {return 0.3*(Math.sin(t) + 2*Math.sin(2*t)) + 0.1*Math.sin(t/6)},
-                    (t) => {return 0.3*(Math.cos(t) - 2*Math.cos(2*t)) + 0.1*Math.sin(t/6)},
-                    (t) => {return 0.3*(-Math.sin(3*t))},
-                    0, 6*Math.PI, 120));
-ModelShading.setRandomPrimitiveColor(position[1][2].getModel());
-
-// row 2
-position[2][0] = Position.buildFromModel(new Cone(0.5, 1.0, 30, 30));
-ModelShading.setColor(position[2][0].getModel(), Color.yellow);
-
-position[2][1] = Position.buildFromModel(new Tetrahedron(12, 12));
-ModelShading.setColor(position[2][1].getModel(), Color.green);
-
-position[2][2] = Position.buildFromModel(new Sphere(1.0, 30, 30));
-ModelShading.setColor(position[2][2].getModel(), Color.cyan);
-
-// Create x, y and z axes
-const xyzAxes = Position.buildFromModel(new Axes3D(6, -6, 6, 0, 7, -7, Color.red));
-
-// Create a horizontal coordinate plane model.
-const xzPlane = Position.buildFromModel(new PanelXZ(-6, 6, -7, 7));
-ModelShading.setColor(xzPlane.getModel(), Color.Gray);
-
-// Add the positions (and their models) to the Scene.
-scene.addPosition(xzPlane); // draw the grid first
-scene.addPosition(xyzAxes); // draw the axes on top of the grid
-
-xzPlane.setMatrix(Matrix.translate(0, -3, -10));
-xyzAxes.setMatrix(Matrix.translate(0, -3, -10));
-
-for (let i = position.length - 1;  i >= 0; --i) // from back to front
+export function buildScene()
 {
-   for (let j = 0; j < position[i].length; ++j)
+   // Create the Scene object that we shall render.
+   const scene = Scene.buildFromName("Geometries_R9");
+
+   // Create a two-dimensional array of Positions holding Models.
+   const position = new Array(3);
+   for(let i = 0; i < 3; i += 1)
+       position[i] = new Array(3);
+
+   // row 0 (first row in first image)
+   position[0][0] = Position.buildFromModel(new TriangularPrism(1.0, 1.0, 10, 30));
+   ModelShading.setColor(position[0][0].getModel(), Color.green);
+
+   position[0][1] = Position.buildFromModel(new Cylinder(0.5, 1.0, 30, 30));
+   ModelShading.setColor(position[0][1].getModel(), Color.blue);
+
+   position[0][2] = Position.buildFromModel(new ConeFrustum(0.5, 1.0, 1.0, 10, 10));
+   ModelShading.setColor(position[0][2].getModel(), Color.orange);
+
+   // row 1
+   position[1][0] = Position.buildFromModel(new Octahedron(2, 2, 2, 2, 2, 2));
+   //position[1][0] = Position.buildFromModel(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2));
+   ModelShading.setColor(position[1][0].getModel(), Color.green);
+
+   position[1][1] = Position.buildFromModel(new Box(1.0, 1.0, 1.0));
+   ModelShading.setRandomPrimitiveColor(position[1][1].getModel());
+
+   position[1][2] = Position.buildFromModel(
+           new ParametricCurve(
+                       (t) => {return 0.3*(Math.sin(t) + 2*Math.sin(2*t)) + 0.1*Math.sin(t/6)},
+                       (t) => {return 0.3*(Math.cos(t) - 2*Math.cos(2*t)) + 0.1*Math.sin(t/6)},
+                       (t) => {return 0.3*(-Math.sin(3*t))},
+                       0, 6*Math.PI, 120));
+   ModelShading.setRandomPrimitiveColor(position[1][2].getModel());
+
+   // row 2
+   position[2][0] = Position.buildFromModel(new Cone(0.5, 1.0, 30, 30));
+   ModelShading.setColor(position[2][0].getModel(), Color.yellow);
+
+   position[2][1] = Position.buildFromModel(new Tetrahedron(12, 12));
+   ModelShading.setColor(position[2][1].getModel(), Color.green);
+
+   position[2][2] = Position.buildFromModel(new Sphere(1.0, 30, 30));
+   ModelShading.setColor(position[2][2].getModel(), Color.cyan);
+
+   // Create x, y and z axes
+   const xyzAxes = Position.buildFromModel(new Axes3D(6, -6, 6, 0, 7, -7, Color.red));
+
+   // Create a horizontal coordinate plane model.
+   const xzPlane = Position.buildFromModel(new PanelXZ(-6, 6, -7, 7));
+   ModelShading.setColor(xzPlane.getModel(), Color.Gray);
+
+   // Add the positions (and their models) to the Scene.
+   scene.addPosition(xzPlane); // draw the grid first
+   scene.addPosition(xyzAxes); // draw the axes on top of the grid
+
+   xzPlane.setMatrix(Matrix.translate(0, -3, -10));
+   xyzAxes.setMatrix(Matrix.translate(0, -3, -10));
+
+   for (let i = position.length - 1;  i >= 0; --i) // from back to front
    {
-      scene.addPosition(position[i][j]);
+      for (let j = 0; j < position[i].length; ++j)
+      {
+         scene.addPosition(position[i][j]);
+      }
    }
+
+   return scene;
 }
+
+const scene = buildScene();
+const xzPlane = scene.positionList[0];
+const xyzAxes = scene.positionList[1];
+
+// use math.sqrt to make the array a 'square'
+const posRows = Math.sqrt(scene.positionList.length-2);
+const posCols = posRows;
+
+const position = new Array(posRows);
+for(let x = 0; x < posRows; x += 1)
+   position[x] = new Array(posCols);
+
+for(let i = 0; i < posRows; i += 1)
+   for(let j = 0; j < posCols; j += 1)
+      position[i][j] = scene.positionList[posCols * i + j + 2];
+
 
 const  fov    = 90.0;
 const  aspect = 2.0;
@@ -109,9 +131,9 @@ for (let k = 0; k < 360; k += 5)
 
    // Place each model where it belongs in the rotated xz-plane
    // and also rotate each model on its own axis.
-   for (let i = 0; i < position.length; ++i)
+   for (let i = 0; i < posRows; ++i)
    {
-      for (let j = 0; j < position[i].length; ++j)
+      for (let j = 0; j < posCols; ++j)
       {
          // Push the model away from the camera.
          // Rotate the plane of the models.

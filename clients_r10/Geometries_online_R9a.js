@@ -12,7 +12,9 @@ import {Scene, Position, Matrix, Camera} from "../renderer/scene/SceneExport.js"
 import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {renderFB} from "../renderer/pipeline/PipelineExport.js";
+import { buildScene } from "./Geometries_R9a.js";
 
+/*
 // Create the Scene object that we shall render.
 const scene = Scene.buildFromName("Geometries_online_R8");
 
@@ -78,6 +80,23 @@ for (let i = position.length - 1;  i >= 0; --i) // from back to front
       scene.addPosition(position[i][j]);
    }
 }
+*/
+
+const scene = buildScene();
+const xzPlane = scene.positionList[0];
+const xyzAxes = scene.positionList[1];
+
+// use math.sqrt to make the array a 'square'
+const posRows = Math.sqrt(scene.positionList.length-2);
+const posCols = posRows;
+
+const position = new Array(posRows);
+for(let x = 0; x < posRows; x += 1)
+   position[x] = new Array(posCols);
+
+for(let i = 0; i < posRows; i += 1)
+   for(let j = 0; j < posCols; j += 1)
+      position[i][j] = scene.positionList[posCols * i + j + 2];
 
 const  fov    = 90.0;
 const  aspect = 2.0;

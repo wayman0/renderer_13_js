@@ -14,69 +14,88 @@ import {renderFB, setDoAntiAliasing, setDoGamma, setRastDebug} from "../renderer
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {format} from "../renderer/scene/util/UtilExport.js";
 
-// Create the Scene object that we shall render.
-const scene = Scene.buildFromName("Geometries_R10b");
-
-// Create a two-dimensional array of Positions holding Models.
-/**@type {Position[][]} */
-const position = new Array(3);
-for(let x = 0; x < position.length; x += 1)
-    position[x] = new Array(3);
-
-// row 0 (first row in first image)
-position[0][0] = new Position(new TriangularPrism(1.0, 1.0, 10));
-ModelShading.setColor(position[0][0].getModel(), Color.magenta);
-
-position[0][1] = new Position(new Cylinder(0.5, 1.0, 30, 30));
-ModelShading.setColor(position[0][1].getModel(), Color.blue);
-
-position[0][2] = new Position(new ConeFrustum(0.5, 1.0, 1.0, 10, 10));
-ModelShading.setColor(position[0][2].getModel(), Color.orange);
-
-position[1][0] = new Position(new Octahedron(2, 2, 2, 2, 2, 2));
-//position[1][0] = new Position(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2));
-ModelShading.setColor(position[1][0].getModel(), Color.red);
-
-position[1][1] = new Position(new Box(1.0, 1.0, 1.0));
-ModelShading.setRandomPrimitiveColor(position[1][1].getModel());
-
-position[1][2] = new Position(new ParametricCurve(
-                        (t) => {return 0.3*(Math.sin(t) + 2*Math.sin(2*t)) + 0.1*Math.sin(t/6)},
-                        (t) => {return 0.3*(Math.cos(t) - 2*Math.cos(2*t)) + 0.1*Math.sin(t/6)},
-                        (t) => {return 0.3*(-Math.sin(3*t))},
-                         0, 6*Math.PI, 120));
-ModelShading.setRandomPrimitiveColor(position[1][2].getModel());
-
-position[2][0] = new Position(new Cone(0.5, 1.0, 30, 30));
-ModelShading.setColor(position[2][0].getModel(), Color.yellow);
-
-position[2][1] = new Position(new Tetrahedron(12, 12));
-ModelShading.setColor(position[2][1].getModel(), Color.green);
-
-position[2][2] = new Position(new Sphere(1.0, 30, 30));
-ModelShading.setColor(position[2][2].getModel(), Color.cyan);
-
-// Create x, y and z axes
-const xyzAxes = new Position(
-                            new Axes3D(6, -6, 6, 0, 7, -7, Color.red));
-
-// Create a "top level" Position that holds
-// the horizontal coordinate plane model.
-const topLevel_p = new Position(new PanelXZ(-6, 6, -7, 7));
-ModelShading.setColor(topLevel_p.getModel(), new Color(50, 50, 50));
-
-// Add the other Positions as nested Positions of the top level Position.
-topLevel_p.addNestedPosition(xyzAxes); // draw the axes after the grid
-for (let i = position.length - 1; i >= 0; --i)  // from back to front
+export function buildScene()
 {
-   for (let j = 0; j < position[i].length; ++j)
+   // Create the Scene object that we shall render.
+   const scene = Scene.buildFromName("Geometries_R10b");
+
+   // Create a two-dimensional array of Positions holding Models.
+   /**@type {Position[][]} */
+   const position = new Array(3);
+   for(let x = 0; x < position.length; x += 1)
+       position[x] = new Array(3);
+
+   // row 0 (first row in first image)
+   position[0][0] = new Position(new TriangularPrism(1.0, 1.0, 10));
+   ModelShading.setColor(position[0][0].getModel(), Color.magenta);
+
+   position[0][1] = new Position(new Cylinder(0.5, 1.0, 30, 30));
+   ModelShading.setColor(position[0][1].getModel(), Color.blue);
+
+   position[0][2] = new Position(new ConeFrustum(0.5, 1.0, 1.0, 10, 10));
+   ModelShading.setColor(position[0][2].getModel(), Color.orange);
+
+   position[1][0] = new Position(new Octahedron(2, 2, 2, 2, 2, 2));
+   //position[1][0] = new Position(Octahedron.buildMeshOctahedron(2, 2, 2, 2, 2, 2));
+   ModelShading.setColor(position[1][0].getModel(), Color.red);
+
+   position[1][1] = new Position(new Box(1.0, 1.0, 1.0));
+   ModelShading.setRandomPrimitiveColor(position[1][1].getModel());
+
+   position[1][2] = new Position(new ParametricCurve(
+                           (t) => {return 0.3*(Math.sin(t) + 2*Math.sin(2*t)) + 0.1*Math.sin(t/6)},
+                           (t) => {return 0.3*(Math.cos(t) - 2*Math.cos(2*t)) + 0.1*Math.sin(t/6)},
+                           (t) => {return 0.3*(-Math.sin(3*t))},
+                            0, 6*Math.PI, 120));
+   ModelShading.setRandomPrimitiveColor(position[1][2].getModel());
+
+   position[2][0] = new Position(new Cone(0.5, 1.0, 30, 30));
+   ModelShading.setColor(position[2][0].getModel(), Color.yellow);
+
+   position[2][1] = new Position(new Tetrahedron(12, 12));
+   ModelShading.setColor(position[2][1].getModel(), Color.green);
+
+   position[2][2] = new Position(new Sphere(1.0, 30, 30));
+   ModelShading.setColor(position[2][2].getModel(), Color.cyan);
+
+   // Create x, y and z axes
+   const xyzAxes = new Position(new Axes3D(6, -6, 6, 0, 7, -7, Color.red));
+
+   // Create a "top level" Position that holds
+   // the horizontal coordinate plane model.
+   const topLevel_p = new Position(new PanelXZ(-6, 6, -7, 7));
+   ModelShading.setColor(topLevel_p.getModel(), new Color(50, 50, 50));
+
+   // Add the other Positions as nested Positions of the top level Position.
+   topLevel_p.addNestedPosition(xyzAxes); // draw the axes after the grid
+   for (let i = position.length - 1; i >= 0; --i)  // from back to front
    {
-      topLevel_p.addNestedPosition(position[i][j]);
+      for (let j = 0; j < position[i].length; ++j)
+      {
+         topLevel_p.addNestedPosition(position[i][j]);
+      }
    }
+
+   // Add the top level Position to the Scene.
+   scene.addPosition( topLevel_p );
+
+   return scene;
 }
 
-// Add the top level Position to the Scene.
-scene.addPosition( topLevel_p );
+const scene = buildScene();
+const topLevel_p = scene.getPosition(0);
+const xyzAxes = topLevel_p.getNestedPositions()[0];
+
+const posRows = Math.sqrt(topLevel_p.nestedPositions.length -1);
+const posCols = posRows;
+
+const position = new Array(posRows);
+for(let x = 0; x < posRows; x += 1)
+   position[x] = new Array(posCols);
+
+for(let i = 0; i < posRows; i += 1)
+   for(let j = 0; j < posCols; j += 1)
+      position[i][j] = topLevel_p.nestedPositions[posCols * i + j + 1];
 
 // Place the top level Position in front of the camera.
 topLevel_p.setMatrix( Matrix.translate(0, -3, -10) );

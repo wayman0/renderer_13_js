@@ -14,74 +14,83 @@ import {renderFB, setDoAntiAliasing, setDoGamma, setRastDebug} from "../renderer
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {format} from "../renderer/scene/util/UtilExport.js";
 
-// build the models, set the color, and create the positions
-const triangMod = new TriangularPrism(undefined, undefined, undefined, 30);
-ModelShading.setColor(triangMod, Color.Magenta);
-const triangPos = new Position(triangMod, Matrix.translate(-3, 0, 4), "Triangular Prism");
+export function buildScene()
+{
+    // build the models, set the color, and create the positions
+    const triangMod = new TriangularPrism(undefined, undefined, undefined, 30);
+    ModelShading.setColor(triangMod, Color.Magenta);
+    const triangPos = new Position(triangMod, Matrix.translate(-3, 0, 4), "Triangular Prism");
 
-const cylModel = new Cylinder(1, 1, 30, 30);
-ModelShading.setColor(cylModel, Color.blue);
-const cylPos = new Position(cylModel, Matrix.translate(0, 0, 4), "Cylinder Position");
+    const cylModel = new Cylinder(1, 1, 30, 30);
+    ModelShading.setColor(cylModel, Color.blue);
+    const cylPos = new Position(cylModel, Matrix.translate(0, 0, 4), "Cylinder Position");
 
-//why does this model have to be translated forward 4 instead of 3 to be in line?
-const coneFrustMod = new ConeFrustum(.5, 1, 1, 10, 10);
-ModelShading.setColor(coneFrustMod, Color.green);
-const coneFrustPos = new Position(coneFrustMod, Matrix.translate(3, 0, 5), "Cone Frustum Position");
+    //why does this model have to be translated forward 4 instead of 3 to be in line?
+    const coneFrustMod = new ConeFrustum(.5, 1, 1, 10, 10);
+    ModelShading.setColor(coneFrustMod, Color.green);
+    const coneFrustPos = new Position(coneFrustMod, Matrix.translate(3, 0, 5), "Cone Frustum Position");
 
-const octMod = new Octahedron(3, 3, 3, 3, 3, 3);
-//const octMod = Octahedron.buildMeshOctahedron(3, 3, 3, 3, 3, 3);
-ModelShading.setColor(octMod, Color.pink);
-const octPos = new Position(octMod, Matrix.translate(-3, 0, 0), "Octahedron Position");
+    const octMod = new Octahedron(3, 3, 3, 3, 3, 3);
+    //const octMod = Octahedron.buildMeshOctahedron(3, 3, 3, 3, 3, 3);
+    ModelShading.setColor(octMod, Color.pink);
+    const octPos = new Position(octMod, Matrix.translate(-3, 0, 0), "Octahedron Position");
 
-const boxMod = new Box(1, 1, 1);
-ModelShading.setColor(boxMod, Color.cyan);
-const boxPos = new Position(boxMod, Matrix.translate(-.5, 0, 0), "Box Position");
+    const boxMod = new Box(1, 1, 1);
+    ModelShading.setColor(boxMod, Color.cyan);
+    const boxPos = new Position(boxMod, Matrix.translate(-.5, 0, 0), "Box Position");
 
-const parCurveMod = new ParametricCurve(
-                 (t) => {return 0.3*(Math.sin(t) + 2*Math.sin(2*t)) + 0.1*Math.sin(t/6)},
-                 (t) => {return 0.3*(Math.cos(t) - 2*Math.cos(2*t)) + 0.1*Math.sin(t/6)},
-                 (t) => {return 0.3*(-Math.sin(3*t))},
-                 0, 6*Math.PI, 120);
-ModelShading.setColor(parCurveMod, Color.red);
-const parCurvePos = new Position(parCurveMod, Matrix.translate(3, 0, 0), "Parametric Curve Position");
-
-
-const coneMod = new Cone(1, 1, 30, 30);
-ModelShading.setColor(coneMod, Color.orange);
-const conePos = new Position(coneMod, Matrix.translate(-3, 0, -4), "Cone Position");
-
-const tetraMod = new Tetrahedron();
-ModelShading.setColor(tetraMod, Color.Yellow);
-const tetraPos = new Position(tetraMod, Matrix.translate(0, 0, -4), "Tetrahedron Position");
-
-const sphereMod = new Sphere(1, 30, 30);
-ModelShading.setColor(sphereMod, Color.white);
-const spherePos = new Position(sphereMod, Matrix.translate(3, 0, -4), "Sphere Position");
+    const parCurveMod = new ParametricCurve(
+                     (t) => {return 0.3*(Math.sin(t) + 2*Math.sin(2*t)) + 0.1*Math.sin(t/6)},
+                     (t) => {return 0.3*(Math.cos(t) - 2*Math.cos(2*t)) + 0.1*Math.sin(t/6)},
+                     (t) => {return 0.3*(-Math.sin(3*t))},
+                     0, 6*Math.PI, 120);
+    ModelShading.setColor(parCurveMod, Color.red);
+    const parCurvePos = new Position(parCurveMod, Matrix.translate(3, 0, 0), "Parametric Curve Position");
 
 
-const xzPlaneMod = new PanelXZ(-7, 7, -7, 7);
-ModelShading.setColor(xzPlaneMod, new Color(200, 200, 200));
-const xzPlanePos = new Position(xzPlaneMod, Matrix.translate(0, -1, -10), "Floor Position");
+    const coneMod = new Cone(1, 1, 30, 30);
+    ModelShading.setColor(coneMod, Color.orange);
+    const conePos = new Position(coneMod, Matrix.translate(-3, 0, -4), "Cone Position");
+
+    const tetraMod = new Tetrahedron();
+    ModelShading.setColor(tetraMod, Color.Yellow);
+    const tetraPos = new Position(tetraMod, Matrix.translate(0, 0, -4), "Tetrahedron Position");
+
+    const sphereMod = new Sphere(1, 30, 30);
+    ModelShading.setColor(sphereMod, Color.white);
+    const spherePos = new Position(sphereMod, Matrix.translate(3, 0, -4), "Sphere Position");
 
 
-// create the nested structure of the scene
-xzPlanePos.addNestedPosition(triangPos); // looks in wrong position?
-xzPlanePos.addNestedPosition(cylPos);
-xzPlanePos.addNestedPosition(coneFrustPos); // looks in wrong position?
-xzPlanePos.addNestedPosition(octPos);
-xzPlanePos.addNestedPosition(boxPos);
-xzPlanePos.addNestedPosition(parCurvePos);
-xzPlanePos.addNestedPosition(conePos);
-xzPlanePos.addNestedPosition(tetraPos);
-xzPlanePos.addNestedPosition(spherePos);
+    const xzPlaneMod = new PanelXZ(-7, 7, -7, 7);
+    ModelShading.setColor(xzPlaneMod, new Color(200, 200, 200));
+    const xzPlanePos = new Position(xzPlaneMod, Matrix.translate(0, -1, -10), "Floor Position");
 
-// create and set the viewvolume of the camera
-const cam = new Camera();
 
-// add the camera and xzPlanes to the scene
-const scene = Scene.buildFromCameraName(cam, "Geometries R9 Scene");
-scene.addPosition(xzPlanePos);
-scene.getPosition(0).getMatrix().mult(Matrix.rotateX(15));
+    // create the nested structure of the scene
+    xzPlanePos.addNestedPosition(triangPos); // looks in wrong position?
+    xzPlanePos.addNestedPosition(cylPos);
+    xzPlanePos.addNestedPosition(coneFrustPos); // looks in wrong position?
+    xzPlanePos.addNestedPosition(octPos);
+    xzPlanePos.addNestedPosition(boxPos);
+    xzPlanePos.addNestedPosition(parCurvePos);
+    xzPlanePos.addNestedPosition(conePos);
+    xzPlanePos.addNestedPosition(tetraPos);
+    xzPlanePos.addNestedPosition(spherePos);
+
+    // create and set the viewvolume of the camera
+    const cam = new Camera();
+
+    // add the camera and xzPlanes to the scene
+    const scene = Scene.buildFromCameraName(cam, "Geometries R9 Scene");
+    scene.addPosition(xzPlanePos);
+
+    return scene;
+}
+
+const scene = buildScene();
+const xzPlanePos = scene.getPosition(0);
+
+xzPlanePos.getMatrix().mult(Matrix.rotateX(15));
 
 
 // create the framebuffer, render, and dump to file
