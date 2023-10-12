@@ -10,6 +10,7 @@ import {Scene, Matrix, Model, Position, Vertex} from "../renderer/scene/SceneExp
 import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {renderFB, setRastDebug, setDoAntiAliasing} from "../renderer/pipeline/PipelineExport.js";
 import {LineSegment} from "../renderer/scene/primitives/PrimitiveExport.js";
+import { handleKeyInput, windowResized } from "./InteractiveAbstractClient_R10.js";
 
 let cubeModel = Model.buildName("Cube");
 cubeModel.addVertex(new Vertex(-1, -1, 1),
@@ -42,55 +43,100 @@ cubePos.setMatrix(Matrix.translate(0, 0, -5));
 let scene = Scene.buildFromName("InteractiveCube_R10");
 scene.addPosition(cubePos);
 
-let fb = new FrameBuffer(500, 500);
-
-renderFB(scene, fb);
-fb.dumpFB2File("Cube.ppm");
-
-// create an animation of the cube rotating around x axis
-for(let x = -90; x <= 90; x += 5)
+try
 {
-    fb.clearFBDefault();
-    cubePos.setMatrix(Matrix.translate(0, 0, -5)
-                            .mult(Matrix.rotateX(x)));
-    renderFB(scene, fb);
-    fb.dumpFB2File("Cube--RotateX(" + x + ").ppm");
+    document;
+    console.log("runing online");
+
+    const file = "./InteractiveAbstractClient_R10.js";
+    try
+    {
+        //const interactiveUtil = await import(file);
+        //runOnline(interactiveUtil);
+
+        async function getModule()
+        {
+            return await import("./InteractiveAbstractClient_R10.js");
+        }
+
+        runOnline(await getModule());
+    }
+    catch(err)
+    {
+        console.log(err);
+        console.log("Import Error");
+    }
+}
+catch(e)
+{
+    console.log("runnoing offline");
+    runOffline();
 }
 
-// create an animation of the cube rotating around y axis
-for(let y = -90; y <= 90; y += 5)
+function runOnline(mod)
 {
-    fb.clearFBDefault();
-    cubePos.setMatrix(Matrix.translate(0, 0, -5)
-                            .mult(Matrix.rotateY(y)));
-    renderFB(scene, fb);
-    fb.dumpFB2File("Cube--RotateY(" + y + ").ppm");
-}
+    console.log(mod);
+    mod.setScene(scene);
 
-// create an animation of the cube rotating around z axis
-for(let z = -90; z <= 90; z += 5)
-{
-    fb.clearFBDefault();
-    cubePos.setMatrix(Matrix.translate(0, 0, -5)
-                            .mult(Matrix.rotateZ(z)));
-    renderFB(scene, fb);
-    fb.dumpFB2File("Cube--RotateZ(" + z + ").ppm");
-}
 
-// create an animation of the cube rotating around x, y, z axis
-for(let r = -90; r <= 90; r += 5)
-{
-    fb.clearFBDefault();
-    cubePos.setMatrix(Matrix.translate(0, 0, -5)
-                            .mult(Matrix.rotateX(r))
-                            .mult(Matrix.rotateY(r))
-                            .mult(Matrix.rotateZ(r)));
-    renderFB(scene, fb);
-    fb.dumpFB2File("Cube--RotateAll(" + r + ").ppm");
+    document.addEventListener("keypress", keyPress);
+
+    function keyPress(e)
+    {
+        mod.handleKeyInput(e);
+    }
+
+    const resizer = new ResizeObserver(mod.windowResized());
+    resizer.observe(document.getElementById("resizer"));    
 }
 
 
+function runOffline()
+{
+    let fb = new FrameBuffer(500, 500);
 
+    renderFB(scene, fb);
+    fb.dumpFB2File("Cube.ppm");
 
+    // create an animation of the cube rotating around x axis
+    for(let x = -90; x <= 90; x += 5)
+    {
+        fb.clearFBDefault();
+        cubePos.setMatrix(Matrix.translate(0, 0, -5)
+                                .mult(Matrix.rotateX(x)));
+        renderFB(scene, fb);
+        fb.dumpFB2File("Cube--RotateX(" + x + ").ppm");
+    }
 
+    // create an animation of the cube rotating around y axis
+    for(let y = -90; y <= 90; y += 5)
+    {
+        fb.clearFBDefault();
+        cubePos.setMatrix(Matrix.translate(0, 0, -5)
+                                .mult(Matrix.rotateY(y)));
+        renderFB(scene, fb);
+        fb.dumpFB2File("Cube--RotateY(" + y + ").ppm");
+    }
 
+    // create an animation of the cube rotating around z axis
+    for(let z = -90; z <= 90; z += 5)
+    {
+        fb.clearFBDefault();
+        cubePos.setMatrix(Matrix.translate(0, 0, -5)
+                                .mult(Matrix.rotateZ(z)));
+        renderFB(scene, fb);
+        fb.dumpFB2File("Cube--RotateZ(" + z + ").ppm");
+    }
+
+    // create an animation of the cube rotating around x, y, z axis
+    for(let r = -90; r <= 90; r += 5)
+    {
+        fb.clearFBDefault();
+        cubePos.setMatrix(Matrix.translate(0, 0, -5)
+                                .mult(Matrix.rotateX(r))
+                                .mult(Matrix.rotateY(r))
+                                .mult(Matrix.rotateZ(r)));
+        renderFB(scene, fb);
+        fb.dumpFB2File("Cube--RotateAll(" + r + ").ppm");
+    }
+}

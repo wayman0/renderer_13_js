@@ -385,17 +385,20 @@ export function setUpViewing()
 
     render(scene, fb.vp);
 
+    /*
     if (takeScreenshot)
     {
         fb.dumpFB2File(format("Screenshot%03d.png", screenshotNumber));
         ++screenshotNumber;
         takeScreenshot = false;
     }
-    
+    */
+   
     // @ts-ignore
     const ctx = document.getElementById("pixels").getContext("2d");
     ctx.canvas.width = w;
     ctx.canvas.height = h;
+    
     ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
 }
 
