@@ -13,6 +13,7 @@ import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {renderFB} from "../renderer/pipeline/PipelineExport.js";
 import {format} from "../renderer/scene/util/UtilExport.js";
+import { numberOfInteractiveModels } from "./InteractiveAbstractClient_R10.js";
 
 const scene = Scene.buildFromName("InteractiveModelsAll_R10");
 // Instantiate at least one of every Model class.
@@ -45,6 +46,7 @@ scene.addPosition(new Position(new Shapes.Octahedron(20, 20, 20, 20, 20, 20)));
 //scene.addPosition(new Position(Shapes.Octahedron.buildMeshOctahedron(20, 20, 20, 20, 20, 20)));
 scene.addPosition(new Position(new Shapes.Icosahedron()));
 scene.addPosition(new Position(new Shapes.Dodecahedron()));
+
 // pyramids
 scene.addPosition(new Position(new Shapes.Pyramid(2.0, 1.0, 5, 6)));
 scene.addPosition(new Position(new Shapes.PyramidFrustum(2.0, 1.0, 0.5, 4, 5)));
@@ -54,7 +56,6 @@ scene.addPosition(new Position(new Shapes.TriangularPyramid(1.0, 1.0, 7, 7)));
 scene.addPosition(new Position(new Shapes.TriangularPrism(0.6, 0.5, 0.5, 3, true)));
 scene.addPosition(new Position(new Shapes.ViewFrustumModel()));
 //scene.addPosition(new Position(new Shapes.ViewFrustum()));
-
 
 // cones
 scene.addPosition(new Position(new Shapes.Cone(1.0, 1.0, 10, 16)));
@@ -104,27 +105,73 @@ ModelShading.setColor(scene.getPosition(length - 3).getModel(), new Color(50, 50
 ModelShading.setColor(scene.getPosition(length - 2).getModel(), new Color(50, 50, 50));// floor
 ModelShading.setColor(scene.getPosition(length - 1).getModel(), new Color(50, 50, 50));// ceiling
 
+scene.getPosition(length - 5).setMatrix(Matrix.translate(0, 0, -7));
+scene.getPosition(length - 4).setMatrix(Matrix.translate(0, 0, -7));
+scene.getPosition(length - 3).setMatrix(Matrix.translate(0, 0, -7));
+scene.getPosition(length - 2).setMatrix(Matrix.translate(0, 0, -7));
+scene.getPosition(length - 1).setMatrix(Matrix.translate(0, 0, -7));
+
+
 scene.getCamera().projPerspective(-3, 3, -3, 3, 1);
-const fb = new FrameBuffer(1024, 1024);
-renderFB(scene, fb);
-fb.dumpFB2File("InteractiveModelsAll_R10.ppm");
 
-for(let x = 0; x < scene.positionList.length-5; x += 1)
+try
 {
-  const p = scene.getPosition(x);
-  p.visible = true;
+  document;
+  const file = "./InteractiveAbstractClient_R10.js";
 
-  for(let rot = 0; rot <= 360; rot += 1)
+  try
   {
-    fb.clearFBDefault();
-    p.setMatrix(Matrix.translate(0, 0, -3)
-                      .mult(Matrix.rotateX(rot))
-                      .mult(Matrix.rotateY(rot)));
+    async function getModule()
+    {
+      return await import(file);
+    }
 
-    renderFB(scene, fb);
-    fb.dumpFB2File(format("InteractiveModelsAll_R10_Pos%2d_Frame_%3d.ppm", x, rot));
-    fb.clearFB(fb.bgColorFB);
+    runOnline(await getModule());
   }
+  catch(err)
+  {
+    console.log(err);
+  }
+}
+catch(e)
+{
+  runOffline();
+}
 
-  p.visible = false;
+function runOnline(mod)
+{
+  mod.setScene(scene);
+  mod.setNumberInteractiveModels(scene.positionList.length - 5);
+  mod.setPushBack(-3);
+
+  document.addEventListener("keypress", mod.handleKeyInput);
+  const resizer = new ResizeObserver(mod.windowResized);
+  resizer.observe(document.getElementById("resizer"));
+}
+
+function runOffline()
+{
+  const fb = new FrameBuffer(1024, 1024);
+  renderFB(scene, fb);
+  fb.dumpFB2File("InteractiveModelsAll_R10.ppm");
+
+  for(let x = 0; x < scene.positionList.length-5; x += 1)
+  {
+    const p = scene.getPosition(x);
+    p.visible = true;
+
+    for(let rot = 0; rot <= 360; rot += 1)
+    {
+      fb.clearFBDefault();
+      p.setMatrix(Matrix.translate(0, 0, -3)
+                        .mult(Matrix.rotateX(rot))
+                        .mult(Matrix.rotateY(rot)));
+
+      renderFB(scene, fb);
+      fb.dumpFB2File(format("InteractiveModelsAll_R10_Pos%2d_Frame_%3d.ppm", x, rot));
+      fb.clearFB(fb.bgColorFB);
+    }
+
+    p.visible = false;
+  }
 }

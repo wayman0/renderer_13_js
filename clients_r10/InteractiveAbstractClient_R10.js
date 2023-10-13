@@ -26,13 +26,15 @@ export let showWindow = false;
 
 export let showMatrix = false;
 export let pushback = undefined;
-export let xTranslation = 0.0;
-export let yTranslation = 0.0;
-export let zTranslation = 0.0
-export let xRotation = 0.0;
-export let yRotation = 0.0;
-export let zRotation = 0.0;
-export let scale = 1.0;
+
+// make these arrays to account for if there are multiple models
+export let xTranslation = new Array()
+export let yTranslation = new Array()
+export let zTranslation = new Array()
+export let xRotation = new Array();
+export let yRotation = new Array();
+export let zRotation = new Array();
+export let scale = new Array();
 
 export let scene;
 export let numberOfInteractiveModels = 1;
@@ -51,6 +53,24 @@ export let fb = new FrameBuffer(100, 100, Color.black);
 export function setScene(s)
 {
     scene = s;
+}
+
+export function setNumberInteractiveModels(num)
+{
+    numberOfInteractiveModels = num;
+
+    for(let modIndex = 0; modIndex < numberOfInteractiveModels; modIndex += 1)
+    {   
+        xTranslation[modIndex] = 0;
+        yTranslation[modIndex] = 0;
+        zTranslation[modIndex] = 0;
+
+        xRotation[modIndex] = 0;
+        yRotation[modIndex] = 0;
+        zRotation[modIndex] = 0;
+        
+        scale[modIndex] = 1;
+    }
 }
 
 export function setPushBack(z)
@@ -205,49 +225,49 @@ export function setTransformations(c)
 {
     if('=' == c)
     {
-        scale = 1.0;
-        xTranslation = 0;
-        yTranslation = 0;
-        zTranslation = 0;
-        xRotation = 0;
-        yRotation = 0;
-        zRotation = 0;
+        scale[currentModel] = 1.0;
+        xTranslation[currentModel] = 0;
+        yTranslation[currentModel] = 0;
+        zTranslation[currentModel] = 0;
+        xRotation[currentModel] = 0;
+        yRotation[currentModel] = 0;
+        zRotation[currentModel] = 0;
     }
     else if('s' == c)
-        scale /= 1.1;
+        scale[currentModel] /= 1.1;
     else if('S' == c)
-        scale *= 1.1;
+        scale[currentModel] *= 1.1;
     else if('x' == c)
-        xTranslation -= .1;
+        xTranslation[currentModel] -= .1;
     else if('X' == c)
-        xTranslation += .1;
+        xTranslation[currentModel] += .1;
     else if('y' == c)
-        yTranslation -= .1;
+        yTranslation[currentModel] -= .1;
     else if('Y' == c)
-        yTranslation += .1;
+        yTranslation[currentModel] += .1;
     else if('z' == c)
-        zTranslation -= .1;
+        zTranslation[currentModel] -= .1;
     else if('Z' == c)
-        zTranslation += .1;
+        zTranslation[currentModel] += .1;
     else if('u' == c)
-        xRotation -= 2;
+        xRotation[currentModel] -= 2;
     else if('U' == c)
-        xRotation += 2;
+        xRotation[currentModel] += 2;
     else if('v' == c)
-        yRotation -= 2;
+        yRotation[currentModel] -= 2;
     else if('V' == c)
-        yRotation += 2;
+        yRotation[currentModel] += 2;
     else if('w' == c)
-        zRotation -= 2;
+        zRotation[currentModel] -= 2;
     else if('W' == c)
-        zRotation += 2;
+        zRotation[currentModel] += 2;
 
 
     // round to the nearest tenth otherwise we get 
     // translate .999 or .799
-    xTranslation = roundTenth(xTranslation);
-    yTranslation = roundTenth(yTranslation);
-    zTranslation = roundTenth(zTranslation);
+    xTranslation[currentModel] = roundTenth(xTranslation[currentModel]);
+    yTranslation[currentModel] = roundTenth(yTranslation[currentModel]);
+    zTranslation[currentModel] = roundTenth(zTranslation[currentModel]);
 
     const modelP = scene.getPosition(currentModel);
 
@@ -257,11 +277,13 @@ export function setTransformations(c)
 
     //@ts-ignore
     modelP.matrix2Identity().mult(Matrix.translate(0, 0, pushback))
-                            .mult(Matrix.translate(xTranslation, yTranslation, zTranslation))
-                            .mult(Matrix.rotateX(xRotation))
-                            .mult(Matrix.rotateY(yRotation))
-                            .mult(Matrix.rotateZ(zRotation))
-                            .mult(Matrix.scale(scale));
+                            .mult(Matrix.translate( xTranslation[currentModel], 
+                                                    yTranslation[currentModel], 
+                                                    zTranslation[currentModel]))
+                            .mult(Matrix.rotateX(xRotation[currentModel]))
+                            .mult(Matrix.rotateY(yRotation[currentModel]))
+                            .mult(Matrix.rotateZ(zRotation[currentModel]))
+                            .mult(Matrix.scale(scale[currentModel]));
 }
 
 export function displayMatrix(c)

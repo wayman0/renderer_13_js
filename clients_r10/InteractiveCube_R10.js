@@ -46,14 +46,10 @@ scene.addPosition(cubePos);
 try
 {
     document;
-    console.log("runing online");
 
     const file = "./InteractiveAbstractClient_R10.js";
     try
     {
-        //const interactiveUtil = await import(file);
-        //runOnline(interactiveUtil);
-
         async function getModule()
         {
             return await import("./InteractiveAbstractClient_R10.js");
@@ -64,29 +60,20 @@ try
     catch(err)
     {
         console.log(err);
-        console.log("Import Error");
     }
 }
 catch(e)
 {
-    console.log("runnoing offline");
     runOffline();
 }
 
 function runOnline(mod)
 {
-    console.log(mod);
     mod.setScene(scene);
+    mod.setNumberInteractiveModels(scene.positionList.length);
 
-
-    document.addEventListener("keypress", keyPress);
-
-    function keyPress(e)
-    {
-        mod.handleKeyInput(e);
-    }
-
-    const resizer = new ResizeObserver(mod.windowResized());
+    document.addEventListener("keypress", mod.handleKeyInput);
+    const resizer = new ResizeObserver(mod.windowResized);
     resizer.observe(document.getElementById("resizer"));    
 }
 

@@ -34,34 +34,71 @@ model.addPrimitive(LineSegment.buildVertexColors(0, 1, 0, 1),
                    LineSegment.buildVertexColors(1, 2, 1, 2),
                    LineSegment.buildVertexColors(2, 0, 2, 0));
 
-let fb = new FrameBuffer(1000, 1000);
-renderFB(scene, fb);
-fb.dumpFB2File("InteractiveTriangle.ppm");
 
-for(let x = 0; x <= 180; x += 1)
+try
 {
-    fb.clearFB(Color.black);
-    scene.getPosition(0).setMatrix(Matrix.translate(-.5, -.5, -2).mult(Matrix.rotateX(2*x)));
-    renderFB(scene, fb);
-    //fb.dumpFB2File(format("InteractiveTriangleRotX Frame %3d.ppm", x));
+    document;
+    const file = "./InteractiveAbstractClient_R10.js";
 
-    fb.clearFB(Color.black);
-    scene.getPosition(0).setMatrix(Matrix.translate(-.5, -.5, -2).mult(Matrix.rotateY(2*x)));
-    renderFB(scene, fb);
-    //fb.dumpFB2File(format("InteractiveTriangleRotY Frame %3d.ppm", x));
+    try
+    {
+        async function getModule()
+        {
+            return await import(file);
+        }
 
-    fb.clearFB(Color.black);
-    scene.getPosition(0).setMatrix(Matrix.translate(-.5, -.5, -2).mult(Matrix.rotateZ(2*x)));
-    renderFB(scene, fb);
-    //fb.dumpFB2File(format("InteractiveTriangleRotZ Frame %3d.ppm", x));
-
-    fb.clearFB(Color.black);
-    scene.getPosition(0).setMatrix(Matrix.translate(-.5, -.5, -2)
-                                        .mult(Matrix.rotateX(2*x))
-                                        .mult(Matrix.rotateY(2*x))
-                                        .mult(Matrix.rotateZ(2*x)));
-    renderFB(scene, fb);
-    fb.dumpFB2File(format("InteractiveTriangleRotAll Frame %3d.ppm", x));
+        runOnline(await getModule());
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+catch(e)
+{
+    runOffline();
 }
 
+function runOnline(mod)
+{
+    mod.setScene(scene);
+    mod.setNumberInteractiveModels(scene.positionList.length);
+
+    document.addEventListener("keypress", mod.handleKeyInput);
+    const resizer = new ResizeObserver(mod.windowResized);
+    resizer.observe(document.getElementById("resizer"));
+}
+
+function runOffline()
+{
+    let fb = new FrameBuffer(1000, 1000);
+    renderFB(scene, fb);
+    fb.dumpFB2File("InteractiveTriangle.ppm");
+
+    for(let x = 0; x <= 180; x += 1)
+    {
+        fb.clearFB(Color.black);
+        scene.getPosition(0).setMatrix(Matrix.translate(-.5, -.5, -2).mult(Matrix.rotateX(2*x)));
+        renderFB(scene, fb);
+        //fb.dumpFB2File(format("InteractiveTriangleRotX Frame %3d.ppm", x));
+
+        fb.clearFB(Color.black);
+        scene.getPosition(0).setMatrix(Matrix.translate(-.5, -.5, -2).mult(Matrix.rotateY(2*x)));
+        renderFB(scene, fb);
+        //fb.dumpFB2File(format("InteractiveTriangleRotY Frame %3d.ppm", x));
+
+        fb.clearFB(Color.black);
+        scene.getPosition(0).setMatrix(Matrix.translate(-.5, -.5, -2).mult(Matrix.rotateZ(2*x)));
+        renderFB(scene, fb);
+        //fb.dumpFB2File(format("InteractiveTriangleRotZ Frame %3d.ppm", x));
+
+        fb.clearFB(Color.black);
+        scene.getPosition(0).setMatrix(Matrix.translate(-.5, -.5, -2)
+                                            .mult(Matrix.rotateX(2*x))
+                                            .mult(Matrix.rotateY(2*x))
+                                            .mult(Matrix.rotateZ(2*x)));
+        renderFB(scene, fb);
+        fb.dumpFB2File(format("InteractiveTriangleRotAll Frame %3d.ppm", x));
+    }
+}
 

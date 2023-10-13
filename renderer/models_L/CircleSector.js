@@ -82,7 +82,7 @@ export default class CircleSector extends Model
       // Create the line segments around the arc.
       for (let i = 0; i < n - 1; ++i)
       {
-         this.addPrimitive(new LineSegment([i, i+1]));
+         this.addPrimitive(LineSegment.buildVertex(i, i+1));
       }
    }
 }//CircleSector

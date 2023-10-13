@@ -43,16 +43,56 @@ scene.addPosition(lsPositBlend);
 scene.addPosition(lsPositRed);
 scene.addPosition(lsPositBlue);
 
-let fb = new FrameBuffer(500, 500);
+scene.getPosition(0).visible = false;
+scene.getPosition(2).visible = false;
+scene.getPosition(1).visible = false;
 
-renderFB(scene, fb);
-fb.dumpFB2File("LineSegment.ppm");
-
-// clearFBDefault or ClearFB doesn't work
-for(let x = -3; x <= 3; x += .5)
+try
 {
-    fb.clearFBDefault();
-    lsPositBlend.setMatrix(Matrix.translate(x, x, -3));
+    document;
+    const file = "./InteractiveAbstractClient_R10.js";
+
+    try
+    {
+        async function getModule()
+        {
+            return await import(file);
+        }
+
+        runOnline(await getModule());
+    }
+    catch(err)
+    {
+        console.log(err);
+    }
+}
+catch(e)
+{
+    runOffline();
+}
+
+function runOnline(mod)
+{
+    mod.setScene(scene);
+    mod.setNumberInteractiveModels(scene.positionList.length);
+
+    document.addEventListener("keypress", mod.handleKeyInput);
+    const resizer = new ResizeObserver(mod.windowResized);
+    resizer.observe(document.getElementById("resizer"));
+}
+function runOffline()
+{
+    let fb = new FrameBuffer(500, 500);
+
     renderFB(scene, fb);
-    fb.dumpFB2File("LineSegment--Translate(" + x + ", " + x + ").ppm");
+    fb.dumpFB2File("LineSegment.ppm");
+
+    // clearFBDefault or ClearFB doesn't work
+    for(let x = -3; x <= 3; x += .5)
+    {
+        fb.clearFBDefault();
+        lsPositBlend.setMatrix(Matrix.translate(x, x, -3));
+        renderFB(scene, fb);
+        fb.dumpFB2File("LineSegment--Translate(" + x + ", " + x + ").ppm");
+    }
 }
