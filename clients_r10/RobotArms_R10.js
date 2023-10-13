@@ -8,9 +8,10 @@
 
 import {Scene, Matrix, Model, Position, Vertex} from "../renderer/scene/SceneExport.js";
 import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {render, renderFB, setRastDebug, setDoAntiAliasing} from "../renderer/pipeline/PipelineExport.js";
+import {render, renderFB, setRastDebug, setDoAntiAliasing, setClipDebug} from "../renderer/pipeline/PipelineExport.js";
 import {LineSegment} from "../renderer/scene/primitives/PrimitiveExport.js";
 import {format} from "../renderer/scene/util/UtilExport.js";
+import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 
 /**
  * @param {Model} model the arm segment model to be made
@@ -37,7 +38,7 @@ const wristRotation2   = new Array(0.0, 0.0);
 const fingerRotation1  = new Array(0.0, 0.0);
 const fingerRotation2  = new Array(0.0, 0.0);
 
-const shoulderLength = new Array(0.4, 0.4);
+let shoulderLength = new Array(0.4, 0.4);
 const elbowLength1   = new Array(0.3, 0.3);
 const elbowLength2   = new Array(0.3, 0.3);
 const wristLength1   = new Array(0.2, 0.2);
@@ -46,7 +47,7 @@ const fingerLength1  = new Array(0.1, 0.1);
 const fingerLength2  = new Array(0.1, 0.1);
 
 const scene = Scene.buildFromName("RobotArms_R10");
-const currentArm = 0;
+let currentArm = 0;
 
 const arm1_s = Position.buildFromName("arm_1");
 const arm2_s = Position.buildFromName("arm_2");
@@ -227,33 +228,224 @@ function keyPressed(e)
 {
     const c = e.key;
 
-    if('d' == c)
+    if('h' == c)
+        printHelpMessage();
+    else if('d' == c)
+    {
+        scene.debug = !scene.debug;
+        setClipDebug(scene.debug);
+    }
     else if('D' == c)
+        console.log(scene.toString());
     else if('/' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
-    else if('' == c)
+        currentArm = (currentArm + 1) %2
+    else if('c' == c)
+    {
+        const color = ModelShading.randomColor();
+        ModelShading.setColor(    arm_p[currentArm].getModel(), color);
+        ModelShading.setColor( elbow1_p[currentArm].getModel(), color);
+        ModelShading.setColor( elbow2_p[currentArm].getModel(), color);
+        ModelShading.setColor( wrist1_p[currentArm].getModel(), color);
+        ModelShading.setColor( wrist2_p[currentArm].getModel(), color);
+        ModelShading.setColor(finger1_p[currentArm].getModel(), color);
+        ModelShading.setColor(finger2_p[currentArm].getModel(), color);
+    }
+    else if('C' == c)
+    {
+        ModelShading.setRandomColor(    arm_p[currentArm].getModel());
+        ModelShading.setRandomColor( elbow1_p[currentArm].getModel());
+        ModelShading.setRandomColor( elbow2_p[currentArm].getModel());
+        ModelShading.setRandomColor( wrist1_p[currentArm].getModel());
+        ModelShading.setRandomColor( wrist2_p[currentArm].getModel());
+        ModelShading.setRandomColor(finger1_p[currentArm].getModel());
+        ModelShading.setRandomColor(finger2_p[currentArm].getModel());
+    }
+    else if('r' == c)
+    {
+        ModelShading.setRainbowPrimitiveColors(    arm_p[currentArm].getModel());
+        ModelShading.setRainbowPrimitiveColors( elbow1_p[currentArm].getModel());
+        ModelShading.setRainbowPrimitiveColors( elbow2_p[currentArm].getModel());
+        ModelShading.setRainbowPrimitiveColors( wrist1_p[currentArm].getModel());
+        ModelShading.setRainbowPrimitiveColors( wrist2_p[currentArm].getModel());
+        ModelShading.setRainbowPrimitiveColors(finger1_p[currentArm].getModel());
+        ModelShading.setRainbowPrimitiveColors(finger2_p[currentArm].getModel());
+    }
+    else if('R' == c)
+    {
+        const c1 = ModelShading.randomColor();
+        const c2 = ModelShading.randomColor();
+        const c3 = ModelShading.randomColor();
+        const c4 = ModelShading.randomColor();
+        const c5 = ModelShading.randomColor();
+        const c6 = ModelShading.randomColor();
+        const c7 = ModelShading.randomColor();
+        const c8 = ModelShading.randomColor();
+            arm_p[currentArm].getModel().colorList.length = 0;
+         elbow1_p[currentArm].getModel().colorList.length = 0;
+         elbow2_p[currentArm].getModel().colorList.length = 0;
+         wrist1_p[currentArm].getModel().colorList.length = 0;
+         wrist2_p[currentArm].getModel().colorList.length = 0;
+        finger1_p[currentArm].getModel().colorList.length = 0;
+        finger2_p[currentArm].getModel().colorList.length = 0;
+
+            arm_p[currentArm].getModel().addColor(c1, c2);
+         elbow1_p[currentArm].getModel().addColor(c2, c3);
+         elbow2_p[currentArm].getModel().addColor(c2, c4);
+         wrist1_p[currentArm].getModel().addColor(c3, c5);
+         wrist2_p[currentArm].getModel().addColor(c4, c6);
+        finger1_p[currentArm].getModel().addColor(c5, c7);
+        finger2_p[currentArm].getModel().addColor(c6, c8);
+
+            arm_p[currentArm].getModel().getPrimitive(0).setColorIndices(0, 1);
+         elbow1_p[currentArm].getModel().getPrimitive(0).setColorIndices(0, 1);
+         elbow2_p[currentArm].getModel().getPrimitive(0).setColorIndices(0, 1);
+         wrist1_p[currentArm].getModel().getPrimitive(0).setColorIndices(0, 1);
+         wrist2_p[currentArm].getModel().getPrimitive(0).setColorIndices(0, 1);
+        finger1_p[currentArm].getModel().getPrimitive(0).setColorIndices(0, 1);
+        finger2_p[currentArm].getModel().getPrimitive(0).setColorIndices(0, 1);
+    }
+    else if('x' == c)
+        xTranslation[currentArm] += .02;
+    else if('X' == c)
+        xTranslation[currentArm] -= .02;
+    else if('y' == c)
+        yTranslation[currentArm] += .02;
+    else if('Y' == c)
+        yTranslation[currentArm] -= .02;
+    else if('s' == c)
+        shoulderRotation[currentArm] += 2;
+    else if('S' == c)
+        shoulderRotation[currentArm] -= 2;
+    else if('e' == c)
+        elbowRotation1[currentArm] += 2;
+    else if('E' == c)
+        elbowRotation1[currentArm] -= 2;
+    else if('w' == c)
+        wristRotation1[currentArm] += 2;
+    else if('W' == c)
+        wristRotation1[currentArm] -= 2;
+    else if('f' == c)
+        fingerRotation1[currentArm] += 2;
+    else if('F' == c)
+        fingerRotation1[currentArm] -= 2;
+    else if('q' == c)
+        elbowRotation2[currentArm] += 2;
+    else if('Q' == c)
+        elbowRotation2[currentArm] -= 2;
+    else if('z' == c)
+        wristRotation1[currentArm] += 2;
+    else if('Z' == c)
+        wristRotation2[currentArm] -= 2;
+    else if('a' == c)
+        fingerRotation2[currentArm] += 2;
+    else if('A' == c)
+        fingerRotation2[currentArm] -= 2;
+    else if('s' == c && e.altKey)
+        shoulderLength[currentArm] += .02;
+    else if('S' == c && e.altKey)
+        shoulderLength[currentArm] -= .02;
+    else if('e' == c && e.altKey)
+        elbowLength1[currentArm] += .02;
+    else if('E' == c && e.altKey)
+        elbowLength1[currentArm] -= .02;
+    else if('w' == c && e.altKey)
+        wristLength1[currentArm] += .02;
+    else if('W' == c && e.altKey)
+        wristLength1[currentArm] -= .02;
+    else if('f' == c && e.altKey)
+        fingerLength1[currentArm] += .02;
+    else if('F' == c && e.altKey)
+        fingerLength1[currentArm] -= .02;
+    else if('q' == c && e.altKey)
+        elbowLength2[currentArm] += .02;
+    else if('Q' == c && e.altKey)
+        elbowLength2[currentArm] -= .02;
+    else if('z' == c && e.altKey)
+        wristLength2[currentArm] += .02;
+    else if('Z' == c && e.altKey)
+        wristLength2[currentArm] -= .02;
+    else if('a' == c && e.altKey)
+        fingerLength2[currentArm] += .02;
+    else if('A' == c && e.altKey)
+        fingerLength2[currentArm] -= .02;
+    else if('=' == c)
+    {
+        xTranslation[currentArm] = 0.0;
+        if (0 == currentArm)
+           yTranslation[0] =  0.5;
+        else
+           yTranslation[1] = -0.5;
+
+        shoulderRotation[currentArm] = 0.0;
+          elbowRotation1[currentArm] =  15.0;
+          elbowRotation2[currentArm] = -15.0;
+          wristRotation1[currentArm] = 0.0;
+          wristRotation2[currentArm] = 0.0;
+         fingerRotation1[currentArm] = 0.0;
+         fingerRotation2[currentArm] = 0.0;
+
+          shoulderLength[currentArm] = 0.4;
+            elbowLength1[currentArm] = 0.3;
+            elbowLength2[currentArm] = 0.3;
+            wristLength1[currentArm] = 0.2;
+            wristLength2[currentArm] = 0.2;
+           fingerLength1[currentArm] = 0.1;
+           fingerLength2[currentArm] = 0.1;
+    }
+
+    setTransformations();
+    setUpViewing();
+}
+
+function setTransformations()
+{
+    arm_p[currentArm].matrix2Identity()
+                    .mult(Matrix.translate( xTranslation[currentArm], 
+                                            yTranslation[currentArm], 
+                                            -1))
+                    .mult(Matrix.rotateZ(shoulderRotation[currentArm]))
+                    .mult(Matrix.scaleXYZ(shoulderLength[currentArm],
+                                          shoulderLength[currentArm], 
+                                          1));
+    
+    elbow1_p[currentArm].matrix2Identity()
+                        .mult(Matrix.translate(1, 0, 0))
+                        .mult(Matrix.rotateZ(elbowRotation1[currentArm]))
+                        .mult(Matrix.scaleXYZ(elbowLength1[currentArm]/shoulderLength[currentArm],
+                                              elbowLength1[currentArm]/shoulderLength[currentArm],
+                                              1));
+    
+    elbow2_p[currentArm].matrix2Identity()
+                        .mult(Matrix.translate(1, 0, 0))
+                        .mult(Matrix.rotateZ(elbowRotation2[currentArm]))
+                        .mult(Matrix.scaleXYZ(elbowLength2[currentArm]/shoulderLength[currentArm],
+                                              elbowLength2[currentArm]/shoulderLength[currentArm],
+                                              1));
+                              
+    wrist1_p[currentArm].matrix2Identity()
+                        .mult(Matrix.translate(1, 0, 0))
+                        .mult(Matrix.rotateZ(wristRotation1[currentArm]))
+                        .mult(Matrix.scaleXYZ(wristLength1[currentArm]/elbowLength1[currentArm],
+                                              wristLength1[currentArm]/elbowLength1[currentArm],
+                                              1));
+                              
+    wrist2_p[currentArm].matrix2Identity()
+                        .mult(Matrix.translate(1, 0, 0))
+                        .mult(Matrix.rotateZ(wristRotation2[currentArm]))
+                        .mult(Matrix.scaleXYZ(wristLength2[currentArm]/elbowLength2[currentArm],
+                                              wristLength2[currentArm]/shoulderLength[currentArm],
+                                              1));
+
+}
+
+function setUpViewing()
+{
+
+}
+
+function windowResized()
+{
+
 }
 
 function printHelpMessage()
