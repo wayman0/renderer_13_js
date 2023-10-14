@@ -20,7 +20,7 @@ import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 function buildArmSegment(model, color)
 {
     model.addVertex(new Vertex(0, 0, 0),
-                    new Vertex(0, 1, 0));
+                    new Vertex(1, 0, 0));
     model.addColor(color);
     model.addPrimitive(LineSegment.buildVertexColor(0, 1, 0));
 
@@ -60,8 +60,8 @@ arm1_s.setModel(buildArmSegment(Model.buildName("Arm-1, shoulder"), Color.blue))
 // two elbows
 const arm1_e1 = Position.buildFromName("Elbow_1");
 const arm1_e2 = Position.buildFromName("Elbow_2");
-arm1_s.addNestedPosition(arm1_e1)
-arm1_e2.addNestedPosition(arm1_e2);
+arm1_s.addNestedPosition(arm1_e1);
+arm1_s.addNestedPosition(arm1_e2);
 arm1_e1.setModel(buildArmSegment(Model.buildName("Arm1, elbow1"), Color.blue));
 arm1_e2.setModel(buildArmSegment(Model.buildName("Arm1, elbow2"), Color.blue));
 
@@ -88,7 +88,7 @@ arm2_s.setModel(buildArmSegment(Model.buildName("Arm-2, shoulder"), Color.red));
 const arm2_e1 = Position.buildFromName("Elbow_1");
 const arm2_e2 = Position.buildFromName("Elbow_2");
 arm2_s.addNestedPosition(arm2_e1)
-arm2_e2.addNestedPosition(arm2_e2);
+arm2_s.addNestedPosition(arm2_e2);
 arm2_e1.setModel(buildArmSegment(Model.buildName("Arm2, elbow1"), Color.red));
 arm2_e2.setModel(buildArmSegment(Model.buildName("Arm2, elbow2"), Color.red));
 
@@ -204,13 +204,15 @@ finger2_p[1].matrix2Identity()
                                   fingerLength2[1]/wristLength2[1],
                                   1));
                  
-
+let fb = new FrameBuffer(1000, 1000, Color.black);
+//setDoAntiAliasing(true);
 
 
 try
 {
     document;
     runOnline();
+    setUpViewing();
 }
 catch(e)
 {
@@ -280,6 +282,7 @@ function keyPressed(e)
         const c6 = ModelShading.randomColor();
         const c7 = ModelShading.randomColor();
         const c8 = ModelShading.randomColor();
+
             arm_p[currentArm].getModel().colorList.length = 0;
          elbow1_p[currentArm].getModel().colorList.length = 0;
          elbow2_p[currentArm].getModel().colorList.length = 0;
@@ -340,33 +343,33 @@ function keyPressed(e)
         fingerRotation2[currentArm] += 2;
     else if('A' == c)
         fingerRotation2[currentArm] -= 2;
-    else if('s' == c && e.altKey)
+    else if('s' == c && e.ctrlKey)
         shoulderLength[currentArm] += .02;
-    else if('S' == c && e.altKey)
+    else if('S' == c && e.ctrlKey)
         shoulderLength[currentArm] -= .02;
-    else if('e' == c && e.altKey)
+    else if('e' == c && e.ctrlKey)
         elbowLength1[currentArm] += .02;
-    else if('E' == c && e.altKey)
+    else if('E' == c && e.ctrlKey)
         elbowLength1[currentArm] -= .02;
-    else if('w' == c && e.altKey)
+    else if('w' == c && e.ctrlKey)
         wristLength1[currentArm] += .02;
-    else if('W' == c && e.altKey)
+    else if('W' == c && e.ctrlKey)
         wristLength1[currentArm] -= .02;
-    else if('f' == c && e.altKey)
+    else if('f' == c && e.ctrlKey)
         fingerLength1[currentArm] += .02;
-    else if('F' == c && e.altKey)
+    else if('F' == c && e.ctrlKey)
         fingerLength1[currentArm] -= .02;
-    else if('q' == c && e.altKey)
+    else if('q' == c && e.ctrlKey)
         elbowLength2[currentArm] += .02;
-    else if('Q' == c && e.altKey)
+    else if('Q' == c && e.ctrlKey)
         elbowLength2[currentArm] -= .02;
-    else if('z' == c && e.altKey)
+    else if('z' == c && e.ctrlKey)
         wristLength2[currentArm] += .02;
-    else if('Z' == c && e.altKey)
+    else if('Z' == c && e.ctrlKey)
         wristLength2[currentArm] -= .02;
-    else if('a' == c && e.altKey)
+    else if('a' == c && e.ctrlKey)
         fingerLength2[currentArm] += .02;
-    else if('A' == c && e.altKey)
+    else if('A' == c && e.ctrlKey)
         fingerLength2[currentArm] -= .02;
     else if('=' == c)
     {
@@ -433,19 +436,61 @@ function setTransformations()
                         .mult(Matrix.translate(1, 0, 0))
                         .mult(Matrix.rotateZ(wristRotation2[currentArm]))
                         .mult(Matrix.scaleXYZ(wristLength2[currentArm]/elbowLength2[currentArm],
-                                              wristLength2[currentArm]/shoulderLength[currentArm],
+                                              wristLength2[currentArm]/elbowLength2[currentArm],
                                               1));
 
+    finger1_p[currentArm].matrix2Identity()
+                         .mult(Matrix.translate(1, 0, 0))
+                         .mult(Matrix.rotateZ(fingerRotation1[currentArm]))
+                         .mult(Matrix.scaleXYZ(fingerLength1[currentArm]/wristLength1[currentArm],
+                                               fingerLength1[currentArm]/wristLength1[currentArm],
+                                               1));
+                          
+    finger2_p[currentArm].matrix2Identity()
+                        .mult(Matrix.translate(1, 0, 0))
+                        .mult(Matrix.rotateZ(fingerRotation2[currentArm]))
+                        .mult(Matrix.scaleXYZ(fingerLength2[currentArm]/wristLength2[currentArm],
+                                              fingerLength2[currentArm]/wristLength2[currentArm],
+                                              1));
 }
 
 function setUpViewing()
 {
+    // get the size of the resizer so we know what size to make the fb
+    const resizer = document.getElementById("resizer");
+    const w = resizer?.offsetWidth;
+    const h = resizer?.offsetHeight;
+
+    //@ts-ignore
+    fb = new FrameBuffer(w, h, fb.bgColorFB);
+
+    render(scene, fb.vp);
+
+    // @ts-ignore
+    const ctx = document.getElementById("pixels").getContext("2d");
+    ctx.canvas.width = w;
+    ctx.canvas.height = h;
+
+    ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
 
 }
 
 function windowResized()
 {
+    // Get the new size of the canvas
+    const resizer = document.getElementById("resizer");
+    const w = resizer?.offsetWidth;
+    const h = resizer?.offsetHeight;
 
+    // Create a new FrameBuffer that fits the canvas    
+    const bg1 = fb.getBackgroundColorFB();
+    const bg2 = fb.getViewport().getBackgroundColorVP();
+
+    //@ts-ignore
+    fb = new FrameBuffer(w, h, bg1);
+    fb.vp.setBackgroundColorVP(bg2);
+
+    setUpViewing();
 }
 
 function printHelpMessage()
@@ -469,15 +514,15 @@ function printHelpMessage()
     console.log("Use the z/Z keys to rotate the current arm at wrist 2.");
     console.log("Use the a/A keys to rotate the current arm at finger 2.");
     console.log();
-    console.log("Use the alt + s/S keys to extend the length of the current arm at the shoulder.");
+    console.log("Use the ctrl + s/S keys to extend the length of the current arm at the shoulder.");
     console.log();
-    console.log("Use the alt + e/E keys to extend the length of the current arm at elbow 1.");
-    console.log("Use the alt + w/W keys to extend the length of the current arm at wrist 1.");
-    console.log("Use the alt + f/F keys to extend the length of the current arm at finger 1.");
+    console.log("Use the ctrl + e/E keys to extend the length of the current arm at elbow 1.");
+    console.log("Use the ctrl + w/W keys to extend the length of the current arm at wrist 1.");
+    console.log("Use the ctrl + f/F keys to extend the length of the current arm at finger 1.");
     console.log();
-    console.log("Use the alt + q/Q keys to extend the length of the current arm at elbow 2.");
-    console.log("Use the alt + z/Z keys to extend the length of the current arm at wrist 2.");
-    console.log("Use the alt + a/A keys to extend the length of the current arm at finger 2.");
+    console.log("Use the ctrl + q/Q keys to extend the length of the current arm at elbow 2.");
+    console.log("Use the ctrl + z/Z keys to extend the length of the current arm at wrist 2.");
+    console.log("Use the ctrl + a/A keys to extend the length of the current arm at finger 2.");
     console.log();
     console.log("Use the x/X keys to translate the current arm along the x-axis.");
     console.log("Use the y/Y keys to translate the current arm along the y-axis.");
@@ -485,11 +530,6 @@ function printHelpMessage()
     console.log("Use the '=' key to reset the current robot arm.");
     console.log("Use the '+' key to save a \"screenshot\" of the framebuffer.");
     console.log("Use the 'h' key to redisplay this help message.");
-}
-
-function windowresized()
-{
-
 }
 
 function runOffline()
