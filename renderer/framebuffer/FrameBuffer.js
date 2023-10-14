@@ -260,7 +260,7 @@ export default class FrameBuffer
      *
      * @param {Color} color the color to set this {@code FrameBuffer} pixels to
      */
-    clearFB(color)
+    clearFB(color = this.#bgColorFB)
     {
         if (color instanceof Color == false)
             throw new Error("Color must be a Color");
