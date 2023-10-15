@@ -472,7 +472,6 @@ function setUpViewing()
     ctx.canvas.height = h;
 
     ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
-
 }
 
 function windowResized()
@@ -534,7 +533,7 @@ function printHelpMessage()
 
 function runOffline()
 {
-    let fb = new FrameBuffer(1000, 1000);
+    fb = new FrameBuffer(1000, 1000);
 
     setDoAntiAliasing(true);
     render(scene, fb.vp);

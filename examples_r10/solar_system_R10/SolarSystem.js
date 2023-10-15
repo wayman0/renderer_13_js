@@ -210,7 +210,7 @@ function runOnline()
         }
         else if ('D' == c)
         {
-               setRastDebug(!rastDebug);
+            setRastDebug(!rastDebug);
         }
         else if ('a' == c)
         {

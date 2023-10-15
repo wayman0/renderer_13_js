@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset=utf-8>
+        <title>Robot Arm 3 </title>
+        <style>
+            body
+            {
+                margin: 0;
+                overflow: auto;
+            }
+            #resizer
+            {
+                float: left;
+                overflow: hidden;
+                resize: both;
+                width: 600px;
+                height: 600px;
+            }
+            button
+            {
+                cursor: pointer;
+            }
+            help
+            {
+                padding: 5px;
+                margin: 20px;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                background-color: lightgray;
+                border: 2px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="width: 100%;">
+            <div style="text-align: center; font-size: x-large;">Robot Arm 3</div>
+        </div>
+        <div id="resizer">
+            <canvas id="pixels" width=600 height=600></canvas>
+        </div>
+
+        <script src="RobotArm3.js", type = "module"></script>
+    </body>
+</html>
