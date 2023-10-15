@@ -5,22 +5,17 @@ import * as ReadLine from "node:readline";
 import {Vertex, LineSegment, Model} from "../scene/SceneExport.js";
 
 /**
- * EXPECTS ONLY THE FILENAME NO PATH!!!
  * HAVE TO USE 'await' WHEN CALLING FUNCTION!!!
  * 
- * @param {string} fileName ONLY the name of the file, do not give the path! 
+ * @param {string} fileName include the path
  * @returns {Promise<Model>} the OBJ model made from the file given, BE SURE TO USE 'await'!!!
  */
-export async function buildOBJModel(fileName)
+export default async function buildOBJModel(fileName)
 {
     if(typeof fileName != "string")
         throw new Error("Filename must be a string");
 
-    if(fileName.includes("/"))
-        throw new Error("Filename must be just the name of the file do not include any paths");
-
-    const filePath = "../../assets/" + fileName;
-    const inputStream = createReadStream(filePath);
+    const inputStream = createReadStream(fileName);
     const readLine = ReadLine.createInterface(
                         { 
                             input: inputStream, 

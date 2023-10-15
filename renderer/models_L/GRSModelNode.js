@@ -5,23 +5,17 @@ import * as ReadLine from "node:readline";
 import {Vertex, LineSegment, Model} from "../scene/SceneExport.js";
 
 /**
- * EXPECTS ONLY THE FILENAME NO PATH!!!
  * HAVE TO USE 'await' WHEN CALLING FUNCTION!!!
  * 
- * @param {string} fileName ONLY the name of the file, do not give the path! 
+ * @param {string} fileName include the path 
  * @returns {Promise<Model>} the OBJ model made from the file given, BE SURE TO USE 'await'!!!
  */
-export async function buildGRSModel(fileName)
+export default async function buildGRSModel(fileName)
 {
     if(typeof fileName != "string")
         throw new Error("FILENAME must be a string");
 
-    // check if the filename doesn't contain a path
-    if(fileName.includes("/"))
-        throw new Error("filename must be just the name of the file, do not include any paths");
-
-    const filePath = "../../assets/grs/" + fileName;
-    const inputStream = createReadStream(filePath);
+    const inputStream = createReadStream(fileName);
     const readLine = ReadLine.createInterface(
                         { 
                             input: inputStream, 

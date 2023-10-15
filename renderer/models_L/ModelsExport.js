@@ -29,8 +29,16 @@ export {default as Icosidodecahedron} from "./Icosidodecahedron.js";
 export {default as Octahedron} from "./Octahedron.js";
 export {default as Tetrahedron} from "./Tetrahedron.js";
 
+/*
+these need to be imported from their actual files
+so as to avoid any node errors
+
 export {default as GRSModel} from "./GRSModel.js";
 export {default as OBJModel} from "./OBJModel.js";
+
+export {default as GRSModelNode} from "./GRSModelNode.js";
+export {default as OBJModelNode} from "./OBJModelNode.js";
+*/
 
 export {default as PanelXY} from "./PanelXY.js";
 export {default as PanelXZ} from "./PanelXZ.js";
