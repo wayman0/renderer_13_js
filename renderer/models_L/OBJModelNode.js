@@ -74,8 +74,7 @@ export default async function buildOBJModel(fileName)
             pList.push(LineSegment.buildVertex(vIndex[2], vIndex[0]));        
         }
     } 
-    console.log(pList.length);
-    console.log(vList.length);  
+
     return new Model(vList, pList, undefined, "OBJModel: " + fileName);
 }
 
