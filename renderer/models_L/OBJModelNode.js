@@ -4,9 +4,23 @@ import * as ReadLine from "node:readline";
 
 import {Vertex, LineSegment, Model} from "../scene/SceneExport.js";
 
+/**
+ * EXPECTS ONLY THE FILENAME NO PATH!!!
+ * HAVE TO USE 'await' WHEN CALLING FUNCTION!!!
+ * 
+ * @param {string} fileName ONLY the name of the file, do not give the path! 
+ * @returns {Promise<Model>} the OBJ model made from the file given, BE SURE TO USE 'await'!!!
+ */
 export async function buildOBJModel(fileName)
 {
-    const inputStream = createReadStream(fileName);
+    if(typeof fileName != "string")
+        throw new Error("Filename must be a string");
+
+    if(fileName.includes("/"))
+        throw new Error("Filename must be just the name of the file do not include any paths");
+
+    const filePath = "../../assets/" + fileName;
+    const inputStream = createReadStream(filePath);
     const readLine = ReadLine.createInterface(
                         { 
                             input: inputStream, 
@@ -94,7 +108,7 @@ AFTER MODEL.NAME
 
 /*
 console.log("BEFORE FUNCTION CALLED")
-let myModel = await buildModel("../../assets/apple.obj");
+let myModel = await buildOBJModel("apple.obj");
 console.log("BEFORE MODEL.NAME")
 console.log(myModel.name);
 console.log("AFTER MODEL.NAME")
@@ -110,3 +124,22 @@ OBJModel: ../../assets/apple.obj
 AFTER MODEL.NAME
 */
 
+/*
+testing purposes
+
+import {FrameBuffer, Color} from "../framebuffer/FramebufferExport.js";
+import {Scene, Position, Matrix} from "../scene/SceneExport.js";
+import {renderFB} from "../pipeline/PipelineExport.js";
+import { setColor } from "../scene/util/ModelShading.js";
+
+const myModel = await buildOBJModel("cow.obj");
+setColor(myModel, Color.cyan);
+const pos = Position.buildFromModelName(myModel, "Cow Position");
+pos.setMatrix(Matrix.translate(0, 0, -5));
+const scene = Scene.buildFromName("Cow Scene");
+scene.addPosition(pos);
+
+const fb = new FrameBuffer(1000, 1000, Color.BLACK);
+renderFB(scene, fb);
+fb.dumpFB2File("Cow.ppm");
+*/
