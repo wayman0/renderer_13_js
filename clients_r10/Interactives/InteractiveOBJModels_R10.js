@@ -13,7 +13,7 @@ import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.j
 import {renderFB} from "../../renderer/pipeline/PipelineExport.js";
 import {format} from "../../renderer/scene/util/UtilExport.js";
 
-const path = "../assets/";
+const path = "../../assets/";
 
 // create the scene
 const scene = Scene.buildFromName("OBJ Models");

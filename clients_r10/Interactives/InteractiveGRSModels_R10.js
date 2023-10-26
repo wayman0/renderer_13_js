@@ -13,7 +13,7 @@ import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.j
 import {renderFB} from "../../renderer/pipeline/PipelineExport.js";
 import {format} from "../../renderer/scene/util/UtilExport.js";
 
-const path = "../assets/grs/";
+const path = "../../assets/grs/";
 
 // create the scene
 const scene = Scene.buildFromName("GRS Models");

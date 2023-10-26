@@ -83,9 +83,9 @@ export default function rasterize(model, ls, vp)
 
     if ((x0 == x1) && (y0 == y1))
     {
-        const x0VP = Math.trunc(x0) -1;
+        const x0VP = Math.trunc(Math.trunc(x0) -1);
         //const y0VP = Math.trunc(y0)-1;
-        const y0VP = Math.trunc(y0);
+        const y0VP = Math.trunc(h - Math.trunc(y0));
 
         if (rastDebug)
         {
@@ -162,7 +162,7 @@ export default function rasterize(model, ls, vp)
         if (doAntiAliasing)
         {
             let yLow = Math.trunc(y);
-            let yHi = yLow + 1;
+            let yHi = Math.trunc(yLow + 1);
 
             if (! transposedLine && y == h) yHi = h;
             if (  transposedLine && y == w) yHi = w;
@@ -191,10 +191,11 @@ export default function rasterize(model, ls, vp)
 
             if (!transposedLine)
             {
-                const xVP = x-1;
-                const yVPLow = h-yLow - 1;
+                const xVP = Math.trunc(x-1);
+                const yVPLow = Math.trunc(h-yLow);
+                //const yVPLow = h-yLow - 1;
                 //const yVPHi = h-yHi - 1;
-                const yVPHi = h-yHi;
+                const yVPHi = Math.trunc(h-yHi);
 
                 if (rastDebug)
                 {
@@ -208,10 +209,10 @@ export default function rasterize(model, ls, vp)
             }
             else
             {
-                const xVPLow = yLow -1;
-                const xVPHi = yHi -1;
+                const xVPLow = Math.trunc(yLow -1);
+                const xVPHi = Math.trunc(yHi -1);
                 //const yVP = h-x -1;
-                const yVP = h-x;
+                const yVP = Math.trunc(h-x);
 
                 if (rastDebug)
                 {
@@ -238,8 +239,8 @@ export default function rasterize(model, ls, vp)
             {
                 //const xVP = x;
                 //const yVP = h-Math.trunc(Math.round(y)) - 1;
-                const xVP = x-1;
-                const yVP = h - Math.trunc(Math.round(y));
+                const xVP = Math.trunc(x-1);
+                const yVP = Math.trunc(h - Math.trunc(Math.round(y)));
 
                 if (rastDebug)
                 {
@@ -254,8 +255,8 @@ export default function rasterize(model, ls, vp)
                 //const xVP = Math.trunc(Math.round(y));
                 //const yVP = h-x - 1;
                 
-                const xVP = (Math.trunc(Math.round(y)))-1;
-                const yVP = h-x;
+                const xVP = Math.trunc((Math.trunc(Math.round(y)))-1);
+                const yVP = Math.trunc(h-x);
 
                 if (rastDebug)
                 {
@@ -271,9 +272,9 @@ export default function rasterize(model, ls, vp)
     const isFloat = r1 <=1 && g1 <= 1 && b1 <= 1
     if (!transposedLine)
     {
-        const xVP = Math.trunc(x1) -1;
+        const xVP = Math.trunc(Math.trunc(x1) -1);
         //const yVP = h - Math.trunc(y1) - 1;
-        const yVP = h - Math.trunc(y1);
+        const yVP = Math.trunc(h - Math.trunc(y1));
         
         if (rastDebug)
         {
@@ -285,8 +286,8 @@ export default function rasterize(model, ls, vp)
     }
     else
     {
-        const xVP = Math.trunc(y1) - 1;
-        const yVP  = h - Math.trunc(x1);
+        const xVP = Math.trunc(Math.trunc(y1) - 1);
+        const yVP  = Math.trunc(h - Math.trunc(x1));
 
         if (rastDebug)
         {
