@@ -107,15 +107,9 @@ moon_p.matrix2Identity()
         .mult(Matrix.rotateY(moonAxisRot));
 
 
-try
-{
-    document;
-    runOnline();
-}
-catch(e)
-{
-    runOffline();
-}
+
+
+runOnline();
 
 function updateParameters()
 {
@@ -271,21 +265,4 @@ function runOnline()
         console.log("Use the 'h' key to redisplay this help message.");
     }
     
-}
-
-function runOffline()
-{
-    const fb = new FrameBuffer(1000, 1000, Color.black);
-
-    for(let r = 0; r < 360; r += 1)
-    {
-        updateParameters();
-        rotate();
-
-        renderFB(scene, fb);
-        fb.dumpFB2File(format("SolarSystem-Frame%03d.ppm", r));
-
-        fb.clearFB();
-    }
-
 }
