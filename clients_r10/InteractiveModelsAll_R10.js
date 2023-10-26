@@ -111,31 +111,21 @@ scene.getPosition(length - 3).setMatrix(Matrix.translate(0, 0, -7));
 scene.getPosition(length - 2).setMatrix(Matrix.translate(0, 0, -7));
 scene.getPosition(length - 1).setMatrix(Matrix.translate(0, 0, -7));
 
-
 scene.getCamera().projPerspective(-3, 3, -3, 3, 1);
 
+const file = "./InteractiveAbstractClient_R10.js";
 try
 {
-  document;
-  const file = "./InteractiveAbstractClient_R10.js";
-
-  try
-  {
     async function getModule()
     {
-      return await import(file);
+        return await import(file);
     }
-
+  
     runOnline(await getModule());
-  }
-  catch(err)
-  {
-    console.log(err);
-  }
 }
-catch(e)
+catch(err)
 {
-  runOffline();
+  console.log(err);
 }
 
 function runOnline(mod)
@@ -147,31 +137,4 @@ function runOnline(mod)
   document.addEventListener("keypress", mod.handleKeyInput);
   const resizer = new ResizeObserver(mod.windowResized);
   resizer.observe(document.getElementById("resizer"));
-}
-
-function runOffline()
-{
-  const fb = new FrameBuffer(1024, 1024);
-  renderFB(scene, fb);
-  fb.dumpFB2File("InteractiveModelsAll_R10.ppm");
-
-  for(let x = 0; x < scene.positionList.length-5; x += 1)
-  {
-    const p = scene.getPosition(x);
-    p.visible = true;
-
-    for(let rot = 0; rot <= 360; rot += 1)
-    {
-      fb.clearFBDefault();
-      p.setMatrix(Matrix.translate(0, 0, -3)
-                        .mult(Matrix.rotateX(rot))
-                        .mult(Matrix.rotateY(rot)));
-
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("InteractiveModelsAll_R10_Pos%2d_Frame_%3d.ppm", x, rot));
-      fb.clearFB(fb.bgColorFB);
-    }
-
-    p.visible = false;
-  }
 }

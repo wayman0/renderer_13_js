@@ -208,16 +208,8 @@ let fb = new FrameBuffer(1000, 1000, Color.black);
 //setDoAntiAliasing(true);
 
 
-try
-{
-    document;
-    runOnline();
-    setUpViewing();
-}
-catch(e)
-{
-    runOffline();
-}
+runOnline();
+setUpViewing();
 
 function runOnline()
 {
@@ -530,93 +522,3 @@ function printHelpMessage()
     console.log("Use the '+' key to save a \"screenshot\" of the framebuffer.");
     console.log("Use the 'h' key to redisplay this help message.");
 }
-
-function runOffline()
-{
-    fb = new FrameBuffer(1000, 1000);
-
-    setDoAntiAliasing(true);
-    render(scene, fb.vp);
-    fb.dumpFB2File("Robot Arm.ppm");
-
-
-    // rotate just the shoulder position to
-    // demonstrate how nested positions works
-    for(let x = -45; x <= 45; x += 5)
-    {
-        fb.clearFBDefault();
-        arm1_s.setMatrix(
-            Matrix.translate(0, -.5, -1)
-                  .mult(Matrix.rotateZ(x))
-                  .mult(Matrix.scaleXYZ(shoulderLength[0], shoulderLength[0], 1)));
-
-        arm2_s.setMatrix(
-            Matrix.translate(0, .5, -1)
-                    .mult(Matrix.rotateZ(x))
-                    .mult(Matrix.scaleXYZ(shoulderLength[1], shoulderLength[1], 1)));
-
-        render(scene, fb.vp);
-        fb.dumpFB2File(format("Robot Arm Rotate Shoulder %03d.ppm", x));
-    }
-
-    for(let x = -45; x <= 45; x += 5)
-    {
-        fb.clearFBDefault();
-
-        arm1_e1.setMatrix(
-            Matrix.translate(0, 1, 0)
-                  .mult(Matrix.rotateZ(x))
-                  .mult(Matrix.scaleXYZ(elbowLength1[0] / shoulderLength[0], elbowLength1[0] / shoulderLength[0], 1)));
-
-        arm1_e2.setMatrix(
-            Matrix.translate(0, 1, 0)
-                  .mult(Matrix.rotateZ(-x))
-                  .mult(Matrix.scaleXYZ(elbowLength2[0] / shoulderLength[0], elbowLength2[0] / shoulderLength[0], 1)));
-
-        render(scene, fb.vp);
-        fb.dumpFB2File(format("Robot Arm Rotate Wrist 1 %03d, Rotate Wrist 2 -%03d.ppm", x, x));
-    }
-
-    for(let x = -45; x <= 45; x += 5)
-    {
-        fb.clearFBDefault();
-
-        arm1_w1.setMatrix(
-            Matrix.translate(0, 1, 0)
-                  .mult(Matrix.rotateZ(x))
-                  .mult(Matrix.scaleXYZ(wristLength1[0] / elbowLength1[0], wristLength1[0] / elbowLength1[0], 1)));
-
-        arm1_w2.setMatrix(
-            Matrix.translate(0, 1, 0)
-                  .mult(Matrix.rotateZ(-x))
-                  .mult(Matrix.scaleXYZ(wristLength2[0] / elbowLength2[0], wristLength2[0] / elbowLength2[0], 1)));
-
-        render(scene, fb.vp);
-        fb.dumpFB2File(format("Robot Arm Rotate Wrist 1 %03d, Rotate Wrist 2 -%03d.ppm", x, x));
-    }
-
-    for(let x = -45; x <= 45; x += 5)
-    {
-        fb.clearFBDefault();
-        arm1_f1.setMatrix(
-            Matrix.translate(0, 1, 0)
-                  .mult(Matrix.rotateZ(x))
-                  .mult(Matrix.scaleXYZ(fingerLength1[0] / wristLength1[0], fingerLength1[0] / wristLength1[0], 1)));
-
-        arm1_f1.setMatrix(
-          Matrix.translate(0, 1, 0)
-                .mult(Matrix.rotateZ(-x))
-                .mult(Matrix.scaleXYZ(fingerLength2[0] / wristLength2[0], fingerLength2[0] / wristLength2[0], 1)));
-
-        render(scene, fb.vp);
-        fb.dumpFB2File(format("Robot Arm Rotate Wrist 1 %03d, Rotate Wrist 2 -%03d.ppm", x, x));
-    }
-}
-
-
-
-
-
-
-
-

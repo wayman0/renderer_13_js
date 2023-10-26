@@ -47,47 +47,23 @@ hidePositions();
 
 let fb = new FrameBuffer(1024, 1024);
 
-// see if we are running offline or online
-// so we know which import to use
 try
 {
-    document;
-
-    try
+    async function getOBJ()
     {
-        async function getOBJ()
-        {
-            return await import ("../renderer/models_L/OBJModel.js");
-        }
-
-        async function getInteractiveUtilites()
-        {
-            return await import ("./InteractiveAbstractClient_R10.js");
-        }
-
-        runOnline(await getOBJ(), await getInteractiveUtilites());
+        return await import ("../renderer/models_L/OBJModel.js");
     }
-    catch(err)
+
+    async function getInteractiveUtilites()
     {
-        console.log(err);
+        return await import ("./InteractiveAbstractClient_R10.js");
     }
+
+    runOnline(await getOBJ(), await getInteractiveUtilites());
 }
-catch(e)
+catch(err)
 {
-    try
-    {
-        async function getOBJ()
-        {
-            return await import ("../renderer/models_L/OBJModelNode.js");
-        }
-
-        runOffline(await getOBJ());
-
-    }
-    catch(err)
-    {
-        console.log(err);
-    }
+    console.log(err);
 }
 
 function setPosMatrixes()
@@ -109,30 +85,6 @@ function setModelColor()
     for(const p of scene.positionList)
         ModelShading.setColor(p.model, ModelShading.randomColor());
 }
-
-/*
-can use this function once the online and offline grsmodules 
-are implemented the same, either as a class or as a function.
-
-function setPosModels(objModule)
-{
-    // set the models
-    birdhead.setModel(objModule.buildGrsModel("birdhead.grs"));
-    brontov2.setModel(objModule.buildGrsModel("bronto_v2.grs"));
-    bronto.setModel(objModule.buildGrsModel("bronto.grs"));
-    dragon.setModel(objModule.buildGrsModel("dragon.grs"));
-    house.setModel(objModule.buildGrsModel("house.grs"));
-    knight.setModel(objModule.buildGrsModel("knight.grs"));
-    kochcurve.setModel(objModule.buildGrsModel("kochcurve.grs"));
-    monkeytree.setModel(objModule.buildGrsModel("monkeytree.grs"));
-    rexv2.setModel(objModule.buildGrsModel("rex_v2.grs"));
-    rex.setModel(objModule.buildGrsModel("rex.grs"));
-    scenePos.setModel(objModule.buildGrsModel("scene.grs"));
-    usav2.setModel(objModule.buildGrsModel("usa_v2.grs"));
-    usa.setModel(objModule.buildGrsModel("usa.grs"));
-    vinci.setModel(objModule.buildGrsModel("vinci.grs"));
-}
-*/
 
 async function runOnline(objModule, interUtilModule)
 {
@@ -158,45 +110,4 @@ async function runOnline(objModule, interUtilModule)
     document.addEventListener("keypress", interUtilModule.handleKeyInput);
     const resizer = new ResizeObserver(interUtilModule.windowResized);
     resizer.observe(document.getElementById("resizer"));
-}
-
-async function runOffline(objModule)
-{
-    //setPosModels(objModule);
-
-    // set the models
-        apple.setModel(await objModule.default(path + "apple.obj"));     
-       cessna.setModel(await objModule.default(path + "cessna.obj"));    
-          cow.setModel(await objModule.default(path + "cow.obj"));       
-      galleon.setModel(await objModule.default(path + "galleon.obj"));   
-    greatRhom.setModel(await objModule.default(path + "great_rhombicosidodecahedron.obj")); 
-        horse.setModel(await objModule.default(path + "horse.obj"));     
-    smallRhom.setModel(await objModule.default(path + "small_rhombicosidodecahedron.obj")); 
-    stanBunny.setModel(await objModule.default(path + "stanford_bunny.obj")); 
-       teapot.setModel(await objModule.default(path + "teapot.obj"));
-
-    setModelColor();
-
-    for(let x = 0; x < scene.positionList.length-1; x += 1)
-    {
-        fb.clearFBDefault();
-
-        const p = scene.getPosition(x);
-        p.visible = true;
-        
-        for(let rot = 0; rot < 180; rot += 5)
-        {
-           p.setMatrix(Matrix.translate(0, 0, -1)
-                             .mult(Matrix.rotateY(rot))
-                             .mult(Matrix.rotateX(rot)));
-           
-            renderFB(scene, fb);
-
-           fb.dumpFB2File(format("Interactive_OBJ_Models_" + p.name + "_Frame%3d.ppm", rot/5));
-           fb.clearFBDefault();
-        }
-
-        p.setMatrix(Matrix.translate(0, 0, -1));
-        p.visible = false;
-    }
 }

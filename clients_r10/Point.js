@@ -60,6 +60,7 @@ function runOnline(mod)
     const resizer = new ResizeObserver(mod.windowResized);
     resizer.observe(document.getElementById("resizer"));
 }
+
 function runOffline()
 {
     let fb = new FrameBuffer(50, 50);

@@ -45,28 +45,19 @@ ModelShading.setColor(scene.getPosition(size-2).getModel(), new Color(50, 50, 50
 scene.getPosition(size - 1).getMatrix().mult( Matrix.translate(0, -1,  0) );// floor
 ModelShading.setColor(scene.getPosition(size-1).getModel(), new Color(50, 50, 50));
 
+const file = "./InteractiveAbstractClient_R10.js";
 try
 {
-    document;
-
-    const file = "./InteractiveAbstractClient_R10.js";
-    try
+    async function getModule()
     {
-        async function getModule()
-        {
-            return await import("./InteractiveAbstractClient_R10.js");
-        }
+        return await import("./InteractiveAbstractClient_R10.js");
+    }
 
-        runOnline(await getModule());
-    }
-    catch(err)
-    {
-        console.log(err);
-    }
+    runOnline(await getModule());
 }
-catch(e)
+catch(err)
 {
-    runOffline();
+    console.log(err);
 }
 
 function runOnline(mod)
@@ -77,29 +68,4 @@ function runOnline(mod)
    document.addEventListener("keypress", mod.handleKeyInput);
    const resizer = new ResizeObserver(mod.windowResized);
    resizer.observe(document.getElementById("resizer"));    
-}
-
-function runOffline()
-{
-   const fb = new FrameBuffer(1000, 1000, new Color(50, 50, 50));
-
-   for(let x = 0; x < scene.positionList.length-2; x += 1)
-   {
-      fb.clearFBDefault();
-      const p = scene.getPosition(x);
-      p.visible = true;
-
-      for(let rot = 0; rot < 180; rot += 5)
-      {
-         p.setMatrix(Matrix.translate(0, 0, -3)
-                           .mult(Matrix.rotateY(rot))
-                           .mult(Matrix.rotateX(rot)));
-         renderFB(scene, fb);
-         fb.dumpFB2File(format("InteractiveModels_R10_Pos%1d_Frame%3d.ppm", x, rot/5));
-         fb.clearFBDefault();
-      }
-
-      p.setMatrix(Matrix.translate(3*x-6, 0, -3));
-      p.visible = false;
-   }
 }
