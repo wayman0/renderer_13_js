@@ -11,10 +11,10 @@
 
 //@ts-check
 
-import {Scene, Matrix, Model, Position, Vertex} from "../renderer/scene/SceneExport.js";
-import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {renderFB, setRastDebug, setDoAntiAliasing} from "../renderer/pipeline/PipelineExport.js";
-import {Point} from "../renderer/scene/primitives/PrimitiveExport.js";
+import {Scene, Matrix, Model, Position, Vertex} from "../../renderer/scene/SceneExport.js";
+import {FrameBuffer, Viewport, Color} from "../../renderer/framebuffer/FramebufferExport.js";
+import {renderFB, setRastDebug, setDoAntiAliasing} from "../../renderer/pipeline/PipelineExport.js";
+import {Point} from "../../renderer/scene/primitives/PrimitiveExport.js";
 
 let ptMod = Model.buildName("Point Model");
 ptMod.addVertex(new Vertex(0, 0, 0));

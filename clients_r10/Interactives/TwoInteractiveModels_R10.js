@@ -6,12 +6,12 @@
 
 //@ts-check
 
-import { Octahedron, TriangularPyramid} from "../renderer/models_L/ModelsExport.js";
-import {Scene, Position, Matrix} from "../renderer/scene/SceneExport.js";
-import * as ModelShading from "../renderer/scene/util/UtilExport.js";
-import {renderFB} from "../renderer/pipeline/PipelineExport.js";
-import {FrameBuffer, Color } from "../renderer/framebuffer/FramebufferExport.js";
-import {format} from "../renderer/scene/util/UtilExport.js";
+import { Octahedron, TriangularPyramid} from "../../renderer/models_L/ModelsExport.js";
+import {Scene, Position, Matrix} from "../../renderer/scene/SceneExport.js";
+import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
+import {renderFB} from "../../renderer/pipeline/PipelineExport.js";
+import {FrameBuffer, Color } from "../../renderer/framebuffer/FramebufferExport.js";
+import {format} from "../../renderer/scene/util/UtilExport.js";
 
 const scene = Scene.buildFromName("Two Interactive Models R10");
 

@@ -6,13 +6,13 @@
 
 //@ts-check
 
-import {Scene, Position, Matrix} from "../renderer/scene/SceneExport.js";
-import {make} from "../renderer/scene/util/UtilExport.js";
-import * as Shapes from "../renderer/models_L/ModelsExport.js";
-import * as ModelShading from "../renderer/scene/util/UtilExport.js";
-import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {renderFB} from "../renderer/pipeline/PipelineExport.js";
-import {format} from "../renderer/scene/util/UtilExport.js";
+import {Scene, Position, Matrix} from "../../renderer/scene/SceneExport.js";
+import {make} from "../../renderer/scene/util/UtilExport.js";
+import * as Shapes from "../../renderer/models_L/ModelsExport.js";
+import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
+import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
+import {renderFB} from "../../renderer/pipeline/PipelineExport.js";
+import {format} from "../../renderer/scene/util/UtilExport.js";
 import { numberOfInteractiveModels } from "./InteractiveAbstractClient_R10.js";
 
 const scene = Scene.buildFromName("InteractiveModelsAll_R10");

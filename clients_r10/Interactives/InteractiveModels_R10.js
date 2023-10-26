@@ -6,12 +6,12 @@
 
 //@ts-check
 
-import {Scene, Position, Matrix} from "../renderer/scene/SceneExport.js";
-import {Sphere, Cylinder, Torus, Cube, PanelXY, PanelXZ, Cube2} from "../renderer/models_L/ModelsExport.js";
-import * as ModelShading from "../renderer/scene/util/UtilExport.js";
-import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {renderFB} from "../renderer/pipeline/PipelineExport.js";
-import {format} from "../renderer/scene/util/UtilExport.js";
+import {Scene, Position, Matrix} from "../../renderer/scene/SceneExport.js";
+import {Sphere, Cylinder, Torus, Cube, PanelXY, PanelXZ, Cube2} from "../../renderer/models_L/ModelsExport.js";
+import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
+import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
+import {renderFB} from "../../renderer/pipeline/PipelineExport.js";
+import {format} from "../../renderer/scene/util/UtilExport.js";
 
 
 // Create the Scene object that we shall render.

@@ -6,10 +6,10 @@
 
 //@ts-check
 
-import {Scene, Matrix, Model, Position, Vertex} from "../renderer/scene/SceneExport.js";
-import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {renderFB, setRastDebug, setDoAntiAliasing} from "../renderer/pipeline/PipelineExport.js";
-import {LineSegment} from "../renderer/scene/primitives/PrimitiveExport.js";
+import {Scene, Matrix, Model, Position, Vertex} from "../../../renderer/scene/SceneExport.js";
+import {FrameBuffer, Viewport, Color} from "../../../renderer/framebuffer/FramebufferExport.js";
+import {renderFB, setRastDebug, setDoAntiAliasing} from "../../../renderer/pipeline/PipelineExport.js";
+import {LineSegment} from "../../../renderer/scene/primitives/PrimitiveExport.js";
 import { handleKeyInput, windowResized } from "./InteractiveAbstractClient_R10.js";
 
 let cubeModel = Model.buildName("Cube");

@@ -6,12 +6,12 @@
 
 //@ts-check
 
-import {Scene, Position, Matrix} from "../renderer/scene/SceneExport.js";
-import {Axes2D} from "../renderer/models_L/ModelsExport.js";
-import * as ModelShading from "../renderer/scene/util/UtilExport.js";
-import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {renderFB} from "../renderer/pipeline/PipelineExport.js";
-import {format} from "../renderer/scene/util/UtilExport.js";
+import {Scene, Position, Matrix} from "../../renderer/scene/SceneExport.js";
+import {Axes2D} from "../../renderer/models_L/ModelsExport.js";
+import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
+import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
+import {renderFB} from "../../renderer/pipeline/PipelineExport.js";
+import {format} from "../../renderer/scene/util/UtilExport.js";
 
 const path = "../assets/";
 
@@ -51,7 +51,7 @@ try
 {
     async function getOBJ()
     {
-        return await import ("../renderer/models_L/OBJModel.js");
+        return await import ("../../renderer/models_L/OBJModel.js");
     }
 
     async function getInteractiveUtilites()

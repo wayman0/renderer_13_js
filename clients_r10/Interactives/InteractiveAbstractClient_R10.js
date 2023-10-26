@@ -6,15 +6,15 @@
 
 //@ts-check
 
-import {Scene, Model, Position, Matrix, Camera, Vertex} from "../renderer/scene/SceneExport.js";
-import {Point, LineSegment} from "../renderer/scene/primitives/PrimitiveExport.js";
-import {make as PointCloud} from "../renderer/scene/util/UtilExport.js";
-import * as ModelShading from "../renderer/scene/util/UtilExport.js";
+import {Scene, Model, Position, Matrix, Camera, Vertex} from "../../../renderer/scene/SceneExport.js";
+import {Point, LineSegment} from "../../../renderer/scene/primitives/PrimitiveExport.js";
+import {make as PointCloud} from "../../../renderer/scene/util/UtilExport.js";
+import * as ModelShading from "../../../renderer/scene/util/UtilExport.js";
 import {render, renderFB, clipDebug, setClipDebug, 
         rastDebug, setRastDebug, doAntiAliasing, setDoAntiAliasing, 
-        doGamma, setDoGamma, doNearClipping, setDoNearClipping} from "../renderer/pipeline/PipelineExport.js"
-import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {format} from "../renderer/scene/util/UtilExport.js";
+        doGamma, setDoGamma, doNearClipping, setDoNearClipping} from "../../../renderer/pipeline/PipelineExport.js"
+import {FrameBuffer, Viewport, Color} from "../../../renderer/framebuffer/FramebufferExport.js";
+import {format} from "../../../renderer/scene/util/UtilExport.js";
 
 
 export let letterbox = false;

@@ -7,12 +7,12 @@
 //@ts-check
 
 import {TriangularPrism, Cylinder, ConeFrustum, Octahedron, Box,
-        ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ, PanelXY} from "../renderer/models_L/ModelsExport.js";
-import {Scene, Position, Matrix, Camera} from "../renderer/scene/SceneExport.js";
-import * as ModelShading from "../renderer/scene/util/UtilExport.js";
-import {renderFB, setDoAntiAliasing, setDoGamma, setRastDebug} from "../renderer/pipeline/PipelineExport.js";
-import {FrameBuffer, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {format} from "../renderer/scene/util/UtilExport.js";
+        ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ, PanelXY} from "../../renderer/models_L/ModelsExport.js";
+import {Scene, Position, Matrix, Camera} from "../../renderer/scene/SceneExport.js";
+import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
+import {renderFB, setDoAntiAliasing, setDoGamma, setRastDebug} from "../../renderer/pipeline/PipelineExport.js";
+import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
+import {format} from "../../renderer/scene/util/UtilExport.js";
 
 // Create the Scene object that we shall render.
 const scene = Scene.buildFromName("Geometries_R10b");
