@@ -137,16 +137,8 @@ finger_p.setMatrix(Matrix.translate(wristLength, 0, 0));
 
 let fb = new FrameBuffer(1024, 1024);
 
-try
-{
-   document;
-   runOnline();
-   setUpViewing();
-}
-catch(e)
-{
-   runOffline();
-}
+runOnline();
+setUpViewing();
 
 function runOnline()
 {
@@ -344,57 +336,4 @@ function printHelpMessage()
    console.log("Use the f/F keys to rotate the arm at the finger.");
    console.log("Use the '=' key to reset the robot arm.");
    console.log("Use the 'h' key to redisplay this help message.");
-}
-
-function runOffline()
-{
-   let fb = new FrameBuffer(1024, 1024);
-
-   // rotate the shoulder
-   for(let rot = -45; rot <= 45; rot += 5)
-   {
-      shoulder_p.matrix2Identity()
-                  .mult(Matrix.translate(0, 0, -1))
-                  .mult(Matrix.rotateZ(rot));
-
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("RobotArms_RotateShoulder-%02d.ppm", rot));
-      fb.clearFB();
-   }
-
-   // rotate the elbow
-   for(let rot = -45; rot <= 45; rot += 5)
-   {
-      elbow_p.matrix2Identity()
-            .mult(Matrix.translate(0, 0, -1))
-            .mult(Matrix.rotateZ(rot));
-
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("RobotArms_RotateElbow-%02d.ppm", rot));
-      fb.clearFB();
-   }
-   
-   // rotate the wrist
-   for(let rot = -45; rot <= 45; rot += 5)
-   {
-      wrist_p.matrix2Identity()
-            .mult(Matrix.translate(0, 0, -1))
-            .mult(Matrix.rotateZ(rot));
-
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("RobotArms_RotateWrist-%02d.ppm", rot));
-      fb.clearFB();
-   }
-
-   // rotate the finger
-   for(let rot = -45; rot <= 45; rot += 5)
-   {
-      finger_p.matrix2Identity()
-            .mult(Matrix.translate(0, 0, -1))
-            .mult(Matrix.rotateZ(rot));
-
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("RobotArms_RotateFinger-%02d.ppm", rot));
-      fb.clearFB();
-   }
 }

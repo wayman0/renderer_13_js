@@ -107,16 +107,8 @@ setTransformations();
 
 let fb = new FrameBuffer(1024, 1024);
 
-try
-{
-   document;
-   runOnline();
-   setUpViewing();
-}
-catch(e)
-{
-   runOffline();
-}
+runOnline();
+setUpViewing();
 
 function runOnline()
 {
@@ -453,90 +445,4 @@ function printHelpMessage()
    console.log("Use the '=' key to reset the robot arm.");
    console.log("Use the '+' key to save a \"screenshot\" of the framebuffer.");
    console.log("Use the 'h' key to redisplay this help message.");
-}
-
-function runOffline()
-{
-   fb = new FrameBuffer(1024, 1024);
-
-   // rotate the shoulder
-   for(let rot = -45; rot <= 45; rot += 5)
-   {
-      shoulder_p.matrix2Identity()
-               .mult(Matrix.translate(xTranslation, yTranslation, -1))
-               .mult(Matrix.rotateZ(rot))
-               .mult(Matrix.scaleXYZ(shoulderLength,
-                                     shoulderLength,
-                                     1));
-
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("RobotArms_RotateShoulder-%02d.ppm", rot));
-      fb.clearFB();
-   }
-
-   // rotate the elbow
-   for(let rot = -45; rot <= 45; rot += 5)
-   {
-      elbow1_p.matrix2Identity()
-               .mult(Matrix.translate(1, 0, 0))
-               .mult(Matrix.rotateZ(rot))
-               .mult(Matrix.scaleXYZ(elbowLength1/shoulderLength,
-                                     elbowLength1/shoulderLength,
-                                     1));
-
-      elbow2_p.matrix2Identity()
-               .mult(Matrix.translate(1, 0, 0))
-               .mult(Matrix.rotateZ(rot))
-               .mult(Matrix.scaleXYZ(elbowLength2/shoulderLength,
-                                     elbowLength2/shoulderLength,
-                                     1));
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("RobotArms_RotateElbow-%02d.ppm", rot));
-      fb.clearFB();
-   }
-
-   // rotate the wrist
-   for(let rot = -45; rot <= 45; rot += 5)
-   {
-      wrist1_p.matrix2Identity()
-               .mult(Matrix.translate(1, 0, 0))
-               .mult(Matrix.rotateZ(rot))
-               .mult(Matrix.scaleXYZ(wristLength1/elbowLength1,
-                                     wristLength1/elbowLength1,
-                                     1));
-
-      wrist2_p.matrix2Identity()
-               .mult(Matrix.translate(1, 0, 0))
-               .mult(Matrix.rotateZ(rot))
-               .mult(Matrix.scaleXYZ(wristLength2/elbowLength2,
-                                     wristLength2/elbowLength2,
-                                     1));
-
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("RobotArms_RotateWrist-%02d.ppm", rot));
-      fb.clearFB();
-   }
-
-   // rotate the finger
-   for(let rot = -45; rot <= 45; rot += 5)
-   {
-      
-      finger1_p.matrix2Identity()
-               .mult(Matrix.translate(1, 0, 0))
-               .mult(Matrix.rotateZ(rot))
-               .mult(Matrix.scaleXYZ(fingerLength1/wristLength1,
-                                     fingerLength1/wristLength1,
-                                     1));
-                                     
-      finger2_p.matrix2Identity()
-               .mult(Matrix.translate(1, 0, 0))
-               .mult(Matrix.rotateZ(rot))
-               .mult(Matrix.scaleXYZ(fingerLength2/wristLength2,
-                                     fingerLength2/wristLength2,
-                                     1));
-
-      renderFB(scene, fb);
-      fb.dumpFB2File(format("RobotArms_RotateFinger-%02d.ppm", rot));
-      fb.clearFB();
-   }
 }
