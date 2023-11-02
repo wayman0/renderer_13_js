@@ -9,23 +9,31 @@
                 margin: 0;
                 overflow: auto;
             }
+
+            #resizer
+            {
+                float:right;
+                overflow: hidden;
+                resize: both;
+                width: 600px;
+                height: 600px;
+                border-width: 3px;
+                border-color: gray;
+            }
         </style>
     </head>
 
 
     <body>
-        <div style="width: 100%;">
-            <div style="text-align: center; font-size: x-large;">Code Editor </div>
+        <div style="text-align: center; font-size: x-large;">Code Editor </div>
+        <textarea id = "input", rows = 25, cols = 100></textarea>
+
+        <div id = resizer>
+            <canvas id = "pixels" width = 500; height = 500;></canvas>
         </div>
 
-        <div style="width:100%";>
-            <textarea id = "input", rows = 25, cols = 100></textarea>
-        </div>
-        
-        <button type = "button" id = "run", style = "height:20px; width:100px; text-align:center; background-color:white;">
-            Run Code
-        </button>
-
+            <button type = "button" id = "run", style = "height:20px; width:100px;"> Run Code</button>
+                    
         <script src = "./code_editor.js" type ="module"></script>
     </body>
 </html>
