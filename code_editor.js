@@ -2,10 +2,14 @@
 
 // access the button on the html file
 const runButton = document.getElementById("run");
+const saveButton = document.getElementById("save");
 const codeBox = document.getElementById("input");
 
-// add the runCode function to the button's event listener
+// add the runCode function to the run button's event listener
 runButton?.addEventListener("click", runCode);
+
+// add the saveCode fucntion to the save buttons event listener
+saveButton?.addEventListener("click", saveCode);
 
 setCanvas();
 addImportCode();
@@ -24,6 +28,35 @@ function runCode()
     script.text = code;
     script.type = "module";
     document.head.appendChild(script).parentNode?.removeChild(script);
+}
+
+function saveCode()
+{
+    // prompt the user for the filename
+    let fileName = "" + prompt("Enter the filename", "");
+    console.log(fileName);
+
+    // while there is no real filename continuously prompt for one
+    while(!(fileName.length > 0))
+        fileName = prompt("Enter the file name", "");
+
+    // get the code in the text box
+    const code = codeBox?.value;
+
+    // create a html element, set the element to be an invisible download href element
+    const saveElement = document.createElement('a');
+    saveElement.setAttribute("href", 'data:text/plain; charset=utf-8,' + encodeURIComponent(code));
+    saveElement.setAttribute("download", fileName);
+    saveElement.style.display = "none";
+    
+    // add the element
+    document.body.appendChild(saveElement);
+    
+    //activate the online save code
+    saveElement.click();
+    
+    // remove the element
+    document.body.removeChild(saveElement);
 }
 
 // get and set the canvas to be black to start with
