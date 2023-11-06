@@ -105,6 +105,7 @@ function addDisplayCode()
     codeBox.value += "resizer.observe(document.getElementById(\"resizer\"));\n";
     codeBox.value += "function display()\n";
     codeBox.value += "{\n";
+    codeBox.value += "\tconst resizer = document.getElementById(\"resizer\");\n";
     codeBox.value += "\tconst w = resizer?.offsetWidth;\n";
     codeBox.value += "\tconst h = resizer?.offsetHeight;\n";
     codeBox.value += "\n";
