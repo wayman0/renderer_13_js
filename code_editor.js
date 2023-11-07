@@ -52,6 +52,9 @@ function saveCode()
     while(!(fileName.length > 0))
         fileName = prompt("Enter the file name", "");
 
+    if(fileName == "null")
+        return;
+
     // get the code in the text box
     const code = codeBox?.value;
 
@@ -174,8 +177,10 @@ function addAnimationCode()
 {
     codeBox.value += "\n\n";
     codeBox.value += "//Code to animate the program\n";
+    codeBox.value += "//uncomment displayNextFrame to start animation\n";
+    codeBox.value += "// uncomment timer = clearInterval() to stop animation\n";
     codeBox.value += "let timer = null;\n";
-    codeBox.value += "displayNextFrame();\n";
+    codeBox.value += "//displayNextFrame();\n";
     codeBox.value += "function displayNextFrame()\n";
     codeBox.value += "{\n";
     codeBox.value += "\ttimer = setInterval(function() \n";
@@ -184,4 +189,5 @@ function addAnimationCode()
     codeBox.value += "\t\tdisplay();\n";
     codeBox.value += "\t}, 1000/50); // 50 frames per second\n";
     codeBox.value += "}\n";
+    codeBox.value += "//timer = clearInterval();\n"
 }

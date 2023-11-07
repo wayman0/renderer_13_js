@@ -12,7 +12,7 @@
 
             #resizer
             {
-                float:right;
+                float:inline-end;
                 overflow: hidden;
                 resize: both;
                 width: 600px;
@@ -27,7 +27,7 @@
     <body>
         <div style="text-align: center; font-size: x-large; ">Code Editor </div>
         
-        <textarea id = "input", rows = 50, cols = 110, style="background-color:rgb(30,30,30); color:rgb(85, 150, 215);"></textarea>
+        <textarea id = "input", spellcheck = "false", rows = 50, cols = 110, style="background-color:rgb(30,30,30); color:rgb(85, 150, 215);"></textarea>
 
         <div id = resizer>
             <canvas id = "pixels" width = 500; height = 500;></canvas>
@@ -36,7 +36,7 @@
         <button type = "button" id = "run"  style = "height:20px; width:100px;"> Run Code</button>
         <button type = "button" id = "save" style = "height:20px; width:100px;"> Save Code</button>
         <button type = "button" id = "import" style = "height:20px; width:100px;"> Import Code</button>
-        
+
         <script src = "./code_editor.js" type ="module"></script>
     </body>
 </html>
