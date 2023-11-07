@@ -3,6 +3,7 @@
 // access the button on the html file
 const runButton = document.getElementById("run");
 const saveButton = document.getElementById("save");
+const importButton = document.getElementById("import");
 const codeBox = document.getElementById("input");
 
 // add the runCode function to the run button's event listener
@@ -11,11 +12,17 @@ runButton?.addEventListener("click", runCode);
 // add the saveCode fucntion to the save buttons event listener
 saveButton?.addEventListener("click", saveCode);
 
+// add the importCode function to the import buttons event listener
+importButton?.addEventListener("click", importCode);
+
 setCanvas();
 addImportCode();
 addDisplayCode();
 addAnimationCode();
 
+// read the code from the text area
+// create a script tag
+// set the script tag to be the text area text
 function runCode()
 {
     //@ts-ignore
@@ -30,6 +37,11 @@ function runCode()
     document.head.appendChild(script).parentNode?.removeChild(script);
 }
 
+// prompt the user for a filename
+// create a href element 
+// set the text of the text area to be the href data
+// set the href to be download with the filename
+// add the href, click the href, delete the href
 function saveCode()
 {
     // prompt the user for the filename
@@ -57,6 +69,43 @@ function saveCode()
     
     // remove the element
     document.body.removeChild(saveElement);
+}
+
+// prompt the user for the file
+// read the file data using fetch
+// write the textarea text to be the read data
+function importCode()
+{
+    // create an input element and make the type be file
+    const fileInput = document.createElement("input");
+    fileInput.type = "file";
+
+    // when there is a file chosen in the file input element read the file
+    fileInput.onchange = e =>  
+        {
+            // get the file 
+            // @ts-ignore
+            const file = e.target.files[0];
+
+            // create a new FileReader and read the file
+            const reader = new FileReader();
+            reader.readAsText(file, 'UTF-8');
+
+            // when the file is completely read
+            reader.onload = readerEvent => 
+            {
+                // get the text from the file
+                // @ts-ignore
+                const text = readerEvent.target.result; 
+
+                // set the text area to be the read text
+                // @ts-ignore
+                codeBox.value = text;
+            }
+        }
+
+    // click on the fileInput element to start the file selection process
+    fileInput.click();
 }
 
 // get and set the canvas to be black to start with
