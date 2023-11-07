@@ -43,6 +43,14 @@ export function format(str, ... values)
         }
     }
 
+    if(newStr.includes("-"))
+    {   
+        // remove the minus sign
+        newStr.replace("-", "");
+        //append the minus sign to the front
+        newStr = "-" + newStr;
+    }
+
     return newStr;
 }
 
