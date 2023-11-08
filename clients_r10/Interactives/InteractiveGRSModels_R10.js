@@ -112,6 +112,7 @@ async function runOnline(grsModule, interUtilModule)
     interUtilModule.setPushBack(-1);
 
     document.addEventListener("keypress", interUtilModule.handleKeyInput);
+    document.addEventListener("keydown", interUtilModule.overrideDefault);
     const resizer = new ResizeObserver(interUtilModule.windowResized);
     resizer.observe(document.getElementById("resizer"));
 }

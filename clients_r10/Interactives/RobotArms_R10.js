@@ -214,6 +214,7 @@ setUpViewing();
 function runOnline()
 {
     document.addEventListener("keypress", keyPressed);
+    document.addEventListener("keydown", overrideDefault);
     const resizer = new ResizeObserver(windowResized);
     resizer.observe(document.getElementById("resizer"));
 }
@@ -392,6 +393,84 @@ function keyPressed(e)
     setUpViewing();
 }
 
+function overrideDefault(e)
+{
+    const c = e.key;
+
+    if('s' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        shoulderLength[currentArm] += .02;
+    }
+    else if('S' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        shoulderLength[currentArm] -= .02;
+    }
+    else if('e' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        elbowLength1[currentArm] += .02;
+    }
+    else if('E' == c && e.ctrlKey)
+    {   
+        e.preventDefault();
+        elbowLength1[currentArm] -= .02;
+    }
+    else if('w' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        wristLength1[currentArm] += .02;
+    }
+    else if('W' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        wristLength1[currentArm] -= .02;
+    }
+    else if('f' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        fingerLength1[currentArm] += .02;
+    }
+    else if('F' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        fingerLength1[currentArm] -= .02;
+    }
+    else if('q' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        elbowLength2[currentArm] += .02;
+    }
+    else if('Q' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        elbowLength2[currentArm] -= .02;
+    }
+    else if('z' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        wristLength2[currentArm] += .02;
+    }
+    else if('Z' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        wristLength2[currentArm] -= .02;
+    }
+    else if('a' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        fingerLength2[currentArm] += .02;
+    }
+    else if('A' == c && e.ctrlKey)
+    {    
+        e.preventDefault();
+        fingerLength2[currentArm] -= .02;
+    }
+
+    setTransformations();
+    setUpViewing();
+}
 function setTransformations()
 {
     arm_p[currentArm].matrix2Identity()

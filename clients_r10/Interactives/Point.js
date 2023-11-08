@@ -27,28 +27,20 @@ ptPos.setMatrix(Matrix.translate(-1, 0, -3));
 let scene = new Scene();
 scene.addPosition(ptPos);
 
+const file = "./InteractiveAbstractClient_R10.js";
+
 try
 {
-    document;
-    const file = "./InteractiveAbstractClient_R10.js";
-
-    try
+    async function getModule()
     {
-        async function getModule()
-        {
-            return await import(file);
-        }
+        return await import(file);
+    }
 
-        runOnline(await getModule());
-    }
-    catch(err)
-    {
-        console.log(err);
-    }
+    runOnline(await getModule());
 }
-catch(e)
+catch(err)
 {
-    runOffline();
+    console.log(err);
 }
 
 function runOnline(mod)
@@ -57,38 +49,7 @@ function runOnline(mod)
     mod.setNumberInteractiveModels(scene.positionList.length);
 
     document.addEventListener("keypress", mod.handleKeyInput);
+    document.addEventListener("keydown", mod.overrideDefault);
     const resizer = new ResizeObserver(mod.windowResized);
     resizer.observe(document.getElementById("resizer"));
-}
-
-function runOffline()
-{
-    let fb = new FrameBuffer(50, 50);
-    fb.clearFB(Color.white);
-
-    //setRastDebug(true);
-
-    renderFB(scene, fb);
-
-    ptMod.primitiveList.length = 0;
-    ptMod.colorList.length = 0;
-
-    ptMod.addColor(Color.magenta);
-    ptMod.addPrimitive(new Point(0, 0));
-    /**@type {Point} */ (ptMod.getPrimitive(0)).radius = 3;
-    ptPos.setMatrix(Matrix.translate(0, 0, -3));
-
-    renderFB(scene, fb);
-
-    ptMod.primitiveList.length = 0;
-    ptMod.colorList.length = 0;
-
-    ptMod.addColor(Color.Blue);
-    ptMod.addPrimitive(new Point(0, 0));
-    /**@type {Point}*/ (ptMod.getPrimitive(0)).radius = 5;
-    ptPos.setMatrix(Matrix.translate(1, 0, -3));
-
-    renderFB(scene, fb);
-
-    fb.dumpFB2File("Point r=1, 3, 5.ppm");
 }

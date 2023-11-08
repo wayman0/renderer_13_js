@@ -135,6 +135,7 @@ function runOnline(mod)
   mod.setPushBack(-3);
 
   document.addEventListener("keypress", mod.handleKeyInput);
+  document.addEventListener("keydown", mod.overrideDefault);
   const resizer = new ResizeObserver(mod.windowResized);
   resizer.observe(document.getElementById("resizer"));
 }

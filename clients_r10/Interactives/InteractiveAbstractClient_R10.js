@@ -221,6 +221,24 @@ export function handleKeyInput(e)
     setUpViewing();
 }
 
+export function overrideDefault(e)
+{
+    const c = e.key;
+
+    if('e' == c && e.altKey)
+    {
+        e.preventDefault();
+        ModelShading.setRandomVertexColor(scene.getPosition(currentModel).getModel());
+    }
+    else if('d' == e && e.altKey)
+    {
+        e.preventDefault();
+        console.log("\n" + scene.getPosition(currentModel).getModel().toString())
+    }
+
+    setUpViewing();
+}
+
 export function setTransformations(c)
 {
     if('=' == c)
