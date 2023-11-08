@@ -185,6 +185,7 @@ setUpViewing();
 function runOnline()
 {
    document.addEventListener("keypress", keyPressed);
+   document.addEventListener("keydown", overrideDefault);
    const resizer = new ResizeObserver(windowResized);
    resizer.observe(document.getElementById("resizer"));
    setUpViewing();
@@ -439,6 +440,90 @@ function keyPressed(e)
    else if ('A' == c && e.ctrlKey)
    {
       fingerRotation2[currentArm] -= 2.0;
+   }
+
+   setTransformations();
+   setUpViewing();
+}
+
+function overrideDefault(e)
+{
+   const c = e.key;
+
+   if ('s' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderRotation[currentArm] += 2.0;
+   }
+   else if ('S' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderRotation[currentArm] -= 2.0;
+   }
+   else if ('e' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowRotation1[currentArm] += 2.0;
+   }
+   else if ('E' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowRotation1[currentArm] -= 2.0;
+   }
+   else if ('w' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristRotation1[currentArm] += 2.0;
+   }
+   else if ('W' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristRotation1[currentArm] -= 2.0;
+   }
+   else if ('f' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerRotation1[currentArm] += 2.0;
+   }
+   else if ('F' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerRotation1[currentArm] -= 2.0;
+   }
+   else if ('q' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowRotation2[currentArm] += 2.0;
+   }
+   else if ('Q' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowRotation2[currentArm] -= 2.0;
+   }
+   else if ('z' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristRotation2[currentArm] += 2.0;
+   }
+   else if ('Z' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristRotation2[currentArm] -= 2.0;
+   }
+   else if ('a' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerRotation2[currentArm] += 2.0;
+   }
+   else if ('A' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerRotation2[currentArm] -= 2.0;
+   }
+   else if('d' == c && e.altKey)
+   {
+      e.preventDefault();
+      console.log(scene.toString());
    }
 
    setTransformations();

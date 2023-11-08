@@ -146,6 +146,7 @@ function rotate()
 function runOnline()
 {
     document.addEventListener("keypress", keyPressed);
+    document.addEventListener("keydown", overrideDefault);
     const resizer = new ResizeObserver(display);
     resizer.observe(document.getElementById("resizer"));
 
@@ -256,6 +257,16 @@ function runOnline()
         else
             scene.getCamera().projOrtho(-6, 6, -6, 6, -1);
     }
+
+    function overrideDefault(e)
+    {
+        if(e.altKey && e.key == 'd')
+        {
+            e.preventDefault();
+            console.log(scene.toString());
+        }
+    }
+
 
     function printHelpMessage()
     {

@@ -113,6 +113,7 @@ setUpViewing();
 function runOnline()
 {
    document.addEventListener("keypress", keyPressed);
+   document.addEventListener("keydown", overrideDefault);
    const resizer = new ResizeObserver(windowResized);
    resizer.observe(document.getElementById("resizer"));
    setUpViewing();
@@ -323,6 +324,88 @@ function keyPressed(e)
    setUpViewing();
 }
 
+function overrideDefault(e)
+{
+   const c = e.key;
+
+   if ('s' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderLength += 2.0;
+   }
+   else if ('S' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderLength -= 2.0;
+   }
+   else if ('e' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength1 += 2.0;
+   }
+   else if ('E' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength1 -= 2.0;
+   }
+   else if ('w' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength1 += 2.0;
+   }
+   else if ('W' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength1 -= 2.0;
+   }
+   else if ('f' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength1 += 2.0;
+   }
+   else if ('F' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength1 -= 2.0;
+   }
+   else if ('q' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength2 += 2.0;
+   }
+   else if ('Q' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength2 -= 2.0;
+   }
+   else if ('z' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength2 += 2.0;
+   }
+   else if ('Z' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength2 -= 2.0;
+   }
+   else if ('a' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength2 += 2.0;
+   }
+   else if ('A' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength2 -= 2.0;
+   }
+   else if('d' == c && e.altKey)
+   {
+      e.preventDefault();
+      console.log(scene.toString());
+   }
+   setTransformations();
+   setUpViewing();
+}
 function windowResized()
 {
    // Get the new size of the canvas
@@ -413,7 +496,6 @@ function printHelpMessage()
 {
    console.log("Use the 'd' key to toggle debugging information on and off.");
    console.log("Use the 'Alt-d' key combination to print the Scene data structure.");
-   console.log("Use the '1' and '2' keys to switch between the two renderers.");
    console.log("Use the 'c' key to change the random solid arm color.");
    console.log("Use the 'C' key to randomly change arm segment colors.");
    console.log("Use the 'r' key to randomly change arm segment end colors.");
@@ -443,6 +525,5 @@ function printHelpMessage()
    console.log("Use the y/Y keys to translate the arm along the y-axis.");
    console.log();
    console.log("Use the '=' key to reset the robot arm.");
-   console.log("Use the '+' key to save a \"screenshot\" of the framebuffer.");
    console.log("Use the 'h' key to redisplay this help message.");
 }

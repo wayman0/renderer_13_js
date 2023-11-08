@@ -114,6 +114,7 @@ setUpViewing();
 function runOnline()
 {
    document.addEventListener("keypress", keyPressed);
+   document.addEventListener("keydown", overrideDefault);
    const resizer = new ResizeObserver(windowResized);
    resizer.observe(document.getElementById("resizer"));
    setUpViewing();
@@ -262,6 +263,60 @@ function keyPressed(e)
    else if ('F' == c && e.ctrlKey)
    {
       fingerLength -= .1;
+   }
+
+   setTransformations();
+   setUpViewing();
+}
+
+function overrideDefault(e)
+{
+   const c = e.key;
+
+   if ('s' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderLength += .1;
+   }
+   else if ('S' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderLength -= .1;
+   }
+   else if ('e' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength += .1;
+   }
+   else if ('E' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength -= .1;
+   }
+   else if ('w' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength += .1;
+   }
+   else if ('W' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength -= .1;
+   }
+   else if ('f' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength += .1;
+   }
+   else if ('F' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength -= .1;
+   }
+   else if('d' == c && e.altKey)
+   {
+      e.preventDefault();
+      console.log(scene.toString());
    }
 
    setTransformations();

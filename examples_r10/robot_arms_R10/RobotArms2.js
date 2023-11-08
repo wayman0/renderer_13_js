@@ -129,6 +129,7 @@ setUpViewing();
 function runOnline()
 {
    document.addEventListener("keypress", keyPressed);
+   document.addEventListener("keydown", overrideDefault);
    const resizer = new ResizeObserver(windowResized);
    resizer.observe(document.getElementById("resizer"));
    setUpViewing();
@@ -390,6 +391,100 @@ function keyPressed(e)
    else if ('A' == c && e.ctrlKey)
    {
       fingerLength2 -= 2.0;
+   }
+
+   setTransformations();
+   setUpViewing();
+}
+
+function overrideDefault(e)
+{
+   const c = e.key;
+
+   if ('s' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderLength1 += 2.0;
+   }
+   else if ('S' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderLength1 -= 2.0;
+   }
+   else if ('e' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength1 += 2.0;
+   }
+   else if ('E' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength1 -= 2.0;
+   }
+   else if ('w' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength1 += 2.0;
+   }
+   else if ('W' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength1 -= 2.0;
+   }
+   else if ('f' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength1 += 2.0;
+   }
+   else if ('F' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength1 -= 2.0;
+   }
+   else if ('b' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderLength2 += 2.0;
+   }
+   else if ('B' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      shoulderLength2 -= 2.0;
+   }
+   else if ('q' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength2 += 2.0;
+   }
+   else if ('Q' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      elbowLength2 -= 2.0;
+   }
+   else if ('z' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength2 += 2.0;
+   }
+   else if ('Z' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      wristLength2 -= 2.0;
+   }
+   else if ('a' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength2 += 2.0;
+   }
+   else if ('A' == c && e.ctrlKey)
+   {
+      e.preventDefault();
+      fingerLength2 -= 2.0;
+   }
+   else if('d' == c && e.altKey)
+   {
+      e.preventDefault();
+      console.log(scene.toString());
    }
 
    setTransformations();

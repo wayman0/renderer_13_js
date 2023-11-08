@@ -133,6 +133,7 @@ setUpViewing();
 function runOnline()
 {
    document.addEventListener("keypress", keyPressed);
+   document.addEventListener("keydown", overrideDefault);
    const resizer = new ResizeObserver(windowResized);
    resizer.observe(document.getElementById("resizer"));
    setUpViewing();
@@ -249,6 +250,18 @@ function keyPressed(e)
    else if ('F' == c)
    {
       fingerRotation -= 2.0;
+   }
+
+   setTransformations();
+   setUpViewing();
+}
+
+function overrideDefault(e)
+{
+   if(e.altKey && e.key == 'd')
+   {
+      e.preventDefault();
+      console.log(scene.toString());
    }
 
    setTransformations();
