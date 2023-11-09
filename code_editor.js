@@ -17,6 +17,7 @@ importButton?.addEventListener("click", importCode);
 
 // add a key pressed event listener to allow completion of () {} [] 
 codeBox?.addEventListener("keypress", codeFeatures);
+
 // add a key down to the document for auto tabbing, 
 // tabs don't belong to text area so adding to text area doesn't work
 // has to be key down instead of key up because key up wont prevent default
@@ -45,12 +46,11 @@ function runCode()
     document.head.appendChild(script).parentNode?.removeChild(script);
 }
 
-let par = false;
-let curly = false;
-let bracket = false;
-
-let numTab = 0;
-const tab = "    ";
+const parStack = [];
+const curlyStack = [];
+const bracketStack = [];
+const quoteStack = [];
+const tab = '\t';
 
 function codeFeatures(e)
 {
@@ -68,7 +68,7 @@ function codeFeatures(e)
         if(c == '[')
         {
             e.preventDefault();
-            bracket = true;
+            bracketStack.push('[');
             codeBox.value = beforeText + '[]' + afterText;
             codeBox.selectionStart = start+1;
             codeBox.selectionEnd = end+1;
@@ -76,65 +76,107 @@ function codeFeatures(e)
         else if(c == '{')
         {
             e.preventDefault();
-            curly = true;
-            codeBox.value = beforeText + '{}' + afterText;
+            curlyStack.push('{');
+
+            codeBox.value = beforeText + '{'; 
+            
+            const tempCurlyStack = [];
+            for(const c of beforeText)
+            {
+                if(c == '{')
+                    tempCurlyStack.push('{');
+                else if(c == '}')
+                    tempCurlyStack.pop();
+            }
+        
+            for(let x = 0; x < tempCurlyStack.length; x += 1)
+                codeBox.value += tab;
+
+            codeBox.value += '}' + afterText;
+
             codeBox.selectionStart = start+1;
             codeBox.selectionEnd = end+1;
-
-            numTab += 1;
         }
         else if(c == '(')
         {
             e.preventDefault();
-            par = true;
+            parStack.push('(');
             codeBox.value = beforeText + '()' + afterText;
             codeBox.selectionStart = start+1;
             codeBox.selectionEnd = end+1;
         }
-        else if(c == ']' && bracket)
+        else if(c == "\"")
         {
             e.preventDefault();
-            bracket = false;
+            quoteStack.push("\"");
+            codeBox.value = beforeText + "\"\"" + afterText;
             codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;
+            codeBox.selectionEnd = end+1;   
         }
-        else if(c == '}' && curly)
+        else if(c == ']' && bracketStack.length != 0)
         {
-            e.preventDefault();
-            curly = false;
-            codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;
-
-            numTab>0? numTab -= 1:0;
+            if(afterText.substring(0, 1) == ']')
+            {
+                e.preventDefault();
+                bracketStack.pop();
+                codeBox.selectionStart = star
+                codeBox.selectionEnd = end+1;
+            }
         }
-        else if(c == ')' && par)
+        else if(c == '}' && curlyStack.length != 0)
         {
-            e.preventDefault();
-            par = false;
-            codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;
+            if(afterText.substring(0, 1) == '}')
+            {
+                e.preventDefault();
+                curlyStack.pop();
+                codeBox.selectionStart = start+1;
+                codeBox.selectionEnd = end+1;
+            }
+        }
+        else if(c == ')' && parStack.length != 0)
+        {
+            if(afterText.substring(0, 1) == ')')
+            {
+                e.preventDefault();
+                parStack.pop();
+                codeBox.selectionStart = start+1;
+                codeBox.selectionEnd = end+1;
+            }
+        }
+        else if(c == '"' && quoteStack.length != 0)
+        {
+            if(afterText.substring(0, 1) == '"')
+            {
+                e.preventDefault();
+                quoteStack.pop();
+                codeBox.selectionStart = start+1;
+                codeBox.selectionEnd = end +1;
+            }
         }
         else if(c == 'Tab')
         {
             e.preventDefault();
-            
-            codeBox.value = beforeText;
-            
-            for(let x = 0; x <= numTab; x += 1)
-                codeBox.value += tab;
-            
-            codeBox.value += afterText;
-
-            codeBox.selectionStart = start + tab.length * (numTab+1);
-            codeBox.selectionEnd = end + tab.length * (numTab+1);
+            codeBox.value = beforeText + tab + afterText
+            codeBox.selectionStart = start + 1;
+            codeBox.selectionEnd = end + 1;
         }
         else if(c == 'Enter')
         {
             e.preventDefault();
-
             codeBox.value = beforeText + '\n';
             
-            for(let x = 0; x < numTab; x += 1)
+            // make a temporary stack to determine how indented
+            // we are based upon how many uncomplete braces there are
+            const tempCurlyStack = [];
+            for(const c of beforeText)
+            {
+                if(c == '{')
+                    tempCurlyStack.push('{');
+                else if(c == '}')
+                    tempCurlyStack.pop();
+            }
+
+            for(let x = 0; x < tempCurlyStack.length; x += 1)
                 codeBox.value += tab;
 
             if(beforeText.charAt(beforeText.length-1) == '{')
@@ -142,12 +184,8 @@ function codeFeatures(e)
             else
                 codeBox.value += afterText;
 
-            codeBox.selectionStart = start + 1 + tab.length * numTab;
-            codeBox.selectionEnd = end + 1 + tab.length * numTab;
-
-            if(beforeText.includes('}') || !curly)
-                numTab>0?numTab-=1:0;
-
+            codeBox.selectionStart = start + 1 + tempCurlyStack.length;
+            codeBox.selectionEnd = end + 1 + tempCurlyStack.length;
         }
     }
     else
@@ -169,20 +207,51 @@ function codeFeatures(e)
             e.preventDefault();
             codeBox.value = beforeText + '(' + highlighted + ')' + afterText;
         }
+        else if(c == '"')
+        {
+            e.preventDefault();
+            codeBox.value = beforeText + '"' + highlighted + '"' + afterText;
+        }
         else if(c == "Tab")
         {
             e.preventDefault();
-            /*
+            
             codeBox.value = beforeText;
 
-            for(let x = 0; x < numTab; x += 1)
-                codeBox.value += tab;
+            const toIndent = highlighted.split("\n");
+            for(const line of toIndent)
+                codeBox.value += tab + line;
 
-            codeBox.value += highlighted;
             codeBox.value += afterText;
-            */
+
+            if(codeBox.selectionDirection == "backward")// moving towards the end
+            {
+                codeBox.selectionStart = end+1;
+                codeBox.selectionEnd = end+1;
+            }
+            else if(codeBox.selectionDirection == "forward")// moving towards the start
+            {
+                codeBox.selectionStart = start + 1;
+                codeBox.selectionEnd = start + 1;
+            }
+            
         }
-        
+        else if(c == "Enter")
+        {
+            e.preventDefault();
+            codeBox.value = beforeText + "\n" + highlighted + "\n" + afterText;
+
+            if(codeBox.selectionDirection == "backward")// moving towards the end
+            {
+                codeBox.selectionStart = end+1;
+                codeBox.selectionEnd = end+1;
+            }
+            else if(codeBox.selectionDirection == "forward")// moving towards the start
+            {
+                codeBox.selectionStart = start + 1;
+                codeBox.selectionEnd = start + 1;
+            }
+        }
     }    
 }
 
