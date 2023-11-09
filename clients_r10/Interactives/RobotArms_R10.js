@@ -214,7 +214,7 @@ setUpViewing();
 function runOnline()
 {
     document.addEventListener("keypress", keyPressed);
-    document.addEventListener("keydown", overrideDefault);
+    document.addEventListener("keydown", overrideDefault);     
     const resizer = new ResizeObserver(windowResized);
     resizer.observe(document.getElementById("resizer"));
 }
@@ -419,6 +419,7 @@ function overrideDefault(e)
     }
     else if('w' == c && e.ctrlKey)
     {    
+        alert("hit ctrl w");
         e.preventDefault();
         wristLength1[currentArm] += .02;
     }

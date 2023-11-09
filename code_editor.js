@@ -15,10 +15,18 @@ saveButton?.addEventListener("click", saveCode);
 // add the importCode function to the import buttons event listener
 importButton?.addEventListener("click", importCode);
 
+// add a key pressed event listener to allow completion of () {} [] 
+codeBox?.addEventListener("keypress", codeFeatures);
+// add a key down to the document for auto tabbing, 
+// tabs don't belong to text area so adding to text area doesn't work
+// has to be key down instead of key up because key up wont prevent default
+// key pressed just doesn't recognize tab key
+document?.addEventListener("keydown", codeFeatures);
+
 setCanvas();
-addImportCode();
-addDisplayCode();
-addAnimationCode();
+//addImportCode();
+//addDisplayCode();
+//addAnimationCode();
 
 // read the code from the text area
 // create a script tag
@@ -35,6 +43,147 @@ function runCode()
     script.text = code;
     script.type = "module";
     document.head.appendChild(script).parentNode?.removeChild(script);
+}
+
+let par = false;
+let curly = false;
+let bracket = false;
+
+let numTab = 0;
+const tab = "    ";
+
+function codeFeatures(e)
+{
+    const start = codeBox.selectionStart;
+    const end = codeBox.selectionEnd;
+    const code = codeBox.value;
+    const beforeText = code.substring(0, start);
+    const afterText = code.substring(end, code.length);
+
+    const c = e.key;
+
+    // no text was highlighted
+    if(start == end)
+    {
+        if(c == '[')
+        {
+            e.preventDefault();
+            bracket = true;
+            codeBox.value = beforeText + '[]' + afterText;
+            codeBox.selectionStart = start+1;
+            codeBox.selectionEnd = end+1;
+        }
+        else if(c == '{')
+        {
+            e.preventDefault();
+            curly = true;
+            codeBox.value = beforeText + '{}' + afterText;
+            codeBox.selectionStart = start+1;
+            codeBox.selectionEnd = end+1;
+
+            numTab += 1;
+        }
+        else if(c == '(')
+        {
+            e.preventDefault();
+            par = true;
+            codeBox.value = beforeText + '()' + afterText;
+            codeBox.selectionStart = start+1;
+            codeBox.selectionEnd = end+1;
+        }
+        else if(c == ']' && bracket)
+        {
+            e.preventDefault();
+            bracket = false;
+            codeBox.selectionStart = start+1;
+            codeBox.selectionEnd = end+1;
+        }
+        else if(c == '}' && curly)
+        {
+            e.preventDefault();
+            curly = false;
+            codeBox.selectionStart = start+1;
+            codeBox.selectionEnd = end+1;
+
+            numTab>0? numTab -= 1:0;
+        }
+        else if(c == ')' && par)
+        {
+            e.preventDefault();
+            par = false;
+            codeBox.selectionStart = start+1;
+            codeBox.selectionEnd = end+1;
+        }
+        else if(c == 'Tab')
+        {
+            e.preventDefault();
+            
+            codeBox.value = beforeText;
+            
+            for(let x = 0; x <= numTab; x += 1)
+                codeBox.value += tab;
+            
+            codeBox.value += afterText;
+
+            codeBox.selectionStart = start + tab.length * (numTab+1);
+            codeBox.selectionEnd = end + tab.length * (numTab+1);
+        }
+        else if(c == 'Enter')
+        {
+            e.preventDefault();
+
+            codeBox.value = beforeText + '\n';
+            
+            for(let x = 0; x < numTab; x += 1)
+                codeBox.value += tab;
+
+            if(beforeText.charAt(beforeText.length-1) == '{')
+                codeBox.value += '\n' + afterText;
+            else
+                codeBox.value += afterText;
+
+            codeBox.selectionStart = start + 1 + tab.length * numTab;
+            codeBox.selectionEnd = end + 1 + tab.length * numTab;
+
+            if(beforeText.includes('}') || !curly)
+                numTab>0?numTab-=1:0;
+
+        }
+    }
+    else
+    {
+        const highlighted = code.substring(start, end);
+
+        if(c == '[')
+        {
+            e.preventDefault();
+            codeBox.value = beforeText + '[' + highlighted + ']' + afterText;
+        }
+        else if(c == '{')
+        {
+            e.preventDefault();
+            codeBox.value = beforeText + '{' + highlighted + '}' + afterText;
+        }
+        else if(c == "(")
+        {
+            e.preventDefault();
+            codeBox.value = beforeText + '(' + highlighted + ')' + afterText;
+        }
+        else if(c == "Tab")
+        {
+            e.preventDefault();
+            /*
+            codeBox.value = beforeText;
+
+            for(let x = 0; x < numTab; x += 1)
+                codeBox.value += tab;
+
+            codeBox.value += highlighted;
+            codeBox.value += afterText;
+            */
+        }
+        
+    }    
 }
 
 // prompt the user for a filename
@@ -191,3 +340,5 @@ function addAnimationCode()
     codeBox.value += "}\n";
     codeBox.value += "//timer = clearInterval();\n"
 }
+
+// allow [], {}, () completion: https://stackoverflow.com/questions/11076975/how-to-insert-text-into-the-textarea-at-the-current-cursor-position
