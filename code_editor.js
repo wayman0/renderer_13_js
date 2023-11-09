@@ -25,9 +25,9 @@ codeBox?.addEventListener("keypress", codeFeatures);
 document?.addEventListener("keydown", codeFeatures);
 
 setCanvas();
-//addImportCode();
-//addDisplayCode();
-//addAnimationCode();
+addImportCode();
+addDisplayCode();
+addAnimationCode();
 
 // read the code from the text area
 // create a script tag
@@ -49,7 +49,8 @@ function runCode()
 const parStack = [];
 const curlyStack = [];
 const bracketStack = [];
-const quoteStack = [];
+const doubleQuoteStack = [];
+const singleQuoteStack = [];
 const tab = '\t';
 
 function codeFeatures(e)
@@ -108,8 +109,16 @@ function codeFeatures(e)
         else if(c == "\"")
         {
             e.preventDefault();
-            quoteStack.push("\"");
+            doubleQuoteStack.push("\"");
             codeBox.value = beforeText + "\"\"" + afterText;
+            codeBox.selectionStart = start+1;
+            codeBox.selectionEnd = end+1;   
+        }
+        else if(c == "'")
+        {
+            e.preventDefault();
+            singleQuoteStack.push("'");
+            codeBox.value = beforeText + "''" + afterText;
             codeBox.selectionStart = start+1;
             codeBox.selectionEnd = end+1;   
         }
@@ -143,15 +152,25 @@ function codeFeatures(e)
                 codeBox.selectionEnd = end+1;
             }
         }
-        else if(c == '"' && quoteStack.length != 0)
+        else if(c == '"' && doubleQuoteStack.length != 0)
         {
             if(afterText.substring(0, 1) == '"')
             {
                 e.preventDefault();
-                quoteStack.pop();
+                doubleQuoteStack.pop();
                 codeBox.selectionStart = start+1;
                 codeBox.selectionEnd = end +1;
             }
+        }
+        else if(c == "'" && singleQuoteStack.length != 0)
+        {
+            if(afterText.substring(0, 1) == "'")
+            {
+                e.preventDefault();
+                singleQuoteStack.pop();
+                codeBox.selectionStart = start+1;
+                codeBox.selectionEnd = end+1;
+            } 
         }
         else if(c == 'Tab')
         {
@@ -211,6 +230,11 @@ function codeFeatures(e)
         {
             e.preventDefault();
             codeBox.value = beforeText + '"' + highlighted + '"' + afterText;
+        }
+        else if(c == "'")
+        {
+            e.preventDefault();
+            codeBox.value = beforeText + "'" + highlighted + "'" + afterText;
         }
         else if(c == "Tab")
         {
