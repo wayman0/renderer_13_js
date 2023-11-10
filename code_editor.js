@@ -29,11 +29,58 @@ addImportCode();
 addDisplayCode();
 addAnimationCode();
 
+
+// need a way to access the timer variable inside any previous running script tags
+// and then call clearInterval() with the timer variable
+// way to do this is rewrite the clearInterval() and setInterval timers
+// and then when the text area code runs it will call my rewritten timer
+// fucntion so that I can get the timer id's of any previous runnings
+// and then can clear all timers every time the run code button is ran
+
+// create an array to hold all timer ids
+window.timerIds = [];
+// make copies of the window functions
+window.oldSetInterval = window.setInterval;
+window.oldClearInterval = window.clearInterval;
+    
+// write the set and clear functions to be my defined functions
+window.setInterval = newSetInterval;
+window.clearInterval = newClearInterval;
+
+function newSetInterval(func, duration)
+{
+    console.log("called new Set interval");
+
+    if(typeof func != "function" || typeof duration != "number")
+        throw new Error("Set Interval requires a function and a time");
+
+    // call the old setInterval function and get the timerId
+    // store the timer id and then return it
+    const timerId = window.oldSetInterval(func, duration);
+    window.timerIds.push(timerId);
+
+    return timerId;
+}
+
+function newClearInterval(timerId)
+{
+    // call the old clearInterval function with the given timerId
+    window.oldClearInterval(timerId);
+}
+    
 // read the code from the text area
 // create a script tag
 // set the script tag to be the text area text
 function runCode()
 {
+    // remove any previous running script tag
+    const prevScript = document.getElementById("script");
+    prevScript?.remove();
+
+    // remove all previous timers by calling clearInterval using the window's list of timerIds
+    while(window.timerIds.length > 0)
+        window.clearInterval(window.timerIds.pop());
+
     //@ts-ignore
     const code = codeBox?.value;
     
@@ -43,7 +90,8 @@ function runCode()
     const script = document.createElement("script");
     script.text = code;
     script.type = "module";
-    document.head.appendChild(script).parentNode?.removeChild(script);
+    script.id = "script";
+    document.head.appendChild(script);
 }
 
 const parStack = [];
@@ -420,18 +468,16 @@ function addAnimationCode()
     codeBox.value += "\n\n";
     codeBox.value += "//Code to animate the program\n";
     codeBox.value += "//uncomment displayNextFrame to start animation\n";
-    codeBox.value += "// uncomment timer = clearInterval() to stop animation\n";
+    codeBox.value += "//uncomment clearInterval(timer) to stop animation\n";
     codeBox.value += "let timer = null;\n";
     codeBox.value += "//displayNextFrame();\n";
     codeBox.value += "function displayNextFrame()\n";
     codeBox.value += "{\n";
     codeBox.value += "\ttimer = setInterval(function() \n";
     codeBox.value += "\t{\n";
-    codeBox.value += "\t\t'move models function'\n";
+    codeBox.value += "\t\t'//move models function'\n";
     codeBox.value += "\t\tdisplay();\n";
     codeBox.value += "\t}, 1000/50); // 50 frames per second\n";
     codeBox.value += "}\n";
-    codeBox.value += "//timer = clearInterval();\n"
+    codeBox.value += "//clearInterval(timer);\n"
 }
-
-// allow [], {}, () completion: https://stackoverflow.com/questions/11076975/how-to-insert-text-into-the-textarea-at-the-current-cursor-position
