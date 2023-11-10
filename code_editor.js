@@ -67,6 +67,17 @@ function newClearInterval(timerId)
     // call the old clearInterval function with the given timerId
     window.oldClearInterval(timerId);
 }
+
+const consoleLog = window.console.log;
+window.console.log = log2TextArea;
+
+function log2TextArea(...args)
+{
+    consoleLog(...args);
+
+    const output = document.getElementById("output");
+    args.forEach((arg) => {output.value += JSON.stringifiy(arg} + "\n");
+}
     
 // read the code from the text area
 // create a script tag
