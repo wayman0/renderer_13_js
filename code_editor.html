@@ -10,30 +10,23 @@
                 overflow: auto;
             }
 
-            #resizer
+            #inputObjects
             {
-                float:inline-end;
-                overflow: hidden;
-                resize: both;
+                float:left
             }
 
-            #outputTextArea
+            #outputObjects
             {
-                resize: both;
-                overflow:hidden;
+                float:right
             }
         </style>
     </head>
 
 
-    <body>
-        <div style="text-align: center; font-size: x-large; ">
-            Code Editor 
-        </div>
-        
+    <body>        
         <div id = inputObjects>
             <div id = inputTextArea>
-                <textarea id = "input", spellcheck = "false", style="background-color:rgb(30,30,30); color:rgb(85, 150, 215);resize:none;white-space:nowrap;;"></textarea>
+                <textarea id = "input", spellcheck = "false", style="background-color:rgb(30,30,30); color:rgb(85, 150, 215);white-space:nowrap;resize:none"></textarea>
             </div>
 
             <div id = buttons>
@@ -43,16 +36,15 @@
             </div>
         </div>
 
-        <div id = "outputObjects">
-            <div id = resizer>
-                <canvas id = "pixels"></canvas>
+        <div id = outputObjects>
+            <div id = resizer style = "resize:both;overflow:hidden;float:inline-end;">
+                <canvas id = "pixels" ></canvas>
             </div>
 
             <div id = outputTextArea>
-                <textarea id = "output"></textarea>
+                <textarea id = output style = "resize:both;overflow:hidden;"></textarea>
             </div>
         </div> 
-
 
         <script src = "./code_editor.js" type ="module"></script>
     </body>
