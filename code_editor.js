@@ -15,10 +15,10 @@ saveButton?.addEventListener("click", saveCode);
 // add the importCode function to the import buttons event listener
 importButton?.addEventListener("click", importCode);
 
-// add a key pressed event listener to allow completion of () {} [] 
+// add a key pressed event listener to allow completion of () {} []
 codeBox?.addEventListener("keypress", codeFeatures);
 
-// add a key down to the document for auto tabbing, 
+// add a key down to the document for auto tabbing,
 // tabs don't belong to text area so adding to text area doesn't work
 // has to be key down instead of key up because key up wont prevent default
 // key pressed just doesn't recognize tab key
@@ -42,7 +42,7 @@ window.timerIds = [];
 // make copies of the window functions
 window.oldSetInterval = window.setInterval;
 window.oldClearInterval = window.clearInterval;
-    
+
 // write the set and clear functions to be my defined functions
 window.setInterval = newSetInterval;
 window.clearInterval = newClearInterval;
@@ -76,9 +76,9 @@ function log2TextArea(...args)
     consoleLog(...args);
 
     const output = document.getElementById("output");
-    args.forEach((arg) => {output.value += JSON.stringifiy(arg} + "\n");
+    args.forEach( arg => {output.value += JSON.stringifiy(arg) + "\n"} );
 }
-    
+
 // read the code from the text area
 // create a script tag
 // set the script tag to be the text area text
@@ -94,8 +94,8 @@ function runCode()
 
     //@ts-ignore
     const code = codeBox?.value;
-    
-    // make a script tag, 
+
+    // make a script tag,
     // set the script code to be the written code
     // and add the script to the document and remove any previous script tag additions
     const script = document.createElement("script");
@@ -138,8 +138,8 @@ function codeFeatures(e)
             e.preventDefault();
             curlyStack.push('{');
 
-            codeBox.value = beforeText + '{'; 
-            
+            codeBox.value = beforeText + '{';
+
             const tempCurlyStack = [];
             for(const c of beforeText)
             {
@@ -148,7 +148,7 @@ function codeFeatures(e)
                 else if(c == '}')
                     tempCurlyStack.pop();
             }
-        
+
             for(let x = 0; x < tempCurlyStack.length; x += 1)
                 codeBox.value += tab;
 
@@ -171,7 +171,7 @@ function codeFeatures(e)
             doubleQuoteStack.push("\"");
             codeBox.value = beforeText + "\"\"" + afterText;
             codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;   
+            codeBox.selectionEnd = end+1;
         }
         else if(c == "'")
         {
@@ -179,7 +179,7 @@ function codeFeatures(e)
             singleQuoteStack.push("'");
             codeBox.value = beforeText + "''" + afterText;
             codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;   
+            codeBox.selectionEnd = end+1;
         }
         else if(c == ']' && bracketStack.length != 0)
         {
@@ -229,7 +229,7 @@ function codeFeatures(e)
                 singleQuoteStack.pop();
                 codeBox.selectionStart = start+1;
                 codeBox.selectionEnd = end+1;
-            } 
+            }
         }
         else if(c == 'Tab')
         {
@@ -242,7 +242,7 @@ function codeFeatures(e)
         {
             e.preventDefault();
             codeBox.value = beforeText + '\n';
-            
+
             // make a temporary stack to determine how indented
             // we are based upon how many uncomplete braces there are
             const tempCurlyStack = [];
@@ -298,7 +298,7 @@ function codeFeatures(e)
         else if(c == "Tab")
         {
             e.preventDefault();
-            
+
             codeBox.value = beforeText;
 
             const toIndent = highlighted.split("\n");
@@ -317,7 +317,7 @@ function codeFeatures(e)
                 codeBox.selectionStart = start + 1;
                 codeBox.selectionEnd = start + 1;
             }
-            
+
         }
         else if(c == "Enter")
         {
@@ -335,11 +335,11 @@ function codeFeatures(e)
                 codeBox.selectionEnd = start + 1;
             }
         }
-    }    
+    }
 }
 
 // prompt the user for a filename
-// create a href element 
+// create a href element
 // set the text of the text area to be the href data
 // set the href to be download with the filename
 // add the href, click the href, delete the href
@@ -364,13 +364,13 @@ function saveCode()
     saveElement.setAttribute("href", 'data:text/plain; charset=utf-8,' + encodeURIComponent(code));
     saveElement.setAttribute("download", fileName);
     saveElement.style.display = "none";
-    
+
     // add the element
     document.body.appendChild(saveElement);
-    
+
     //activate the online save code
     saveElement.click();
-    
+
     // remove the element
     document.body.removeChild(saveElement);
 }
@@ -385,9 +385,9 @@ function importCode()
     fileInput.type = "file";
 
     // when there is a file chosen in the file input element read the file
-    fileInput.onchange = e =>  
+    fileInput.onchange = e =>
         {
-            // get the file 
+            // get the file
             // @ts-ignore
             const file = e.target.files[0];
 
@@ -396,11 +396,11 @@ function importCode()
             reader.readAsText(file, 'UTF-8');
 
             // when the file is completely read
-            reader.onload = readerEvent => 
+            reader.onload = readerEvent =>
             {
                 // get the text from the file
                 // @ts-ignore
-                const text = readerEvent.target.result; 
+                const text = readerEvent.target.result;
 
                 // set the text area to be the read text
                 // @ts-ignore
@@ -444,9 +444,9 @@ function addImportCode()
 {
     codeBox.value += "//ts-check\n\n";
     codeBox.value += "//import what is necessary from the appropriate imports\n"
-    codeBox.value += "import {} from \"./renderer/scene/sceneExport.js\";\n";
-    codeBox.value += "import {} from \"./renderer/pipeline/pipelineExport.js\";\n";
-    codeBox.value += "import {} from \"./renderer/framebuffer/FramebufferExport.js\";\n";
+    codeBox.value += "import {Scene} from \"./renderer/scene/sceneExport.js\";\n";
+    codeBox.value += "import {renderFB} from \"./renderer/pipeline/pipelineExport.js\";\n";
+    codeBox.value += "import {FrameBuffer} from \"./renderer/framebuffer/FramebufferExport.js\";\n";
 }
 
 // add the writing to a canvas code to the text box
