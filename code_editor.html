@@ -15,8 +15,12 @@
                 float:inline-end;
                 overflow: hidden;
                 resize: both;
-                width: 800px;
-                height: 800px;
+            }
+
+            #outputTextArea
+            {
+                resize: both;
+                overflow:hidden;
             }
         </style>
     </head>
@@ -27,17 +31,28 @@
             Code Editor 
         </div>
         
-        <textarea id = "input", spellcheck = "false",  rows = 50, cols = 110, style="background-color:rgb(30,30,30); color:rgb(85, 150, 215);resize:none;white-space:nowrap;;"></textarea>
+        <div id = inputObjects>
+            <div id = inputTextArea>
+                <textarea id = "input", spellcheck = "false", style="background-color:rgb(30,30,30); color:rgb(85, 150, 215);resize:none;white-space:nowrap;;"></textarea>
+            </div>
 
-        <div id = resizer>
-            <canvas id = "pixels" width = 500; height = 500;></canvas>
+            <div id = buttons>
+                <button type = "button" id = "run"  style = "height:20px; width:100px;"> Run Code</button>
+                <button type = "button" id = "save" style = "height:20px; width:100px;"> Save Code</button>
+                <button type = "button" id = "import" style = "height:20px; width:100px;"> Import Code</button>
+            </div>
         </div>
 
-        <div id = buttons>
-            <button type = "button" id = "run"  style = "height:20px; width:100px;"> Run Code</button>
-            <button type = "button" id = "save" style = "height:20px; width:100px;"> Save Code</button>
-            <button type = "button" id = "import" style = "height:20px; width:100px;"> Import Code</button>
-        </div>
+        <div id = "outputObjects">
+            <div id = resizer>
+                <canvas id = "pixels"></canvas>
+            </div>
+
+            <div id = outputTextArea>
+                <textarea id = "output"></textarea>
+            </div>
+        </div> 
+
 
         <script src = "./code_editor.js" type ="module"></script>
     </body>

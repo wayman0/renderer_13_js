@@ -1,10 +1,38 @@
 //@ts-check
 
-// access the button on the html file
+// access the elements on the html file
 const runButton = document.getElementById("run");
 const saveButton = document.getElementById("save");
 const importButton = document.getElementById("import");
 const codeBox = document.getElementById("input");
+const resizer = document.getElementById("resizer");
+const outBox = document.getElementById("output");
+
+// get the screen width and height
+const screenW = window.innerWidth;
+const screenH = window.innerHeight;
+
+// position the codeBox to be upper right corner
+// and be 49% width, 90% height
+codeBox.style.left = 0;
+codeBox.style.top = 0;
+codeBox.style.width = (.49 * screenW) + "px";
+codeBox.style.height = (.90 * screenH) + "px";
+
+// position the resizer to be the upper right half
+resizer.style.left = (.51 * screenW) + "px";
+resizer.style.top = 0;
+// make the resizer a square based upon 1/2 the screen height
+resizer.style.width = (.49 * screenH) + "px";
+resizer.style.height = (.49 * screenH) + "px";
+
+
+// position the output box to be the lower right half
+outBox.style.left = (.51 * screenW) + "px";
+outBox.style.top = (.51 * screenH) + "px";
+outBox.style.width = (.49 * screenW) + "px";
+outBox.style.height = (.49 * screenH) + "px";
+
 
 // add the runCode function to the run button's event listener
 runButton?.addEventListener("click", runCode);
@@ -73,10 +101,12 @@ window.console.log = log2TextArea;
 
 function log2TextArea(...args)
 {
-    consoleLog(...args);
+    consoleLog(args);
 
     const output = document.getElementById("output");
-    args.forEach((arg) => {output.value += JSON.stringifiy(arg} + "\n");
+    output.value = "";
+    
+    args.forEach((arg) => {output.value += arg.toString() + "\n"});
 }
     
 // read the code from the text area
@@ -415,7 +445,6 @@ function importCode()
 // get and set the canvas to be black to start with
 function setCanvas()
 {
-    const resizer = document.getElementById("resizer");
     const w = resizer?.offsetWidth;
     const h = resizer?.offsetHeight;
 
