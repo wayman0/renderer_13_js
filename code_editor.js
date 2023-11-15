@@ -44,10 +44,12 @@ importButton?.addEventListener("click", importCode);
 // add a key pressed event listener to allow completion of () {} [] 
 codeBox?.addEventListener("keypress", codeFeatures);
 
-// add a key down to the document for auto tabbing, 
-// tabs don't belong to text area so adding to text area doesn't work
-// has to be key down instead of key up because key up wont prevent default
-// key pressed just doesn't recognize tab key
+/*
+add a key down to the document for auto tabbing, 
+tabs don't belong to text area so adding to text area doesn't work
+has to be key down instead of key up because key up wont prevent default
+key pressed just doesn't recognize tab key
+*/
 document?.addEventListener("keydown", codeFeatures);
 
 setCanvas();
@@ -55,13 +57,14 @@ addImportCode();
 addDisplayCode();
 addAnimationCode();
 
-
-// need a way to access the timer variable inside any previous running script tags
-// and then call clearInterval() with the timer variable
-// way to do this is rewrite the clearInterval() and setInterval timers
-// and then when the text area code runs it will call my rewritten timer
-// fucntion so that I can get the timer id's of any previous runnings
-// and then can clear all timers every time the run code button is ran
+/*
+need a way to access the timer variable inside any previous running script tags
+and then call clearInterval() with the timer variable
+way to do this is rewrite the clearInterval() and setInterval timers
+and then when the text area code runs it will call my rewritten timer
+function so that I can get the timer id's of any previous runnings
+and then can clear all timers every time the run code button is ran
+*/
 
 // create an array to hold all timer ids
 window.timerIds = [];
@@ -93,43 +96,52 @@ function newClearInterval(timerId)
     window.oldClearInterval(timerId);
 }
 
+/*
+overwrite the console.log() function to allow printing
+to an output text box on the webpage instead of 
+having to open the console window for output
+*/
 const consoleLog = window.console.log;
 window.console.log = log2TextArea;
+
+// add an error event listener so that any errors get sent to the outBox
+window.addEventListener("error", logError);
 
 function log2TextArea(...args)
 {
     consoleLog(args);
 
-    const output = document.getElementById("output");
-    output.value = "";
+    outBox.value = "";
     
-    args.forEach((arg) => {output.value += arg.toString() + "\n"});
+    args.forEach(displayOutput);
 }
-    
-// read the code from the text area
-// create a script tag
-// set the script tag to be the text area text
-function runCode()
+
+function displayOutput(arg)
 {
-    // remove any previous running script tag
-    const prevScript = document.getElementById("script");
-    prevScript?.remove();
+    if(typeof arg == "object" || typeof arg == "function")
+    {
+        const fields = [];
+        const values = [];
 
-    // remove all previous timers by calling clearInterval using the window's list of timerIds
-    while(window.timerIds.length > 0)
-        window.clearInterval(window.timerIds.pop());
+        // have to add recursive nature to print objects containing objects
+        for(const f in arg)
+        {    
+            fields.push(f);
+            values.push(arg[f])
+        }    
 
-    //@ts-ignore
-    const code = codeBox?.value;
-    
-    // make a script tag, 
-    // set the script code to be the written code
-    // and add the script to the document and remove any previous script tag additions
-    const script = document.createElement("script");
-    script.text = code;
-    script.type = "module";
-    script.id = "script";
-    document.head.appendChild(script);
+        for(let index = 0; index < fields.length; index += 1)
+        {
+            outBox.value += fields[index] + ": " + values[index] + "\n";
+        }
+    }
+    else
+        outBox.value += arg.toString() + "\n";
+}
+
+function logError(e)
+{
+    displayOutput(e.message + " at line " + e.lineno + ":" + e.colno);
 }
 
 const parStack = [];
@@ -411,11 +423,41 @@ function codeFeatures(e)
     }    
 }
 
-// prompt the user for a filename
-// create a href element 
-// set the text of the text area to be the href data
-// set the href to be download with the filename
-// add the href, click the href, delete the href
+/*
+read the code from the text area
+create a script tag
+set the script tag to be the text area text
+*/
+function runCode()
+{
+    // remove any previous running script tag
+    const prevScript = document.getElementById("script");
+    prevScript?.remove();
+
+    // remove all previous timers by calling clearInterval using the window's list of timerIds
+    while(window.timerIds.length > 0)
+        window.clearInterval(window.timerIds.pop());
+
+    //@ts-ignore
+    const code = codeBox?.value;
+    
+    // make a script tag, 
+    // set the script code to be the written code
+    // and add the script to the document and remove any previous script tag additions
+    const script = document.createElement("script");
+    script.text = code;
+    script.type = "module";
+    script.id = "script";
+    document.head.appendChild(script);
+}
+
+/*
+prompt the user for a filename
+create a href element 
+set the text of the text area to be the href data
+set the href to be download with the filename
+add the href, click the href, delete the href
+*/
 function saveCode()
 {
     // prompt the user for the filename
@@ -448,9 +490,11 @@ function saveCode()
     document.body.removeChild(saveElement);
 }
 
-// prompt the user for the file
-// read the file data using fetch
-// write the textarea text to be the read data
+/*
+prompt the user for the file
+read the file data using fetch
+write the textarea text to be the read data
+*/
 function importCode()
 {
     // create an input element and make the type be file
