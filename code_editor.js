@@ -270,6 +270,75 @@ function codeFeatures(e)
             codeBox.selectionStart = start + 1 + tempCurlyStack.length;
             codeBox.selectionEnd = end + 1 + tempCurlyStack.length;
         }
+        else if(c == "Backspace")
+        {
+            const toDelete = beforeText.substring(beforeText.length-1, beforeText.length);
+            if(toDelete == '(')
+            {
+                e.preventDefault();
+                if(afterText.substring(0, 1) == ')')
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
+                else
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+
+                codeBox.selectionStart = start-1;
+                codeBox.selectionEnd = end -1;
+            }
+            else if(toDelete == '[')
+            {
+                e.preventDefault();
+                if(afterText.substring(0, 1) == ']')
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
+                else
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+
+                codeBox.selectionStart = start-1;
+                codeBox.selectionEnd = end -1;
+            }
+            else if(toDelete == '{')
+            {
+                const myRegEx = /[\t]*}/;
+                const testStr = afterText.substring(0, afterText.indexOf('}') +1);
+
+                e.preventDefault();
+                if(myRegEx.test(testStr))
+                {    
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + 
+                                    afterText.substring(afterText.indexOf("}")+1, afterText.length);
+
+                    codeBox.selectionStart = start-1;
+                    codeBox.selectionEnd = end -1;
+                }
+                else
+                {    
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+                    codeBox.selectionStart = start-1;
+                    codeBox.selectionEnd = end -1;
+                }
+            }
+            else if(toDelete == '\'')
+            {
+                e.preventDefault();
+                if(afterText.substring(0, 1) == '\'')
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
+                else
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+
+                codeBox.selectionStart = start-1;
+                codeBox.selectionEnd = end -1;
+            }
+            else if(toDelete == '\"')
+            {
+                e.preventDefault();
+                if(afterText.substring(0, 1) == '\"')
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
+                else
+                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+
+                codeBox.selectionStart = start-1;
+                codeBox.selectionEnd = end -1;
+            }
+        }
     }
     else
     {
@@ -322,7 +391,6 @@ function codeFeatures(e)
                 codeBox.selectionStart = start + 1;
                 codeBox.selectionEnd = start + 1;
             }
-            
         }
         else if(c == "Enter")
         {
