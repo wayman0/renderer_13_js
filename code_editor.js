@@ -110,33 +110,54 @@ window.addEventListener("error", logError);
 function log2TextArea(...args)
 {
     consoleLog(args);
-
-    outBox.value = "";
     
     args.forEach(displayOutput);
+    outBox.value += "\n";
 }
 
 function displayOutput(arg)
 {
-    if(typeof arg == "object" || typeof arg == "function")
+    if(Array.isArray(arg))// treat arrays as a seperate object otherwise each element is its own line
     {
-        const fields = [];
-        const values = [];
+        outBox.value += "["
 
-        // have to add recursive nature to print objects containing objects
-        for(const f in arg)
-        {    
-            fields.push(f);
-            values.push(arg[f])
-        }    
-
-        for(let index = 0; index < fields.length; index += 1)
+        for(let index = 0; index < arg.length; index += 1)
         {
-            outBox.value += fields[index] + ": " + values[index] + "\n";
-        }
+            if(typeof arg[index] == "string")
+                outBox.value += "\"" + arg[index] + "\"";
+            else if(typeof arg[index] == "object")
+                displayOutput(arg[index]);
+            else
+                outBox.value += arg[index];
+
+            if(index < arg.length -1)
+                outBox.value += ", ";
+        }   
+
+        outBox.value += "]";
     }
-    else
-        outBox.value += arg.toString() + "\n";
+    else if(typeof arg == "object" || typeof arg == "function")
+    {
+        outBox.value += "{";
+
+        for(const f in arg)
+        {
+            if(typeof arg[f] == "object")
+                displayOutput(arg[f]);
+            else if(typeof arg[f] == "string")
+                outBox.vlaue += f + ": " + "\"" + arg[f] + "\"";
+            else
+                outBox.value += f + ": " + arg[f];
+        }
+
+        outBox.value += "}";
+    }
+    else if(typeof arg == "string")
+        outBox.value += "\"" + arg + "\"";
+    else 
+        outBox.value += arg.toString();
+
+    outBox.value += ", ";
 }
 
 function logError(e)
@@ -437,6 +458,9 @@ function runCode()
     // remove all previous timers by calling clearInterval using the window's list of timerIds
     while(window.timerIds.length > 0)
         window.clearInterval(window.timerIds.pop());
+
+    // clear the output window
+    outBox.value = "";
 
     //@ts-ignore
     const code = codeBox?.value;

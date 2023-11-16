@@ -15,10 +15,40 @@
                 float:left
             }
 
-            #outputObjects
+            inputTextArea
+            {
+                background-color:rgb(30,30,30); 
+                color:rgb(85, 150, 215);
+                text-wrap:nowrap;
+                overflow:scroll;
+                resize:none"
+            }
+
+            buttons
+            {
+                height:20px; 
+                width:100px;
+            }
+
+            outputObjects
             {
                 float:right
             }
+
+            resizer
+            {
+                resize:both;
+                overflow:hidden;
+                float:inline-end;
+            }
+            
+            outputTextArea
+            {
+                resize:both;
+                overflow:scroll;
+                text-wrap:nowrap;
+            }
+
         </style>
     </head>
 
@@ -26,23 +56,23 @@
     <body>        
         <div id = inputObjects>
             <div id = inputTextArea>
-                <textarea id = "input", spellcheck = "false", style="background-color:rgb(30,30,30); color:rgb(85, 150, 215);white-space:nowrap;resize:none"></textarea>
+                <textarea id = input, spellcheck = "false"></textarea>
             </div>
 
             <div id = buttons>
-                <button type = "button" id = "run"  style = "height:20px; width:100px;"> Run Code</button>
-                <button type = "button" id = "save" style = "height:20px; width:100px;"> Save Code</button>
-                <button type = "button" id = "import" style = "height:20px; width:100px;"> Import Code</button>
+                <button type = "button" id = "run" > Run Code</button>
+                <button type = "button" id = "save"> Save Code</button>
+                <button type = "button" id = "import"> Import Code</button>
             </div>
         </div>
 
         <div id = outputObjects>
-            <div id = resizer style = "resize:both;overflow:hidden;float:inline-end;">
-                <canvas id = "pixels" ></canvas>
+            <div id = resizer>
+                <canvas id = pixels ></canvas>
             </div>
 
             <div id = outputTextArea>
-                <textarea id = output spellcheck = false style = "resize:both;overflow:hidden;"></textarea>
+                <textarea id = output spellcheck = false></textarea>
             </div>
         </div> 
 
