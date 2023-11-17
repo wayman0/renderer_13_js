@@ -12,6 +12,7 @@ const outBox = document.getElementById("output");
 const screenW = window.innerWidth;
 const screenH = window.innerHeight;
 
+/*
 // position the codeBox to be upper right corner
 // and be 49% width, 95% height
 codeBox.style.left = 0;
@@ -31,6 +32,7 @@ outBox.style.left = (.51 * screenW) + "px";
 outBox.style.top = (parseInt(resizer.style.height) + 5) + "px";
 outBox.style.width = (.49 * screenW) + "px";
 outBox.style.height = (screenH - parseInt(outBox.style.top) - 5) + "px"; 
+*/
 
 // add the runCode function to the run button's event listener
 runButton?.addEventListener("click", runCode);

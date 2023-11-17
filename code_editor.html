@@ -4,59 +4,71 @@
         <meta charset=utf-8>
         <title>Code Editor </title>
         <style>
-            body
-            {
-                margin: 0;
-                overflow: auto;
-            }
-
-            #inputObjects
-            {
-                float:left
-            }
-
-            inputTextArea
+            #input
             {
                 background-color:rgb(30,30,30); 
                 color:rgb(85, 150, 215);
                 text-wrap:nowrap;
                 overflow:scroll;
-                resize:none"
+                resize:none;
+                left: 0%;
+                top: 1%;
+                width :  49%;
+                height : 95%;
+                position:absolute;
             }
-
-            buttons
+            #run
             {
-                height:20px; 
+                position: absolute;
+                left:0%;
+                top:97%;
                 width:100px;
+                height: 20px;
+            }
+            #save
+            {
+                position: absolute;
+                position: absolute;
+                left:100px;
+                top:97%;
+                width:100px;
+                height: 20px;
+            }           
+            #import
+            {
+                position: absolute;
+                position: absolute;
+                left:200px;
+                top:97%;
+                width:100px;
+                height: 20px;
             }
 
-            outputObjects
+            #resizer
             {
-                float:right
-            }
-
-            resizer
-            {
+                left:51%;
+                top:1%;
+                width:48%;
+                height:69%;
+                position:absolute;
                 resize:both;
-                overflow:hidden;
-                float:inline-end;
             }
-            
-            outputTextArea
+            #output
             {
-                resize:both;
-                overflow:scroll;
-                text-wrap:nowrap;
+                position:absolute;
+                left:51%;
+                top:71%;
+                width:48%;
+                height:28%;
+                text-wrap: nowrap;
             }
-
         </style>
     </head>
 
-
     <body>        
-        <div id = inputObjects>
-            <div id = inputTextArea>
-                <textarea id = input, spellcheck = "false"></textarea>
+        <div id = "inputObjects">
+            <div id = "inputTextArea">
+                <textarea id = "input", spellcheck = "false" rows="50", cols="100"></textarea>
             </div>
 
             <div id = buttons>
@@ -66,13 +78,13 @@
             </div>
         </div>
 
-        <div id = outputObjects>
-            <div id = resizer>
-                <canvas id = pixels ></canvas>
+        <div id = "outputObjects">
+            <div id = "resizer">
+                <canvas id = "pixels" ></canvas>
             </div>
 
-            <div id = outputTextArea>
-                <textarea id = output spellcheck = false></textarea>
+            <div id = "outputTextArea">
+                <textarea id = "output" spellcheck = false></textarea>
             </div>
         </div> 
 
