@@ -4,29 +4,153 @@
         <meta charset=utf-8>
         <title>Code Editor </title>
         <style>
-            body
-            {
-                margin: 0;
+            #page
+            {                
+                position: absolute;
+                left: .25%;
+                top: .25%;
+                width: 99.5%;
+                height: 99.5%;
+                resize:none;
                 overflow: auto;
+
+                background-color: darkslategrey;
+
+                border-style: solid;
+                border-width: 1pt;
+                border-color: black;
+            }
+
+            #inputObjects
+            {
+                position:absolute;
+
+                left:auto;
+                top:auto;
+                width:49.5%;
+                height:99%;
+
+                resize:both;
+                overflow:auto;
+
+                border-left-color: white;
+                border-left-width: 1pt;
+                border-left-style: solid;
+
+                border-right-color: white;
+                border-right-width: 1pt;
+                border-right-style: solid;
+
+                border-top-color: white;
+                border-top-width: 1pt;
+                border-top-style: solid;
+
+                border-bottom-color: white;
+                border-bottom-width: 1pt;
+                border-bottom-style: solid;
+            }
+
+            #inputTextArea
+            {
+                width:100%;
+                height:95%;
+                resize:both;
+                overflow: hidden;
+            }
+
+            #input
+            {
+                width:99%;
+                height:99%;
+                resize:none;
+                text-wrap:nowrap;
+                overflow:auto;
+                background-color:rgb(30,30,30); 
+                color:rgb(85, 150, 215);
+            }
+
+            #buttons
+            {
+                width:100%;
+                height:5%;
+                resize:both;
+                overflow: auto;
+            }
+
+            .button
+            {                
+                width:32%;
+                height:95%;
+                text-align: center;
+                font-size: 90%;
+            }
+
+            #outputObjects
+            {
+                position: absolute;
+
+                left:50%;
+                top:auto;                
+                width:49.5%;
+                height:99%;
+
+                resize: both;
+                overflow: auto;
+
+                border-left-color: white;
+                border-left-width: 1pt;
+                border-left-style: solid;
+
+                border-right-color: white;
+                border-right-width: 1pt;
+                border-right-style: solid;
+
+                border-top-color: white;
+                border-top-width: 1pt;
+                border-top-style: solid;
+
+                border-bottom-color: white;
+                border-bottom-width: 1pt;
+                border-bottom-style: solid;
             }
 
             #resizer
             {
-                float:inline-end;
-                overflow: hidden;
-                resize: both;
+                width:85%;
+                height:70%;
+                margin-left:auto;
+                margin-right:auto;
+                resize:both;
+                overflow:hidden;
             }
 
             #outputTextArea
             {
-                resize: both;
-                overflow:hidden;
+                width:99%;
+                height:29%;
+                resize:both;
+                overflow: hidden;
+
+                margin-top:auto;
+                margin-bottom:auto;
+                margin-left:auto;
+                margin-right:auto;
+            }
+
+            #output
+            {
+                width:100%;
+                height:100%;
+
+                resize:none;
+                overflow:auto;
+                text-wrap:nowrap;
             }
         </style>
     </head>
 
-
     <body>
+<<<<<<< HEAD
         <div style="text-align: center; font-size: x-large; ">
             Code Editor
         </div>
@@ -42,17 +166,38 @@
                 <button type = "button" id = "import" style = "height:20px; width:100px;"> Import Code</button>
             </div>
         </div>
+=======
+        <div id = "page">
+            <div id = "inputObjects">
+                <div id = "inputTextArea">
+                    <textarea id = "input", spellcheck = "false"></textarea>
+                </div>
+>>>>>>> downstream/main
 
-        <div id = "outputObjects">
-            <div id = resizer>
-                <canvas id = "pixels"></canvas>
+                <div id = buttons>
+                    <button type = "button" id = "run"    class = "button"> Run Code</button>
+                    <button type = "button" id = "save"   class = "button"> Save Code</button>
+                    <button type = "button" id = "import" class = "button"> Import Code</button>
+                </div>
             </div>
 
+<<<<<<< HEAD
             <div id = outputTextArea>
                 <textarea id = "output"></textarea>
             </div>
         </div>
+=======
+            <div id = "outputObjects">
+                <div id = "resizer">
+                    <canvas id = "pixels" ></canvas>
+                </div>
+>>>>>>> downstream/main
 
+                <div id = "outputTextArea">
+                    <textarea id = "output" spellcheck = false></textarea>
+                </div>
+            </div> 
+        </div>
 
         <script src = "./code_editor.js" type ="module"></script>
     </body>
