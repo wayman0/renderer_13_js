@@ -34,45 +34,6 @@ addDisplayCode();
 addAnimationCode();
 
 /*
-need a way to access the timer variable inside any previous running script tags
-and then call clearInterval() with the timer variable
-way to do this is rewrite the clearInterval() and setInterval timers
-and then when the text area code runs it will call my rewritten timer
-function so that I can get the timer id's of any previous runnings
-and then can clear all timers every time the run code button is ran
-*/
-
-// create an array to hold all timer ids
-window.timerIds = [];
-
-// make copies of the window functions
-window.oldSetInterval = window.setInterval;
-window.oldClearInterval = window.clearInterval;
-    
-// write the set and clear functions to be my defined functions
-window.setInterval = newSetInterval;
-window.clearInterval = newClearInterval;
-
-function newSetInterval(func, duration)
-{
-    if(typeof func != "function" || typeof duration != "number")
-        throw new Error("Set Interval requires a function and a time");
-
-    // call the old setInterval function and get the timerId
-    // store the timer id and then return it
-    const timerId = window.oldSetInterval(func, duration);
-    window.timerIds.push(timerId);
-
-    return timerId;
-}
-
-function newClearInterval(timerId)
-{
-    // call the old clearInterval function with the given timerId
-    window.oldClearInterval(timerId);
-}
-
-/*
 overwrite the console.log() function to allow printing
 to an output text box on the webpage instead of 
 having to open the console window for output
@@ -150,21 +111,6 @@ function displayOutput(arg)
     outBox.value += ", ";
 }
 
-/*
-{
- b: true
- n: 1
- s: "string" 
- c: "c" 
- a: 
-	[1, 2, 3]
- o: 
-{
- x: "a" 
- y: false
-}
-}
- */
 function logError(e)
 {
     displayOutput(e.message + " at line " + e.lineno + ":" + e.colno + "\n");
@@ -172,7 +118,6 @@ function logError(e)
 
 const tab = '\t';
 let numTab = 0;
-
 function codeFeatures(e)
 {
     const start = codeBox.selectionStart;
@@ -455,6 +400,7 @@ function codeFeatures(e)
     }   
 }
 
+let numClicks = 0;
 /*
 read the code from the text area
 create a script tag
@@ -466,9 +412,11 @@ function runCode()
     const prevScript = document.getElementById("script");
     prevScript?.remove();
 
-    // remove all previous timers by calling clearInterval using the window's list of timerIds
-    while(window.timerIds.length > 0)
-        window.clearInterval(window.timerIds.pop());
+    // record the number of times the run button is clicked
+    // so we can assume the value of the timer that is created
+    numClicks += 1;
+    for(let x = 1; x <= numClicks; x += 1)
+        clearInterval(x);
 
     // clear the output window
     outBox.value = "";
