@@ -8,32 +8,6 @@ const codeBox = document.getElementById("input");
 const resizer = document.getElementById("resizer");
 const outBox = document.getElementById("output");
 
-// get the screen width and height
-const screenW = window.innerWidth;
-const screenH = window.innerHeight;
-
-/*
-// position the codeBox to be upper right corner
-// and be 49% width, 95% height
-codeBox.style.left = 0;
-codeBox.style.top = 0;
-codeBox.style.width = (.49 * screenW) + "px";
-codeBox.style.height = (.95 * screenH) + "px";
-
-// position the resizer to be the upper right half centered
-resizer.style.left = (.51 * screenW) + "px";
-resizer.style.top = 0;
-// make the resizer a square based upon 3/4 of the right half of the screen width
-resizer.style.width = (.75 * .5 * screenW) + "px";
-resizer.style.height = (.75 * .5 * screenW) + "px";
-
-// position the output box to be the lower right half
-outBox.style.left = (.51 * screenW) + "px";
-outBox.style.top = (parseInt(resizer.style.height) + 5) + "px";
-outBox.style.width = (.49 * screenW) + "px";
-outBox.style.height = (screenH - parseInt(outBox.style.top) - 5) + "px"; 
-*/
-
 // add the runCode function to the run button's event listener
 runButton?.addEventListener("click", runCode);
 
@@ -114,7 +88,8 @@ function log2TextArea(...args)
     consoleLog(args);
     
     args.forEach(displayOutput);
-    outBox.value += "\n";
+    // remove the last ", " and add a "\n"
+    outBox.value = outBox.value.substring(0, outBox.value.length-2) + "\n";
 }
 
 function displayOutput(arg)
@@ -138,41 +113,65 @@ function displayOutput(arg)
 
         outBox.value += "]";
     }
-    else if(typeof arg == "object" || typeof arg == "function")
+    else if(typeof arg == "object")
     {
-        outBox.value += "{";
+        outBox.value += "{ ";
 
-        for(const f in arg)
+        // grab the field names 
+        const fields = Object.keys(arg);
+
+        // loop over the parallel arrays
+        for(let x = 0; x < fields.length; x += 1)
         {
-            if(typeof arg[f] == "object")
-                displayOutput(arg[f]);
-            else if(typeof arg[f] == "string")
-                outBox.vlaue += f + ": " + "\"" + arg[f] + "\"";
+            const f = fields[x];
+            const v = arg[f];            
+
+            if(typeof v == "object")
+            {    
+                outBox.value += f + ": "; 
+                displayOutput(v);
+            }
+            else if(typeof v == "string")
+                outBox.value += f + ": " + "\"" + v + "\"";
             else
-                outBox.value += f + ": " + arg[f];
+                outBox.value += f + ": " + v;
+
+            if(x < fields.length-1)
+                outBox.value += ", ";
         }
 
-        outBox.value += "}";
+        outBox.value += " }";
     }
     else if(typeof arg == "string")
         outBox.value += "\"" + arg + "\"";
     else 
-        outBox.value += arg.toString();
+        outBox.value += arg;
 
     outBox.value += ", ";
 }
 
+/*
+{
+ b: true
+ n: 1
+ s: "string" 
+ c: "c" 
+ a: 
+	[1, 2, 3]
+ o: 
+{
+ x: "a" 
+ y: false
+}
+}
+ */
 function logError(e)
 {
-    displayOutput(e.message + " at line " + e.lineno + ":" + e.colno);
+    displayOutput(e.message + " at line " + e.lineno + ":" + e.colno + "\n");
 }
 
-const parStack = [];
-const curlyStack = [];
-const bracketStack = [];
-const doubleQuoteStack = [];
-const singleQuoteStack = [];
 const tab = '\t';
+let numTab = 0;
 
 function codeFeatures(e)
 {
@@ -184,266 +183,276 @@ function codeFeatures(e)
 
     const c = e.key;
 
-    // no text was highlighted
-    if(start == end)
+    if(e.target == codeBox)
     {
-        if(c == '[')
+        if(start == end)
         {
-            e.preventDefault();
-            bracketStack.push('[');
-            codeBox.value = beforeText + '[]' + afterText;
-            codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;
-        }
-        else if(c == '{')
-        {
-            e.preventDefault();
-            curlyStack.push('{');
-
-            codeBox.value = beforeText + '{'; 
-            
-            const tempCurlyStack = [];
-            for(const c of beforeText)
-            {
-                if(c == '{')
-                    tempCurlyStack.push('{');
-                else if(c == '}')
-                    tempCurlyStack.pop();
-            }
-        
-            for(let x = 0; x < tempCurlyStack.length; x += 1)
-                codeBox.value += tab;
-
-            codeBox.value += '}' + afterText;
-
-            codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;
-        }
-        else if(c == '(')
-        {
-            e.preventDefault();
-            parStack.push('(');
-            codeBox.value = beforeText + '()' + afterText;
-            codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;
-        }
-        else if(c == "\"")
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + "\"\"" + afterText;
-            codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;   
-        }
-        else if(c == "'")
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + "''" + afterText;
-            codeBox.selectionStart = start+1;
-            codeBox.selectionEnd = end+1;  
-        }
-        else if(c == ']' && bracketStack.length != 0)
-        {
-            if(afterText.substring(0, 1) == ']')
+            if(c == '[')
             {
                 e.preventDefault();
-                bracketStack.pop();
-                codeBox.selectionStart = star
-                codeBox.selectionEnd = end+1;
-            }
-        }
-        else if(c == '}' && curlyStack.length != 0)
-        {
-            if(afterText.substring(0, 1) == '}')
-            {
-                e.preventDefault();
-                curlyStack.pop();
+                codeBox.value = beforeText + '[]' + afterText;
                 codeBox.selectionStart = start+1;
                 codeBox.selectionEnd = end+1;
             }
-        }
-        else if(c == ')' && parStack.length != 0)
-        {
-            if(afterText.substring(0, 1) == ')')
+            else if(c == '{')
             {
                 e.preventDefault();
-                parStack.pop();
+
+                codeBox.value = beforeText + '{'; 
+
+                const tempCurlyStack = [];
+                for(const c of beforeText)
+                {
+                    if(c == '{')
+                        tempCurlyStack.push('{');
+                    else if(c == '}')
+                        tempCurlyStack.pop();
+                }
+            
+                for(let x = 0; x < tempCurlyStack.length; x += 1)
+                    codeBox.value += tab;
+
+                codeBox.value += '}' + afterText;
+
                 codeBox.selectionStart = start+1;
                 codeBox.selectionEnd = end+1;
             }
-        }
-        else if(c == 'Tab')
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + tab + afterText
-            codeBox.selectionStart = start + 1;
-            codeBox.selectionEnd = end + 1;
-        }
-        else if(c == 'Enter')
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + '\n';
-            
-            // make a temporary stack to determine how indented
-            // we are based upon how many uncomplete braces there are
-            const tempCurlyStack = [];
-            for(const c of beforeText)
+            else if(c == '(')
             {
-                if(c == '{')
-                    tempCurlyStack.push('{');
-                else if(c == '}')
-                    tempCurlyStack.pop();
+                e.preventDefault();
+                codeBox.value = beforeText + '()' + afterText;
+                codeBox.selectionStart = start+1;
+                codeBox.selectionEnd = end+1;
             }
+            else if(c == "\"")
+            {
+                e.preventDefault();
+                codeBox.value = beforeText + "\"\"" + afterText;
+                codeBox.selectionStart = start+1;
+                codeBox.selectionEnd = end+1;   
+            }
+            else if(c == "'")
+            {
+                e.preventDefault();
+                codeBox.value = beforeText + "''" + afterText;
+                codeBox.selectionStart = start+1;
+                codeBox.selectionEnd = end+1;  
+            }
+            else if(c == ']')
+            {
+                if(afterText.substring(0, 1) == ']')
+                {
+                    e.preventDefault();
+                    codeBox.selectionStart = start+1;
+                    codeBox.selectionEnd = end+1;
+                }
+            }
+            else if(c == '}')
+            {
+                if(afterText.substring(0, 1) == '}')
+                {
+                    e.preventDefault();
+                    codeBox.selectionStart = start+1;
+                    codeBox.selectionEnd = end+1;
+                }
+            }
+            else if(c == ')')
+            {
+                if(afterText.substring(0, 1) == ')')
+                {
+                    e.preventDefault();
+                    codeBox.selectionStart = start+1;
+                    codeBox.selectionEnd = end+1;
+                }
+            }
+            else if(c == 'Tab')
+            {
+                e.preventDefault();
+                numTab += 1;
 
-            for(let x = 0; x < tempCurlyStack.length; x += 1)
+                codeBox.value = beforeText;
                 codeBox.value += tab;
+                codeBox.value += afterText
 
-            if(beforeText.charAt(beforeText.length-1) == '{')
-                codeBox.value += '\n' + afterText;
-            else
+
+                codeBox.selectionStart = start + 1;
+                codeBox.selectionEnd = end + 1;
+            }
+            else if(c == 'Enter')
+            {
+                e.preventDefault();
+                codeBox.value = beforeText + '\n';
+
+                // make a temporary stack to determine how indented
+                // we are based upon how many uncomplete braces there are
+                const tempCurlyStack = [];
+                for(const c of beforeText)
+                {
+                    if(c == '{')
+                        tempCurlyStack.push('{');
+                    else if(c == '}')
+                        tempCurlyStack.pop();
+                }
+
+                for(let x = 0; x < tempCurlyStack.length + numTab; x += 1)
+                    codeBox.value += tab;
+
+                if(beforeText.charAt(beforeText.length-1) == '{')
+                    codeBox.value += '\n' + afterText;
+                else
+                    codeBox.value += afterText;
+
+                codeBox.selectionStart = start + 1 + numTab + tempCurlyStack.length;
+                codeBox.selectionEnd = end + 1 + numTab + tempCurlyStack.length;
+            }
+            else if(c == "Backspace")
+            {
+                const toDelete = beforeText.substring(beforeText.length-1, beforeText.length);
+                if(toDelete == '(')
+                {
+                    e.preventDefault();
+                    if(afterText.substring(0, 1) == ')')
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
+                    else
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+
+                    codeBox.selectionStart = start-1;
+                    codeBox.selectionEnd = end -1;
+                }
+                else if(toDelete == '[')
+                {
+                    e.preventDefault();
+                    if(afterText.substring(0, 1) == ']')
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
+                    else
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+
+                    codeBox.selectionStart = start-1;
+                    codeBox.selectionEnd = end -1;
+                }
+                else if(toDelete == '{')
+                {
+                    const myRegEx = /[\t]*}/;
+                    const testStr = afterText.substring(0, afterText.indexOf('}') +1);
+
+                    e.preventDefault();
+                    if(myRegEx.test(testStr))
+                    {    
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + 
+                                        afterText.substring(afterText.indexOf("}")+1, afterText.length);
+
+                        codeBox.selectionStart = start-1;
+                        codeBox.selectionEnd = end -1;
+                    }
+                    else
+                    {    
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+                        codeBox.selectionStart = start-1;
+                        codeBox.selectionEnd = end -1;
+                    }
+                }
+                else if(toDelete == '\'')
+                {
+                    e.preventDefault();
+                    if(afterText.substring(0, 1) == '\'')
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
+                    else
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+
+                    codeBox.selectionStart = start-1;
+                    codeBox.selectionEnd = end -1;
+                }
+                else if(toDelete == '\"')
+                {
+                    e.preventDefault();
+                    if(afterText.substring(0, 1) == '\"')
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
+                    else
+                        codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+
+                    codeBox.selectionStart = start-1;
+                    codeBox.selectionEnd = end -1;
+                }
+                else if(toDelete == '\t')
+                {
+                    if(numTab>0)
+                        numTab -= 1;
+
+                    codeBox.selectionStart = start;
+                    codeBox.selectionEnd = end;
+                }
+            }
+        }
+        else
+        {
+            const highlighted = code.substring(start, end);
+
+            if(c == '[')
+            {
+                e.preventDefault();
+                codeBox.value = beforeText + '[' + highlighted + ']' + afterText;
+            }
+            else if(c == '{')
+            {
+                e.preventDefault();
+                codeBox.value = beforeText + '{' + highlighted + '}' + afterText;
+            }
+            else if(c == "(")
+            {
+                e.preventDefault();
+                codeBox.value = beforeText + '(' + highlighted + ')' + afterText;
+            }
+            else if(c == '"')
+            {
+                e.preventDefault();
+                codeBox.value = beforeText + '"' + highlighted + '"' + afterText;
+            }
+            else if(c == "'")
+            {
+                e.preventDefault();
+                codeBox.value = beforeText + "'" + highlighted + "'" + afterText;
+            }
+            else if(c == "Tab")
+            {
+                e.preventDefault();
+
+                codeBox.value = beforeText;
+
+                const toIndent = highlighted.split("\n");
+                for(const line of toIndent)
+                    codeBox.value += tab + line;
+
                 codeBox.value += afterText;
 
-            codeBox.selectionStart = start + 1 + tempCurlyStack.length;
-            codeBox.selectionEnd = end + 1 + tempCurlyStack.length;
-        }
-        else if(c == "Backspace")
-        {
-            const toDelete = beforeText.substring(beforeText.length-1, beforeText.length);
-            if(toDelete == '(')
-            {
-                e.preventDefault();
-                if(afterText.substring(0, 1) == ')')
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
-                else
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
-
-                codeBox.selectionStart = start-1;
-                codeBox.selectionEnd = end -1;
-            }
-            else if(toDelete == '[')
-            {
-                e.preventDefault();
-                if(afterText.substring(0, 1) == ']')
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
-                else
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
-
-                codeBox.selectionStart = start-1;
-                codeBox.selectionEnd = end -1;
-            }
-            else if(toDelete == '{')
-            {
-                const myRegEx = /[\t]*}/;
-                const testStr = afterText.substring(0, afterText.indexOf('}') +1);
-
-                e.preventDefault();
-                if(myRegEx.test(testStr))
-                {    
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + 
-                                    afterText.substring(afterText.indexOf("}")+1, afterText.length);
-
-                    codeBox.selectionStart = start-1;
-                    codeBox.selectionEnd = end -1;
+                if(codeBox.selectionDirection == "backward")// moving towards the end
+                {
+                    codeBox.selectionStart = end+1;
+                    codeBox.selectionEnd = end+1;
                 }
-                else
-                {    
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
-                    codeBox.selectionStart = start-1;
-                    codeBox.selectionEnd = end -1;
+                else if(codeBox.selectionDirection == "forward")// moving towards the start
+                {
+                    codeBox.selectionStart = start + 1;
+                    codeBox.selectionEnd = start + 1;
                 }
             }
-            else if(toDelete == '\'')
+            else if(c == "Enter")
             {
                 e.preventDefault();
-                if(afterText.substring(0, 1) == '\'')
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
-                else
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
+                codeBox.value = beforeText + "\n" + highlighted + "\n" + afterText;
 
-                codeBox.selectionStart = start-1;
-                codeBox.selectionEnd = end -1;
+                if(codeBox.selectionDirection == "backward")// moving towards the end
+                {
+                    codeBox.selectionStart = end+1;
+                    codeBox.selectionEnd = end+1;
+                }
+                else if(codeBox.selectionDirection == "forward")// moving towards the start
+                {
+                    codeBox.selectionStart = start + 1;
+                    codeBox.selectionEnd = start + 1;
+                }
             }
-            else if(toDelete == '\"')
-            {
-                e.preventDefault();
-                if(afterText.substring(0, 1) == '\"')
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText.substring(1, afterText.length);
-                else
-                    codeBox.value = beforeText.substring(0, beforeText.length-1) + afterText;
-
-                codeBox.selectionStart = start-1;
-                codeBox.selectionEnd = end -1;
-            }
-        }
-    }
-    else
-    {
-        const highlighted = code.substring(start, end);
-
-        if(c == '[')
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + '[' + highlighted + ']' + afterText;
-        }
-        else if(c == '{')
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + '{' + highlighted + '}' + afterText;
-        }
-        else if(c == "(")
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + '(' + highlighted + ')' + afterText;
-        }
-        else if(c == '"')
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + '"' + highlighted + '"' + afterText;
-        }
-        else if(c == "'")
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + "'" + highlighted + "'" + afterText;
-        }
-        else if(c == "Tab")
-        {
-            e.preventDefault();
-            
-            codeBox.value = beforeText;
-
-            const toIndent = highlighted.split("\n");
-            for(const line of toIndent)
-                codeBox.value += tab + line;
-
-            codeBox.value += afterText;
-
-            if(codeBox.selectionDirection == "backward")// moving towards the end
-            {
-                codeBox.selectionStart = end+1;
-                codeBox.selectionEnd = end+1;
-            }
-            else if(codeBox.selectionDirection == "forward")// moving towards the start
-            {
-                codeBox.selectionStart = start + 1;
-                codeBox.selectionEnd = start + 1;
-            }
-        }
-        else if(c == "Enter")
-        {
-            e.preventDefault();
-            codeBox.value = beforeText + "\n" + highlighted + "\n" + afterText;
-
-            if(codeBox.selectionDirection == "backward")// moving towards the end
-            {
-                codeBox.selectionStart = end+1;
-                codeBox.selectionEnd = end+1;
-            }
-            else if(codeBox.selectionDirection == "forward")// moving towards the start
-            {
-                codeBox.selectionStart = start + 1;
-                codeBox.selectionEnd = start + 1;
-            }
-        }
-    }    
+        } 
+    }   
 }
 
 /*
