@@ -4,89 +4,175 @@
         <meta charset=utf-8>
         <title>Code Editor </title>
         <style>
+            #page
+            {
+                position: absolute;
+                left: .25%;
+                top: .25%;
+                width: 99.5%;
+                height: 99.5%;
+                resize:none;
+                overflow: auto;
+
+                background-color: darkslategrey;
+
+                border-style: solid;
+                border-width: 1pt;
+                border-color: black;
+            }
+
+            #inputObjects
+            {
+                position:absolute;
+
+                left:auto;
+                top:auto;
+                width:49.5%;
+                height:99%;
+
+                resize:both;
+                overflow:auto;
+
+                border-left-color: white;
+                border-left-width: 1pt;
+                border-left-style: solid;
+
+                border-right-color: white;
+                border-right-width: 1pt;
+                border-right-style: solid;
+
+                border-top-color: white;
+                border-top-width: 1pt;
+                border-top-style: solid;
+
+                border-bottom-color: white;
+                border-bottom-width: 1pt;
+                border-bottom-style: solid;
+            }
+
+            #inputTextArea
+            {
+                width:100%;
+                height:95%;
+                resize:both;
+                overflow: hidden;
+            }
+
             #input
             {
+                width:99%;
+                height:99%;
+                resize:none;
+                text-wrap:nowrap;
+                overflow:auto;
                 background-color:rgb(30,30,30); 
                 color:rgb(85, 150, 215);
-                text-wrap:nowrap;
-                overflow:scroll;
-                resize:none;
-                left: 0%;
-                top: 1%;
-                width :  49%;
-                height : 95%;
-                position:absolute;
             }
-            #run
+
+            #buttons
             {
-                position: absolute;
-                left:0%;
-                top:97%;
-                width:100px;
-                height: 20px;
+                width:100%;
+                height:5%;
+                resize:both;
+                overflow: auto;
             }
-            #save
+
+            .button
+            {                
+                width:32%;
+                height:95%;
+                text-align: center;
+                font-size: 90%;
+            }
+
+            #outputObjects
             {
                 position: absolute;
-                position: absolute;
-                left:100px;
-                top:97%;
-                width:100px;
-                height: 20px;
-            }           
-            #import
-            {
-                position: absolute;
-                position: absolute;
-                left:200px;
-                top:97%;
-                width:100px;
-                height: 20px;
+
+                left:50%;
+                top:auto;                
+                width:49.5%;
+                height:99%;
+
+                resize: both;
+                overflow: auto;
+
+                border-left-color: white;
+                border-left-width: 1pt;
+                border-left-style: solid;
+
+                border-right-color: white;
+                border-right-width: 1pt;
+                border-right-style: solid;
+
+                border-top-color: white;
+                border-top-width: 1pt;
+                border-top-style: solid;
+
+                border-bottom-color: white;
+                border-bottom-width: 1pt;
+                border-bottom-style: solid;
             }
 
             #resizer
             {
-                left:51%;
-                top:1%;
-                width:48%;
-                height:69%;
-                position:absolute;
+                width:85%;
+                height:70%;
+                margin-left:auto;
+                margin-right:auto;
                 resize:both;
+                overflow:hidden;
             }
+
+            #outputTextArea
+            {
+                width:99%;
+                height:29%;
+                resize:both;
+                overflow: hidden;
+
+                margin-top:auto;
+                margin-bottom:auto;
+                margin-left:auto;
+                margin-right:auto;
+            }
+
             #output
             {
-                position:absolute;
-                left:51%;
-                top:71%;
-                width:48%;
-                height:28%;
-                text-wrap: nowrap;
+                width:100%;
+                height:100%;
+
+                resize:none;
+                overflow:auto;
+                text-wrap:nowrap;
             }
         </style>
     </head>
 
-    <body>        
-        <div id = "inputObjects">
-            <div id = "inputTextArea">
-                <textarea id = "input", spellcheck = "false" rows="50", cols="100"></textarea>
+    <body>
+        <div id = "page">
+            <div id = "inputObjects">
+                <div id = "inputTextArea">
+                    <textarea id = "input", spellcheck = "false"></textarea>
+                </div>
+
+                <div id = buttons>
+                    <button type = "button" id = "run"    class = "button"> Run Code</button>
+                    <button type = "button" id = "save"   class = "button"> Save Code</button>
+                    <button type = "button" id = "import" class = "button"> Import Code</button>
+                </div>
             </div>
 
-            <div id = buttons>
-                <button type = "button" id = "run" > Run Code</button>
-                <button type = "button" id = "save"> Save Code</button>
-                <button type = "button" id = "import"> Import Code</button>
-            </div>
+            <div id = "outputObjects">
+                <div id = "resizer">
+                    <canvas id = "pixels" ></canvas>
+                </div>
+
+                <div id = "outputTextArea">
+                    <textarea id = "output" spellcheck = false></textarea>
+                </div>
+            </div> 
         </div>
-
-        <div id = "outputObjects">
-            <div id = "resizer">
-                <canvas id = "pixels" ></canvas>
-            </div>
-
-            <div id = "outputTextArea">
-                <textarea id = "output" spellcheck = false></textarea>
-            </div>
-        </div> 
 
         <script src = "./code_editor.js" type ="module"></script>
     </body>
