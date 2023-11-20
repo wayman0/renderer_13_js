@@ -29,9 +29,12 @@ key pressed just doesn't recognize tab key
 document?.addEventListener("keydown", codeFeatures);
 
 setCanvas();
-addImportCode();
-addDisplayCode();
-addAnimationCode();
+addExample();
+runCode();
+
+//addImportCode();
+//addDisplayCode();
+//addAnimationCode();
 
 /*
 overwrite the console.log() function to allow printing
@@ -400,7 +403,7 @@ function codeFeatures(e)
     }   
 }
 
-let numClicks = 0;
+//let numClicks = 0;
 /*
 read the code from the text area
 create a script tag
@@ -414,16 +417,18 @@ function runCode()
 
     // record the number of times the run button is clicked
     // so we can assume the value of the timer that is created
-    numClicks += 1;
-    for(let x = 1; x <= numClicks; x += 1)
-        clearInterval(x);
+    // this doesn't work because the user can stop/start the animation
+    // generating more id's then run button clicks
+    //numClicks += 1;
+    //for(let x = 1; x <= numClicks; x += 1)
+    //    clearInterval(x);
 
     // clear the output window
     outBox.value = "";
 
     //@ts-ignore
     const code = codeBox?.value;
-    
+
     // make a script tag, 
     // set the script code to be the written code
     // and add the script to the document and remove any previous script tag additions
@@ -536,6 +541,134 @@ function setCanvas()
 
     //@ts-ignore
     ctx.putImageData(new ImageData(black, w, h), 0, 0);
+}
+
+// add a simple rotating sphere example to the text area upon loading
+function addExample()
+{
+    let exampleStr = "//@ts-check\n";
+    exampleStr += "//Import what is necessary for your code\n"
+    exampleStr += "import {Scene, Position, Matrix, Model, Vertex, LineSegment} from \"./renderer/scene/SceneExport.js\";\n";
+    exampleStr += "import {renderFB, render, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma} from \"./renderer/pipeline/PipelineExport.js\";\n";
+    exampleStr += "import {FrameBuffer, Viewport, Color} from \"./renderer/framebuffer/FramebufferExport.js\";\n";
+    exampleStr += "import {Sphere} from \"./renderer/models_L/ModelsExport.js\";\n";
+    exampleStr += "import * as ModelShading from \"./renderer/scene/util/UtilExport.js\";\n";
+    exampleStr += "\n";
+    
+    exampleStr += "//Create a default sphere from the Models import\n"
+    exampleStr += "const sphereMod = new Sphere();\n";
+    exampleStr += "//Set the sphere to be a random color using the Model Shading import\n"
+    exampleStr += "ModelShading.setRandomColor(sphereMod);\n";
+    exampleStr += "\n";
+    
+    exampleStr += "//Create a position to hold the model\n"
+    exampleStr += "const spherePos = Position.buildFromModel(sphereMod);\n";
+    exampleStr += "//Set the position to be translated back 3 units\n"
+    exampleStr += "spherePos.setMatrix(Matrix.translate(0, 0, -3));\n";
+    exampleStr += "\n";
+    
+    exampleStr += "//Create an empy scene\n"
+    exampleStr += "const scene = new Scene();\n";
+    exampleStr += "//Add the sphere position to the scene\n"
+    exampleStr += "scene.addPosition(spherePos);\n";
+    exampleStr += "\n";
+
+    exampleStr += "//Create timer to hold the timerID returned by the setInterval() function\n"
+    exampleStr += "let timer = null;\n";
+    exampleStr += "displayNextFrame();\n";
+    exampleStr += "\n";
+
+    exampleStr += "//The function that sets the timer to the timerID returned by setInterval\n"
+    exampleStr += "//and will contiuously call rotate() and then display() at a rate of 50fps\n"
+    exampleStr += "function displayNextFrame()\n";
+    exampleStr += "{\n";
+    exampleStr += "    timer = setInterval( () => \n";
+    exampleStr += "            {\n";
+    exampleStr += "                rotate();\n";
+    exampleStr += "                display();\n";
+    exampleStr += "            }, 1000/50);//50 fps\n";
+    exampleStr += "}\n";
+    exampleStr += "\n";
+    exampleStr += "//Create a variable to store the rotations for the sphere\n"
+    exampleStr += "let rot = 0;\n";
+    exampleStr += "//The function that actually rotates the sphere along its y axis\n"
+    exampleStr += "function rotate()\n";
+    exampleStr += "{\n";
+    exampleStr += "    // rotate the sphere along its y axis by 1 more degree\n";
+    exampleStr += "    spherePos.getMatrix().mult(Matrix.rotateY(1));\n";
+    exampleStr += "\n";
+    exampleStr += "    /*\n";
+    exampleStr += "    could also do:\n";
+    exampleStr += "\n";
+    exampleStr += "    // reset the sphere matrix to be translated back 3 units and then rotated along its y axis by rot\n";
+    exampleStr += "    spherePos.setMatrix(\n";
+    exampleStr += "                Matrix.translate(0, 0, -3)\n";
+    exampleStr += "                .mult(Matrix.rotateY(rot)));\n";
+    exampleStr += "\n";
+    exampleStr += "    // increment the amount to rotate the sphere by for the next frame\n";
+    exampleStr += "    rot = rot%360 + 1;\n";
+    exampleStr += "    */\n";
+    exampleStr += "}\n";
+    exampleStr += "\n";
+
+    exampleStr += "//Create a resize observer that calls display \n";
+    exampleStr += "and set it to observe the resizer html element\n";
+    exampleStr += "//This allows the canvas to be redrawn when it is resized\n"
+    exampleStr += "const resizerEl = document.getElementById(\"resizer\");\n";
+    exampleStr += "const resizer = new ResizeObserver(display);\n";
+    exampleStr += "resizer.observe(resizerEl);\n";
+    exampleStr += "//The function that is responsible for rendering the scene into the fb \n";
+    exampleStr += "//and that then redraws the canvas to be the fb\n"
+    exampleStr += "function display()\n";
+    exampleStr += "{\n";
+    exampleStr += "    //get the width and height of the resizer\n"
+    exampleStr += "    const w = resizerEl.offsetWidth;\n";
+    exampleStr += "    const h = resizerEl.offsetHeight;\n";
+    exampleStr += "\n";
+    exampleStr += "    const ctx = document.getElementById(\"pixels\").getContext(\"2d\");\n";
+    exampleStr += "\n";
+    exampleStr += "    if(ctx == null)\n";
+    exampleStr += "    {    \n";
+    exampleStr += "        console.log(\"Warning: ctx.getContext(2d) is null\");\n";
+    exampleStr += "        return;\n";
+    exampleStr += "    }\n";
+    exampleStr += "\n";
+    exampleStr += "    //Set the canvas to be the size of the resizer\n"
+    exampleStr += "    ctx.canvas.width = w;\n";
+    exampleStr += "    ctx.canvas.height = h;\n";
+    exampleStr += "\n";
+    exampleStr += "    //Create a framebuffer to be the size of the resizer/canvas and render the scene into it\n"
+    exampleStr += "    const fb = new FrameBuffer(w, h, Color.black);\n";
+    exampleStr += "    renderFB(scene, fb);\n";
+    exampleStr += "\n";
+    exampleStr += "    // could also do\n";
+    exampleStr += "    //render(scene, fb.vp);\n";
+    exampleStr += "\n";
+    exampleStr += "    //write the framebuffer to the canvas\n"
+    exampleStr += "    ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);\n";
+    exampleStr += "}\n";
+    exampleStr += "\n";
+
+    exampleStr += "//Add a key listener to the document to allow the animation to be started/stopped\n"
+    exampleStr += "let play = true;\n";
+    exampleStr += "document.addEventListener(\"keypress\", keyPressed);\n";
+    exampleStr += "function keyPressed(keyEvent)\n";
+    exampleStr += "{\n";
+    exampleStr += "    const c = keyEvent.key;\n";
+    exampleStr += "\n";
+    exampleStr += "    if(c == 's' && play == false)// if the animation isn't playing and the 's' key is pressed start the animation\n";
+    exampleStr += "    {\n";
+    exampleStr += "        displayNextFrame();\n";
+    exampleStr += "        play = !play;\n";
+    exampleStr += "    }\n";
+    exampleStr += "    else if(c == 'S' && play == true) // if the animation is playing and the 'S' key is pressed stop the animation\n";
+    exampleStr += "    {\n";
+    exampleStr += "        clearInterval(timer);\n";
+    exampleStr += "        play = !play;\n";
+    exampleStr += "    }\n";
+    exampleStr += "}\n";
+
+    codeBox.value = exampleStr;
 }
 
 // add the import code to the text box
