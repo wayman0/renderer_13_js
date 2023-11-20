@@ -612,7 +612,7 @@ function addExample()
     exampleStr += "\n";
 
     exampleStr += "//Create a resize observer that calls display \n";
-    exampleStr += "and set it to observe the resizer html element\n";
+    exampleStr += "//and set it to observe the resizer html element\n";
     exampleStr += "//This allows the canvas to be redrawn when it is resized\n"
     exampleStr += "const resizerEl = document.getElementById(\"resizer\");\n";
     exampleStr += "const resizer = new ResizeObserver(display);\n";
