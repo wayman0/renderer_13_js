@@ -467,7 +467,7 @@ function saveCode()
 
     // get the code in the text box
     //const code = codeBox?.value;
-    const code = editor.session.value();
+    const code = editor.session.getValue();
 
     // create a html element, set the element to be an invisible download href element
     const saveElement = document.createElement('a');
@@ -517,7 +517,7 @@ function importCode()
                 // set the text area to be the read text
                 // @ts-ignore
                 //codeBox.value = text;
-                editor.setValue(text);
+                editor.setValue(text, -1);
             }
         }
 
@@ -677,7 +677,7 @@ function addExample()
     exampleStr += "}\n";
 
     //codeBox.value = exampleStr;
-    editor.setValue(exampleStr);
+    editor.setValue(exampleStr, -1);
 }
 
 /*
