@@ -1,10 +1,14 @@
 //@ts-check
 
+const editor = ace.edit("input");
+editor.setTheme("ace/theme/monokai");
+editor.session.setMode("ace/mode/javascript");
+
 // access the elements on the html file
 const runButton = document.getElementById("run");
 const saveButton = document.getElementById("save");
 const importButton = document.getElementById("import");
-const codeBox = document.getElementById("input");
+//const codeBox = document.getElementById("input");
 const resizer = document.getElementById("resizer");
 const outBox = document.getElementById("output");
 
@@ -17,8 +21,9 @@ saveButton?.addEventListener("click", saveCode);
 // add the importCode function to the import buttons event listener
 importButton?.addEventListener("click", importCode);
 
+
 // add a key pressed event listener to allow completion of () {} [] 
-codeBox?.addEventListener("keypress", codeFeatures);
+//codeBox?.addEventListener("keypress", codeFeatures);
 
 /*
 add a key down to the document for auto tabbing, 
@@ -26,7 +31,7 @@ tabs don't belong to text area so adding to text area doesn't work
 has to be key down instead of key up because key up wont prevent default
 key pressed just doesn't recognize tab key
 */
-document?.addEventListener("keydown", codeFeatures);
+//document?.addEventListener("keydown", codeFeatures);
 
 setCanvas();
 addExample();
@@ -121,6 +126,7 @@ function logError(e)
 
 const tab = '\t';
 let numTab = 0;
+/*
 function codeFeatures(e)
 {
     const start = codeBox.selectionStart;
@@ -402,6 +408,7 @@ function codeFeatures(e)
         } 
     }   
 }
+*/
 
 //let numClicks = 0;
 /*
@@ -426,8 +433,8 @@ function runCode()
     // clear the output window
     outBox.value = "";
 
-    //@ts-ignore
-    const code = codeBox?.value;
+    //const code = codeBox?.value;
+    const code = editor.session.getValue();
 
     // make a script tag, 
     // set the script code to be the written code
@@ -450,7 +457,6 @@ function saveCode()
 {
     // prompt the user for the filename
     let fileName = "" + prompt("Enter the filename", "");
-    console.log(fileName);
 
     // while there is no real filename continuously prompt for one
     while(!(fileName.length > 0))
@@ -460,7 +466,8 @@ function saveCode()
         return;
 
     // get the code in the text box
-    const code = codeBox?.value;
+    //const code = codeBox?.value;
+    const code = editor.session.value();
 
     // create a html element, set the element to be an invisible download href element
     const saveElement = document.createElement('a');
@@ -509,7 +516,8 @@ function importCode()
 
                 // set the text area to be the read text
                 // @ts-ignore
-                codeBox.value = text;
+                //codeBox.value = text;
+                editor.setValue(text);
             }
         }
 
@@ -668,9 +676,11 @@ function addExample()
     exampleStr += "    }\n";
     exampleStr += "}\n";
 
-    codeBox.value = exampleStr;
+    //codeBox.value = exampleStr;
+    editor.setValue(exampleStr);
 }
 
+/*
 // add the import code to the text box
 function addImportCode()
 {
@@ -680,7 +690,9 @@ function addImportCode()
     codeBox.value += "import {} from \"./renderer/pipeline/pipelineExport.js\";\n";
     codeBox.value += "import {} from \"./renderer/framebuffer/FramebufferExport.js\";\n";
 }
+*/
 
+/*
 // add the writing to a canvas code to the text box
 function addDisplayCode()
 {
@@ -704,7 +716,9 @@ function addDisplayCode()
     codeBox.value += "\tctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);\n";
     codeBox.value += "}\n";
 }
+*/
 
+/*
 // add the animation code to the text box
 function addAnimationCode()
 {
@@ -724,3 +738,4 @@ function addAnimationCode()
     codeBox.value += "}\n";
     codeBox.value += "//clearInterval(timer);\n"
 }
+*/
