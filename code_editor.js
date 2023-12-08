@@ -11,8 +11,11 @@ const importButton = document.getElementById("import");
 const resizer = document.getElementById("resizer");
 const outBox = document.getElementById("output");
 
+runButton.addEventListener("click", runCode);
+saveButton.addEventListener("click", saveCode);
+importButton.addEventListener("click", importCode);
+
 setCanvas();
-addExample();
 runCode();
 
 /*
@@ -28,7 +31,7 @@ window.addEventListener("error", logError);
 
 function log2TextArea(...args)
 {
-    consoleLog(args);
+    args.forEach(consoleLog);
     
     args.forEach(displayOutput);
     // remove the last ", " and add a "\n"
@@ -103,25 +106,26 @@ read the code from the text area
 create a script tag
 set the script tag to be the text area text
 */
-function runCode()
+async function runCode()
 {
-    // remove any previous running script tag
-    const prevScript = document.getElementById("script");
-    prevScript?.remove();
+    let code = editor.session.getValue();
+    
+    if(window.localStorage.getItem("code") == null && code == "")
+    {
+        window.localStorage.setItem("code", await readFile("inputCode.js"));
+    }
+    else if(window.localStorage.getItem("code") == null && code != "")
+    {
+        window.localStorage.setItem("code", code);
+    }
+    else if(window.localStorage.getItem("code") != null && code != "")
+    {
+        window.localStorage.setItem("code", code);
+        window.location.reload();
+    }
 
-    // record the number of times the run button is clicked
-    // so we can assume the value of the timer that is created
-    // this doesn't work because the user can stop/start the animation
-    // generating more id's then run button clicks
-    //numClicks += 1;
-    //for(let x = 1; x <= numClicks; x += 1)
-    //    clearInterval(x);
-
-    // clear the output window
-    outBox.value = "";
-
-    //const code = codeBox?.value;
-    const code = editor.session.getValue();
+    code = window.localStorage.getItem("code");
+    editor.session.setValue(code);
 
     // make a script tag, 
     // set the script code to be the written code
@@ -184,32 +188,28 @@ function importCode()
     fileInput.type = "file";
 
     // when there is a file chosen in the file input element read the file
-    fileInput.onchange = e =>  
-        {
-            // get the file 
-            // @ts-ignore
-            const file = e.target.files[0];
-
-            // create a new FileReader and read the file
-            const reader = new FileReader();
-            reader.readAsText(file, 'UTF-8');
-
-            // when the file is completely read
-            reader.onload = readerEvent => 
-            {
-                // get the text from the file
-                // @ts-ignore
-                const text = readerEvent.target.result; 
-
-                // set the text area to be the read text
-                // @ts-ignore
-                //codeBox.value = text;
-                editor.setValue(text, -1);
-            }
-        }
+    fileInput.onchange = readFile;
 
     // click on the fileInput element to start the file selection process
     fileInput.click();
+}
+
+// use fetch to read the content of the file
+async function readFile(e)
+{
+    let file = "";
+
+    if(typeof e == "string")
+        file = e;
+    else
+        file = e.target.files[0].name;
+    
+    const response = await fetch(file, {method: "GET"});
+    const text = await response.text();
+
+    editor.session.setValue(text);
+
+    return text;
 }
 
 // get and set the canvas to be black to start with

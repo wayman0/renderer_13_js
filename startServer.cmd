@@ -1,1 +1,1 @@
-http-server -c-1
+http-server -p 8094 -c-1 -o /code_editor.html
