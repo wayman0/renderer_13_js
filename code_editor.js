@@ -110,6 +110,8 @@ async function runCode()
 {
     let code = editor.session.getValue();
     
+    /*
+    // this 'remembers' the previous code written even after window is closed
     if(window.localStorage.getItem("code") == null && code == "")
     {
         window.localStorage.setItem("code", await readFile("inputCode.js"));
@@ -125,6 +127,24 @@ async function runCode()
     }
 
     code = window.localStorage.getItem("code");
+    */
+
+    // this only remembers what is done in the tab now, not from previous sessions
+    if(window.sessionStorage.getItem("code") == null && code == "")
+    {
+        window.sessionStorage.setItem("code", await readFile("inputCode.js"));
+    }
+    else if(window.sessionStorage.getItem("code") == null && code != "")
+    {
+        window.sessionStorage.setItem("code", code);
+    }
+    else if(window.sessionStorage.getItem("code") != null && code != "")
+    {
+        window.sessionStorage.setItem("code", code);
+        window.location.reload();
+    }
+
+    code = window.sessionStorage.getItem("code");
     editor.session.setValue(code);
 
     // make a script tag, 
