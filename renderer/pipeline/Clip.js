@@ -41,44 +41,79 @@ export function clip(model)
 {
     // have to do this way because new Array(model.colorList()) gives error
     // and can't just pass the color list itself
+    /*
     const newColorList = new Array();
     for (let x = 0; x < model.colorList.length; x += 1)
     {
         newColorList[x] = model.colorList[x];
     }
+    */
 
+    const newColorList = Array.from(model.colorList);
     const model2 = new Model(model.vertexList,
                              model.primitiveList,
                              newColorList,
                              model.name,
                              model.visible);
 
-    const newPrimitiveList = new Array();
+    //const newPrimitiveList = new Array();
+    //
+    //for(const p of model2.primitiveList)
+    //{
+    //    logPrimitive("5. Clipping", model2, p);
+    //
+    //    let pClipped = undefined;
+    //    if (p instanceof LineSegment)
+    //    {
+    //        pClipped = LineClip(model2, /**@type {LineSegment}*/ (p));
+    //    }
+    //    else
+    //    {
+    //        pClipped = PointClip(model2, /**@type {Point}*/ (p));
+    //    }
+    //
+    //    if (pClipped != undefined)
+    //    {
+    //        newPrimitiveList.push(pClipped);
+    //        logPrimitive("5. Clipped (accept)", model2, pClipped);
+    //    }
+    //    else
+    //    {
+    //        logPrimitive("5. Clipped (reject)", model2, p);
+    //    }
+    //}
 
-    for(const p of model2.primitiveList)
-    {
-        logPrimitive("5. Clipping", model2, p);
+    // use map to map which primitives should be clipped,
+    // however any primitive that is clipped is not returned
+    // by the callback function and therefore the new return 
+    // array at the clipped primitive index is set to be undefined by js
+    // so then have to use a filter to filter out the js set undefined primitives
+        
+    // I don't believe just filter can be used because filter returns a subarray
+    // which would cause mutative problems later on, whereas map returns a new array
+    // and is therefore nonmutative.  Using filter after map is ok, because map
+    // returns a new arrray and then filter returns a subarray of maps new array.
+    const newPrimitiveList = model2.primitiveList.map(
+                             (p) => {
+                                        logPrimitive("5. Clipping", model2, p);
 
-        let pClipped = undefined;
-        if (p instanceof LineSegment)
-        {
-            pClipped = LineClip(model2, /**@type {LineSegment}*/ (p));
-        }
-        else
-        {
-            pClipped = PointClip(model2, /**@type {Point}*/ (p));
-        }
+                                        let pClipped = undefined;
+                                        if (p instanceof LineSegment)
+                                            pClipped = LineClip(model2, /**@type {LineSegment}*/ (p));
+                                        else if(p instanceof Point)
+                                            pClipped = PointClip(model2, /**@type {Point}*/ (p));
 
-        if (pClipped != undefined)
-        {
-            newPrimitiveList.push(pClipped);
-            logPrimitive("5. Clipped (accept)", model2, pClipped);
-        }
-        else
-        {
-            logPrimitive("5. Clipped (reject)", model2, p);
-        }
-    }
+                                        if (pClipped != undefined)
+                                        {
+                                            logPrimitive("5. Clipped (accept)", model2, pClipped);
+                                            return pClipped;
+                                        }
+                                        else
+                                        {
+                                            logPrimitive("5. Clipped (reject)", model2, p);
+                                        }
+                                    })
+                                    .filter( (p) => {return p != undefined && p != null});
 
     return new Model(model2.vertexList,
                      newPrimitiveList,

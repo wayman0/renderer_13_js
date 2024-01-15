@@ -77,6 +77,7 @@ import {Model, Vertex, Camera} from "../scene/SceneExport.js";
  */
 export default function project(model, camera)
 {
+   /*
     const newVertexList = new Array();
 
     for (let x = 0; x < model.vertexList.length; x += 1)
@@ -88,6 +89,15 @@ export default function project(model, camera)
         else
             newVertexList[x] = new Vertex(v.x, v.y, 0);
     }
+    */
+
+    const newVertexList = model.vertexList.map(
+                          (v) => {
+                                    if(camera.perspective)
+                                       return new Vertex(v.x/-v.z, v.y/-v.z, -1);
+                                    else
+                                       return new Vertex(v.x, v.y, 0);
+                                 });
 
     return new Model(newVertexList,
                      model.primitiveList,
