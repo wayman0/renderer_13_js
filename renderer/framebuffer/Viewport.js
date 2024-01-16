@@ -359,14 +359,17 @@ export default class Viewport
         }
         */
 
-        const c = Color.convert2Int(color);
+        //const c = Color.convert2Int(color);
         for(let pixel = 0; pixel < this.getWidthVP() * this.getHeightVP()*4; pixel += 4)
         {
-            this.parent.pixelBuffer[pixel + 0] = c.getRed();
-            this.parent.pixelBuffer[pixel + 1] = c.getGreen();
-            this.parent.pixelBuffer[pixel + 2] = c.getBlue();
-            this.parent.pixelBuffer[pixel + 3] = c.getAlpha();
+            this.parent.pixelBuffer[pixel + 0] = color.getRed();
+            this.parent.pixelBuffer[pixel + 1] = color.getGreen();
+            this.parent.pixelBuffer[pixel + 2] = color.getBlue();
+            this.parent.pixelBuffer[pixel + 3] = color.getAlpha();
         }
+
+        for(let pixel = 0; pixel < this.getWidthVP() * this.getHeightVP()*4; pixel += 4)
+            this.parent.pixelBuffer.set(color.rgb, pixel);
     }
 
 
