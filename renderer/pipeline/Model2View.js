@@ -32,15 +32,14 @@ export default function model2view(position, ctm)
     const model = position.model;
     /*
     let newVertexList = new Array();
-
     for (let x = 0; x < model.vertexList.length; x += 1)
-    {
         newVertexList[x] = ctm.timesVertex(model.vertexList[x]);
-    }
-    */
-
+   */
+    
+    // this method is slower
     // use map because we are 'mapping' from model space to view space and it is non mutative
     const newVertexList = model.vertexList.map( (v) => {return ctm.timesVertex(v);});
+    
 
     return new Model(newVertexList,
                      model.primitiveList,

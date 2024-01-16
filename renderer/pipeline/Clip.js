@@ -83,6 +83,7 @@ export function clip(model)
     //    }
     //}
 
+    // the below method is slower 
     // use map to map which primitives should be clipped,
     // however any primitive that is clipped is not returned
     // by the callback function and therefore the new return 
@@ -96,13 +97,13 @@ export function clip(model)
     const newPrimitiveList = model2.primitiveList.map(
                              (p) => {
                                         logPrimitive("5. Clipping", model2, p);
-
+    
                                         let pClipped = undefined;
                                         if (p instanceof LineSegment)
                                             pClipped = LineClip(model2, /**@type {LineSegment}*/ (p));
                                         else if(p instanceof Point)
                                             pClipped = PointClip(model2, /**@type {Point}*/ (p));
-
+    
                                         if (pClipped != undefined)
                                         {
                                             logPrimitive("5. Clipped (accept)", model2, pClipped);

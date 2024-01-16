@@ -89,6 +89,7 @@ export function clip(model, camera)
     //    }
     //}
 
+    // this method is slower
     // use map to map which primitives should be clipped,
     // however any primitive that is clipped is not returned
     // by the callback function and therefore the new return 
@@ -102,14 +103,14 @@ export function clip(model, camera)
     const newPrimitiveList = model2.primitiveList.map( 
                              (p) => {
                                         logPrimitive("3. Near_Clipping", model2, p);
-
+    
                                         let pClipped = undefined;
-
+    
                                         if (p instanceof LineSegment)
                                             pClipped = NearLine( model2, /**@type {LineSegment}*/(p), camera);
                                         else if(p instanceof Point)
                                             pClipped = NearPoint(model2, /**@type {Point}*/(p),       camera);
-
+    
                                         if (pClipped != undefined)
                                         {
                                             logPrimitive("3. Near_Clipped (accept)", model2, pClipped);

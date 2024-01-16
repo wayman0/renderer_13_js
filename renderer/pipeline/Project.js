@@ -79,7 +79,6 @@ export default function project(model, camera)
 {
    /*
     const newVertexList = new Array();
-
     for (let x = 0; x < model.vertexList.length; x += 1)
     {
         const v = model.vertexList[x];
@@ -91,6 +90,8 @@ export default function project(model, camera)
     }
     */
 
+    
+    // this method is slower
     const newVertexList = model.vertexList.map(
                           (v) => {
                                     if(camera.perspective)
@@ -98,6 +99,7 @@ export default function project(model, camera)
                                     else
                                        return new Vertex(v.x, v.y, 0);
                                  });
+    
 
     return new Model(newVertexList,
                      model.primitiveList,

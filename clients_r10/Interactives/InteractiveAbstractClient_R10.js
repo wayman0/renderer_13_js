@@ -423,7 +423,11 @@ export function setUpViewing()
         fb.vp.clearVPDefault();
     }
 
+    const startTime = new Date().getTime();
     render(scene, fb.vp);
+    const endTime = new Date().getTime();
+
+    console.log("render time: " + (endTime - startTime));
 
     /*
     if (takeScreenshot)

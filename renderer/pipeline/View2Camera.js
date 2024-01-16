@@ -63,7 +63,6 @@ export default function view2camera(model, camera)
     const t = camera.top;
     const near = -camera.n;
 
-    /*
     const newVertexList = new Array();
     for (let x = 0; x < model.vertexList.length; x += 1)
     {
@@ -94,8 +93,10 @@ export default function view2camera(model, camera)
 
         newVertexList[x] = new Vertex(v_x, v_y, v_z);
     }
-    */
-   // use map because we are 'mapping' from view space to camera space and it is non mutative
+
+    // use map because we are 'mapping' from view space to camera space and it is non mutative
+    /*
+    // this method is slower
     const newVertexList = model.vertexList.map(
                           (v) => {
                                     let v_x = undefined;
@@ -121,6 +122,7 @@ export default function view2camera(model, camera)
 
                                     return new Vertex(v_x, v_y, v_z);
                            });
+    */
 
     return new Model(newVertexList,
                      model.primitiveList,
