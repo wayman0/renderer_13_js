@@ -412,14 +412,17 @@ export default class FrameBuffer
         // we loop over every pixel in the pixelBuffer
         // so instead of looping over every single number
         // we acces every fourth number, the start of each pixel
-        const c = Color.convert2Int(color);
+        //for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
+        //{
+        //    this.#pixelBuffer[startPixel + 0] = color.getRed();
+        //    this.#pixelBuffer[startPixel + 1] = color.getGreen();
+        //    this.#pixelBuffer[startPixel + 2] = color.getBlue();
+        //    this.#pixelBuffer[startPixel + 3] = color.getAlpha();
+        //}
+
+        // see page 278 and 279 of the js book
         for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
-        {
-            this.#pixelBuffer[startPixel + 0] = c.getRed();
-            this.#pixelBuffer[startPixel + 1] = c.getGreen();
-            this.#pixelBuffer[startPixel + 2] = c.getBlue();
-            this.#pixelBuffer[startPixel + 3] = c.getAlpha();
-        }
+            this.#pixelBuffer.set(color.rgb, startPixel);
     }
 
 
@@ -449,13 +452,16 @@ export default class FrameBuffer
         //const startPixelData = y*this.#width + x;
         const startPixelData = this.width * 4 * y + 4 * x;
 
-        const r = this.#pixelBuffer[startPixelData + 0];
-        const g = this.#pixelBuffer[startPixelData + 1];
-        const b = this.#pixelBuffer[startPixelData + 2];
-        const a = this.#pixelBuffer[startPixelData + 3];
+        //const r = this.#pixelBuffer[startPixelData + 0];
+        //const g = this.#pixelBuffer[startPixelData + 1];
+        //const b = this.#pixelBuffer[startPixelData + 2];
+        //const a = this.#pixelBuffer[startPixelData + 3];
 
-        return new Color(r, g, b, a);
+        //return new Color(r, g, b, a);
         //return this.#pixelBuffer[index];
+
+        // see page 279 of the js book
+        return Color.buildRGBA(this.#pixelBuffer.slice(startPixelData, startPixelData + 4));
     }
 
 
@@ -496,6 +502,9 @@ export default class FrameBuffer
             throw new Error("FrameBuffer: Bad pixel coordinate " +
                             "(" + x + ", " + y + ") " +
                             "[w= " + this.getWidthFB() + ", h= " + this.getHeightFB() + "]");
+
+        // see page 278 - 279 of the js book
+        this.#pixelBuffer.set(color.rgb, index);
     /*
         see if the given color is supposed to be blended, if so then call blending function.
 
@@ -510,17 +519,17 @@ export default class FrameBuffer
         else
             this.#pixelBuffer[index] = color;
     */
-        const c = Color.convert2Int(color);
+        //const c = Color.convert2Int(color);
       
-        const r = c.getRed();
-        const g = c.getGreen();
-        const b = c.getBlue();
-        const a = c.getAlpha();
-
-        this.#pixelBuffer[index + 0] = r;
-        this.#pixelBuffer[index + 1] = g;
-        this.#pixelBuffer[index + 2] = b;
-        this.#pixelBuffer[index + 3] = a;
+        //const r = color.getRed();
+        //const g = color.getGreen();
+        //const b = color.getBlue();
+        //const a = color.getAlpha();
+//
+        //this.#pixelBuffer[index + 0] = r;
+        //this.#pixelBuffer[index + 1] = g;
+        //this.#pixelBuffer[index + 2] = b;
+        //this.#pixelBuffer[index + 3] = a;
 
         // this seems to properly input the colors into the pixelbuffer
         // but when the pixel buffer is printed out it is wrong
@@ -712,10 +721,13 @@ export default class FrameBuffer
             for(let x = upperLeftX; x < lowerRightX; x += 1)
             {
                 const col = this.getPixelFB(x, y);
+                
+                // see page 278 - 279 of the js book
+                colorData.set(col.rgb.slice(0, 3), index);
 
-                colorData[index+ 0] = col.getRed();
-                colorData[index+ 1] = col.getGreen();
-                colorData[index+ 2] = col.getBlue();
+                //colorData[index+ 0] = col.getRed();
+                //colorData[index+ 1] = col.getGreen();
+                //colorData[index+ 2] = col.getBlue();
                 index += 3;
             }
         }
@@ -860,6 +872,22 @@ export default class FrameBuffer
     }
 }
 
+// if you run this code with the new vs old color implmentation
+// the old color implementation is a lot faster then the new implementation
+let startTime = new Date().getTime();
+let fb1 = await FrameBuffer.buildFile("../../assets/textures/brick2.ppm");
+let stopTime = new Date().getTime();
+console.log("read file: " + (stopTime - startTime));
+
+startTime = new Date().getTime();
+fb1.dumpFB2File("brick.ppm");
+stopTime = new Date().getTime();
+console.log("write file: " + (stopTime - startTime));
+
+startTime = new Date().getTime();
+const fb2 = new FrameBuffer(600, 600, Color.black);
+stopTime = new Date().getTime();
+console.log("FB make : " + (stopTime - startTime));
 
 // failed attempts at reading the ppm file byte by byte instead of at once
 /*
@@ -903,7 +931,6 @@ nodefs.open(ppmFile, 'r', function(err, fd)
                 }
             });
 */
-
 /*
 nodefs.open(ppmFile, 'r', 
     function(error, fileDesc)
@@ -1066,7 +1093,6 @@ nodefs.open(ppmFile, 'r',
         //return fb;
     });
 */
-
 /*
 console.log(fb.pixelBuffer);
 
@@ -1076,7 +1102,6 @@ for(let x = 0; x < fb.pixelBuffer.length; x += 3)
     console.log(fb.pixelBuffer[x] + " " + fb.pixelBuffer[x+1] + " " + fb.pixelBuffer[x+2]);
 fb.dumpFB2File("output2.ppm");
 */
-
 /*
 const nodefs = await import("node:fs");
 let fb = new FrameBuffer(0, 0);
@@ -1231,7 +1256,6 @@ function(error, fileDesc)
 
 return await fb;
 */
-
 /*
 import("node:fs").then(
     fs => fs.open(ppmFile, 'r', 
@@ -1396,7 +1420,6 @@ import("node:fs").then(
                 //return fb;
             }));
     */
-
 /*
         const nodefs = await import("node:fs");
         const nodeReadLine = await import("node:readline");
@@ -1531,9 +1554,3 @@ import("node:fs").then(
         console.log("Number of bytes read in the ppm raster :" + sumLine);// 748258
         return fb;
 */
-
-
-
-
-
-
