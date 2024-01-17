@@ -6,7 +6,7 @@
 
 //@ts-check
 import {Viewport, Color} from "./FramebufferExport.js";
-import {format} from "../scene/util/UtilExport.js";
+import {format} from "../../renderer/scene/util/UtilExport.js";
 
 export default class FrameBuffer
 {
@@ -136,7 +136,7 @@ export default class FrameBuffer
        @returns {Promise<FrameBuffer>}
     */
     static async buildFile(fileName)
-    {
+    {        
         if(typeof fileName != "string")
             throw new Error("Filename must be a string");
         
@@ -237,11 +237,12 @@ export default class FrameBuffer
             if(g < 0) g += 256;
             if(b < 0) b += 256;
 
-            fb.pixelBuffer[fbIndex + 0] = r;
-            fb.pixelBuffer[fbIndex + 1] = g;
-            fb.pixelBuffer[fbIndex + 2] = b;
-            fb.pixelBuffer[fbIndex + 3] = a;
-
+            //fb.pixelBuffer[fbIndex + 0] = r;
+            //fb.pixelBuffer[fbIndex + 1] = g;
+            //fb.pixelBuffer[fbIndex + 2] = b;
+            //fb.pixelBuffer[fbIndex + 3] = a;
+            
+            fb.pixelBuffer.set([r, g, b, a], fbIndex);
             fbIndex += 4;
         }
         
@@ -744,7 +745,6 @@ export default class FrameBuffer
         });
     }
 
-
     static main()
     {   
         // test the ofline ppm file building
@@ -870,6 +870,7 @@ export default class FrameBuffer
         fb3.convertBlue2FB().dumpFB2File("FB3-BLUE.ppm");
         */
     }
+    
 }
 
 // if you run this code with the new vs old color implmentation

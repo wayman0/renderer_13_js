@@ -6,7 +6,7 @@
 
 //@ts-check
 import {Viewport, Color} from "./FramebufferExport.js";
-import {format} from "../scene/util/UtilExport.js";
+import {format} from "../../renderer/scene/util/UtilExport.js";
 
 export default class FrameBuffer
 {
@@ -136,7 +136,7 @@ export default class FrameBuffer
        @returns {Promise<FrameBuffer>}
     */
     static async buildFile(fileName)
-    {
+    {        
         if(typeof fileName != "string")
             throw new Error("Filename must be a string");
         
@@ -412,17 +412,17 @@ export default class FrameBuffer
         // we loop over every pixel in the pixelBuffer
         // so instead of looping over every single number
         // we acces every fourth number, the start of each pixel
-        //for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
-        //{
-        //    this.#pixelBuffer[startPixel + 0] = color.getRed();
-        //    this.#pixelBuffer[startPixel + 1] = color.getGreen();
-        //    this.#pixelBuffer[startPixel + 2] = color.getBlue();
-        //    this.#pixelBuffer[startPixel + 3] = color.getAlpha();
-        //}
+        for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
+        {
+            this.#pixelBuffer[startPixel + 0] = color.getRed();
+            this.#pixelBuffer[startPixel + 1] = color.getGreen();
+            this.#pixelBuffer[startPixel + 2] = color.getBlue();
+            this.#pixelBuffer[startPixel + 3] = color.getAlpha();
+        }
 
         // see page 278 and 279 of the js book
-        for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
-            this.#pixelBuffer.set(color.rgb, startPixel);
+        //for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
+        //    this.#pixelBuffer.set(color.rgb, startPixel);
     }
 
 
@@ -452,16 +452,15 @@ export default class FrameBuffer
         //const startPixelData = y*this.#width + x;
         const startPixelData = this.width * 4 * y + 4 * x;
 
-        //const r = this.#pixelBuffer[startPixelData + 0];
-        //const g = this.#pixelBuffer[startPixelData + 1];
-        //const b = this.#pixelBuffer[startPixelData + 2];
-        //const a = this.#pixelBuffer[startPixelData + 3];
+        const r = this.#pixelBuffer[startPixelData + 0];
+        const g = this.#pixelBuffer[startPixelData + 1];
+        const b = this.#pixelBuffer[startPixelData + 2];
+        const a = this.#pixelBuffer[startPixelData + 3];
 
-        //return new Color(r, g, b, a);
-        //return this.#pixelBuffer[index];
+        return new Color(r, g, b, a);
 
         // see page 279 of the js book
-        return Color.buildRGBA(this.#pixelBuffer.slice(startPixelData, startPixelData + 4));
+        //return Color.buildRGBA(this.#pixelBuffer.slice(startPixelData, startPixelData + 4));
     }
 
 
@@ -504,7 +503,8 @@ export default class FrameBuffer
                             "[w= " + this.getWidthFB() + ", h= " + this.getHeightFB() + "]");
 
         // see page 278 - 279 of the js book
-        this.#pixelBuffer.set(color.rgb, index);
+        //this.#pixelBuffer.set(color.rgb, index);
+
     /*
         see if the given color is supposed to be blended, if so then call blending function.
 
@@ -519,17 +519,17 @@ export default class FrameBuffer
         else
             this.#pixelBuffer[index] = color;
     */
-        //const c = Color.convert2Int(color);
+        const c = Color.convert2Int(color);
       
-        //const r = color.getRed();
-        //const g = color.getGreen();
-        //const b = color.getBlue();
-        //const a = color.getAlpha();
-//
-        //this.#pixelBuffer[index + 0] = r;
-        //this.#pixelBuffer[index + 1] = g;
-        //this.#pixelBuffer[index + 2] = b;
-        //this.#pixelBuffer[index + 3] = a;
+        const r = color.getRed();
+        const g = color.getGreen();
+        const b = color.getBlue();
+        const a = color.getAlpha();
+  
+        this.#pixelBuffer[index + 0] = r;
+        this.#pixelBuffer[index + 1] = g;
+        this.#pixelBuffer[index + 2] = b;
+        this.#pixelBuffer[index + 3] = a;
 
         // this seems to properly input the colors into the pixelbuffer
         // but when the pixel buffer is printed out it is wrong
@@ -723,11 +723,11 @@ export default class FrameBuffer
                 const col = this.getPixelFB(x, y);
                 
                 // see page 278 - 279 of the js book
-                colorData.set(col.rgb.slice(0, 3), index);
+                //colorData.set(col.rgb.slice(0, 3), index);
 
-                //colorData[index+ 0] = col.getRed();
-                //colorData[index+ 1] = col.getGreen();
-                //colorData[index+ 2] = col.getBlue();
+                colorData[index+ 0] = col.getRed();
+                colorData[index+ 1] = col.getGreen();
+                colorData[index+ 2] = col.getBlue();
                 index += 3;
             }
         }
@@ -743,7 +743,6 @@ export default class FrameBuffer
                        err => {if (err) throw err;});
         });
     }
-
 
     static main()
     {   
@@ -870,24 +869,8 @@ export default class FrameBuffer
         fb3.convertBlue2FB().dumpFB2File("FB3-BLUE.ppm");
         */
     }
+    
 }
-
-// if you run this code with the new vs old color implmentation
-// the old color implementation is a lot faster then the new implementation
-//let startTime = new Date().getTime();
-//let fb1 = await FrameBuffer.buildFile("../../assets/textures/brick2.ppm");
-//let stopTime = new Date().getTime();
-//console.log("read file: " + (stopTime - startTime));
-//
-//startTime = new Date().getTime();
-//fb1.dumpFB2File("brick.ppm");
-//stopTime = new Date().getTime();
-//console.log("write file: " + (stopTime - startTime));
-//
-//startTime = new Date().getTime();
-//const fb2 = new FrameBuffer(600, 600, Color.black);
-//stopTime = new Date().getTime();
-//console.log("FB make : " + (stopTime - startTime));
 
 // failed attempts at reading the ppm file byte by byte instead of at once
 /*
