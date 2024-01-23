@@ -236,9 +236,7 @@ export default function clip(model, ls)
          || Math.abs(y1) > 1) )
     {
         if (clipDebug)
-        {
             logMessage("-- Trivial accept.");
-        }
 
         return ls;
     }
@@ -248,16 +246,12 @@ export default function clip(model, ls)
               (y0 < -1 && y1 < -1))
     {
         if (clipDebug)
-        {
             logMessage("-- Trivial delete.");
-        }
 
         return undefined;
     }
     else
-    {
         return clip(model, clipOneTime(model, ls));
-    }
 }
 
 
@@ -405,13 +399,9 @@ function clipOneTime(model, ls)
     // since t is already a float we dont need to cast it
     let t_ = undefined;
     if (t > 1)
-    {
         t_ = 1/t;
-    }
     else
-    {
         t_ = t;
-    }
 
     // this looks like blending code,
     // can we just use a blend function in
@@ -421,7 +411,7 @@ function clipOneTime(model, ls)
     let b = (1-t_) * cO[2] + t_ * cI[2];
 
     // have to truncate otherwise can get 255.0000000001
-    let newColor = new Color(Math.trunc(r), Math.trunc(g), Math.trunc(b));
+    let newColor = new Color(r, g, b);
     let cIndexNew = model.colorList.length;
     model.addColor(newColor);
 
@@ -429,27 +419,9 @@ function clipOneTime(model, ls)
     {
         let vOut = "";
         if (0 == vOutside)
-        {
             vOut = "v0";
-        }
         else
-        {
             vOut = "v1";
-        }
-
-        /*
-        logMessage("--Clip off " + vOut + " at " + equation);
-        logMessage("-- t = " + t);
-        logMessage("-- <x_i, y_i> = <" + vIx + ", " + vIy + ">");
-        logMessage("-- <x_o, y_o> = <" + vOx + ", " + vIy + ">");
-        logMessage("-- <x_c, y_c> = <" + x   + ", " + y   + ">");
-        logMessage("-- <r_i, g_i, b_i> = <" +
-                                        cI[0] + ", " + cI[1] + ", " + cI[2] + ">");
-        logMessage("-- <r_o, g_o, b_o> = <" +
-                                        cO[0] + ", " + cO[1] + ", " + cO[2] + ">");
-        logMessage("-- <r_c, g_c, b_c> = <" +
-                                            r + ", " + g + ", " + b + ">");
-        */
 
         logMessage(
             format("-- Clip off %s at %s", vOut, equation));

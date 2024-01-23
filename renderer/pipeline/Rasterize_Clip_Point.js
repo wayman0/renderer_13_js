@@ -28,8 +28,6 @@ export default function rasterize(model, pt, vp)
     const CLIPPED = " : Clipped";
     const NOT_CLIPPED = "";
 
-    const bg = Color.convert2Float(vp.bgColorVP);  //vp.bgColorVP.convert2Float();
-
     const w = vp.width;
     const h = vp.height;
 
@@ -37,7 +35,7 @@ export default function rasterize(model, pt, vp)
     const v = model.vertexList[vIndex];
 
     const cIndex = pt.cIndexList[0];
-    const c = Color.convert2Float(model.colorList[cIndex]); //model.colorList[cIndex].convert2Float().getRGBComponents();
+    const c = model.colorList[cIndex].rgb;
     let r = c[0], g = c[1], b = c[2];
 
     if (doGamma)
@@ -74,23 +72,15 @@ export default function rasterize(model, pt, vp)
                 let clippedMessage;
 
                 if (x_ > 0 && x_ <= w && y_ > 0 && y_ <= h)
-                {
                     clippedMessage = NOT_CLIPPED;
-                }
                 else
-                {
                     clippedMessage = CLIPPED;
-                }
 
                 logPixelMessage(clippedMessage, x, y, x_-1, h -y_, r, g, b, vp);
             }
 
-            const isFloat = r <= 1 && g <= 1 && b <= 1;
             if (x_ > 0 && x_ <= w && y_ > 0 && y_ <= h)
-            {
-                // have to check if the color is in int or float representation
-                vp.setPixelVP(x_-1, h-y_, new Color(r, g, b, isFloat? 1:255, isFloat));
-            }
+                vp.setPixelVP(x_-1, h-y_, new Color(r, g, b));
         }
     }
 }

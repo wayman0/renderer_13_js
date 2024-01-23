@@ -53,25 +53,19 @@ export default function clip(model, ls, camera)
     if (z0 <= n && z1 <= n)
     {
         if (nearDebug)
-        {
             logMessage("-- Near_Clip: Trivial accept.");
-        }
 
         return ls;
     }
     else if (z0 > n && z1 > n)
     {
         if (nearDebug)
-        {
             logMessage("-- Near_Clip: Trivial delete");
-        }
 
         return undefined;
     }
     else
-    {
         return interpolateNewVertex(model, ls, n);
-    }
 }
 
 
@@ -125,13 +119,9 @@ function interpolateNewVertex(model, ls, n)
     let t_ = undefined;
 
     if (t > 1)
-    {
         t_ = 1/t;
-    }
     else
-    {
         t_ = t;
-    }
 
     // can we just use blend function in color?
     const r = (1-t_) * c1[0] + t_ * c0[0];
@@ -143,20 +133,16 @@ function interpolateNewVertex(model, ls, n)
     model.vertexList.push(newVertex);
 
     // have to do trunc otherwise can get 255.000000000001 which will give error
-    const newColor = new Color(Math.trunc(r), Math.trunc(g), Math.trunc(b));
+    const newColor = new Color(r, g, b);
     const cIndexNew = model.colorList.length;
     model.colorList.push(newColor);
 
     let vNearIndex;
 
     if (v0z > n)
-    {
         vNearIndex = 0;
-    }
     else
-    {
         vNearIndex = 1;
-    }
 
     if (nearDebug)
     {
@@ -175,13 +161,9 @@ function interpolateNewVertex(model, ls, n)
     let result = undefined;
 
     if (0 == vNearIndex)
-    {
         result = LineSegment.buildVertexColors(vIndexNew, vInd1, cIndexNew, cInd1)
-    }
     else
-    {
         result = LineSegment.buildVertexColors(vInd0, vIndexNew, cInd0, cIndexNew);
-    }
 
     return result;
 }

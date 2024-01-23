@@ -45,8 +45,7 @@ import {format} from "../scene/util/UtilExport.js";
  */
 export default function rasterize(model, ls, vp)
 {
-    const bg = Color.convert2Float(vp.bgColorVP);
-  //const bg = vp.bgColorVP();//.convert2Float();
+    const bg = vp.bgColorVP;
     const w = vp.width;
     const h = vp.height;
 
@@ -57,12 +56,10 @@ export default function rasterize(model, ls, vp)
 
     const cIndex0 = ls.cIndexList[0];
     const cIndex1 = ls.cIndexList[1];
-  //const c0 = model.colorList[cIndex0].convert2Float.getRGBComponents;
-  //const c1 = model.colorList[cIndex1].convert2Float.getRGBComponents;
-    const c0 = Color.convert2Float(model.colorList[cIndex0]).getRGBComponents();
-    const c1 = Color.convert2Float(model.colorList[cIndex1]).getRGBComponents();
-    let r0 = c0[0], g0 = c0[1], b0 = c0[2];
-    let r1 = c1[0], g1 = c1[1], b1 = c1[2];
+    const c0 = model.colorList[cIndex0].getRGBComponents();
+    const c1 = model.colorList[cIndex1].getRGBComponents();
+    let r0 = c0[0]/255, g0 = c0[1]/255, b0 = c0[2]/255;
+    let r1 = c1[0]/255, g1 = c1[1]/255, b1 = c1[2]/255;
 
     let x0 = .5 + w/2.001 * (v0.x + 1), x1 = .5 + w/2.001 * (v1.x + 1);
     let y0 = .5 + h/2.001 * (v0.y + 1), y1 = .5 + h/2.001 * (v1.y + 1);
@@ -88,11 +85,9 @@ export default function rasterize(model, ls, vp)
         const y0VP = Math.trunc(h - Math.trunc(y0));
 
         if (rastDebug)
-        {
             logPixel(x0, y0, x0VP, y0VP, r0, g0, b0, vp);
-        }
 
-        vp.setPixelVP(x0VP, y0VP, new Color(r0, g0, b0, 255, model.colorList[cIndex0].isFloat()));
+        vp.setPixelVP(x0VP, y0VP, new Color(r0 * 255, g0 * 255, b0 * 255, 255));
 
         return;
     }
@@ -133,7 +128,7 @@ export default function rasterize(model, ls, vp)
         b1 = tempB;
     }
 
-    const denom  =  x1 - x0;
+    const  denom =  x1 - x0;
     const      m = (y1 - y0)/denom;
     const slopeR = (r1 - r0)/denom;
     const slopeG = (g1 - g0)/denom;
@@ -187,8 +182,6 @@ export default function rasterize(model, ls, vp)
                 bH = Math.pow(bH, Color.GAMMA);
             }
 
-            const isFloat = r <=1 && g<=1 && b<=1;
-
             if (!transposedLine)
             {
                 const xVP = Math.trunc(x-1);
@@ -200,12 +193,11 @@ export default function rasterize(model, ls, vp)
                 if (rastDebug)
                 {
                     logPixelsYAA(x, y, xVP, yVPLow, yVPHi,
-                                rL, gL, bL, rH, gH, bH, vp);
+                                 rL, gL, bL, rH, gH, bH, vp);
                 }
 
-                // have to check if the color is in int or float representation
-                vp.setPixelVP(xVP, yVPLow, new Color(rL, gL, bL, isFloat? 1:255, isFloat));
-                vp.setPixelVP(xVP, yVPHi,  new Color(rH, gH, bH, isFloat? 1:255, isFloat));
+                vp.setPixelVP(xVP, yVPLow, new Color(rL * 255, gL * 255, bL * 255));
+                vp.setPixelVP(xVP, yVPHi,  new Color(rH * 255, gH * 255, bH * 255));
             }
             else
             {
@@ -220,9 +212,8 @@ export default function rasterize(model, ls, vp)
                                  rL, gL, bL, rH, gH, bH, vp);
                 }
 
-                // have to check if the color is in int or float representation
-                vp.setPixelVP(xVPLow, yVP, new Color(rL, gL, bL, isFloat? 1:255, isFloat));
-                vp.setPixelVP(xVPHi,  yVP, new Color(rH, gH, bH, isFloat? 1:255, isFloat));
+                vp.setPixelVP(xVPLow, yVP, new Color(rL * 255, gL * 255, bL * 255));
+                vp.setPixelVP(xVPHi,  yVP, new Color(rH * 255, gH * 255, bH * 255));
             }
         }
         else
@@ -234,7 +225,6 @@ export default function rasterize(model, ls, vp)
                 b = Math.pow(b, Color.GAMMA);
             }
 
-            const isFloat = r<= 1 && g<= 1 && b<= 1;
             if (!transposedLine)
             {
                 //const xVP = x;
@@ -243,12 +233,10 @@ export default function rasterize(model, ls, vp)
                 const yVP = Math.trunc(h - Math.trunc(Math.round(y)));
 
                 if (rastDebug)
-                {
                     logPixel(x, y, xVP, yVP, r, g, b, vp);
-                }
 
                 // have to check if the color is in int or float representation
-                vp.setPixelVP(xVP, yVP, new Color(r, g, b, isFloat? 1:255, isFloat));
+                vp.setPixelVP(xVP, yVP, new Color(r * 255, g * 255, b * 255));
             }
             else
             {
@@ -259,17 +247,14 @@ export default function rasterize(model, ls, vp)
                 const yVP = Math.trunc(h-x);
 
                 if (rastDebug)
-                {
                     logPixel(y, x, xVP, yVP, r, g, b, vp);
-                }
 
                 // have to check if the color is in int or float representation
-                vp.setPixelVP(xVP, yVP, new Color(r, g, b, isFloat? 1:255, isFloat))
+                vp.setPixelVP(xVP, yVP, new Color(r * 255, g * 255, b * 255))
             }
         }
     }
 
-    const isFloat = r1 <=1 && g1 <= 1 && b1 <= 1
     if (!transposedLine)
     {
         const xVP = Math.trunc(Math.trunc(x1) -1);
@@ -277,12 +262,10 @@ export default function rasterize(model, ls, vp)
         const yVP = Math.trunc(h - Math.trunc(y1));
         
         if (rastDebug)
-        {
             logPixel(x1, y1, xVP, yVP, r1, g1, b1, vp);
-        }
 
         // have to check if the color is in int or float representation
-        vp.setPixelVP(xVP, yVP, new Color(r1, g1, b1, isFloat? 1:255, isFloat));
+        vp.setPixelVP(xVP, yVP, new Color(r1 * 255, g1 * 255, b1 * 255));
     }
     else
     {
@@ -290,11 +273,9 @@ export default function rasterize(model, ls, vp)
         const yVP  = Math.trunc(h - Math.trunc(x1));
 
         if (rastDebug)
-        {
             logPixel(y1, x1, xVP, yVP, r1, g1, b1, vp);
-        }
 
         // have to check if the color is in int or float representation
-        vp.setPixelVP(xVP, yVP, new Color(r1, g1, b1, isFloat? 1:255, isFloat))
+        vp.setPixelVP(xVP, yVP, new Color(r1 * 255, g1 * 255, b1 * 255))
     }
 }
