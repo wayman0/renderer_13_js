@@ -1,1 +1,0 @@
-node --prof-process isolate-000001BE2836D590-14300-v8.log > profOutput.txt
