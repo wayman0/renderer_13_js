@@ -1,7 +1,7 @@
 // import the framebuffer and color
 import {FrameBuffer, Color} from "./FramebufferExport.js";
 
-const filePath = "../../assets/textures/brick2.ppm";
+const filePath = "../../../assets/textures/brick2.ppm";
 
 let startTime = new Date().getTime(); 
 const fbFile = await FrameBuffer.buildFile(filePath);
@@ -40,3 +40,4 @@ fb.dumpFB2File("randomFB.ppm");
 endTime = new Date().getTime();
 console.log("Write: " + (endTime - startTime));
 console.log("---------------------------------------------");
+

@@ -1,0 +1,30 @@
+buildFile: 38
+Instantiate: 23
+Get Pixel: 213
+Set Pixel: 178
+Write: 301
+---------------------------------------------
+buildFile: 33
+Instantiate: 22
+Get Pixel: 216
+Set Pixel: 178
+Write: 266
+---------------------------------------------
+buildFile: 41
+Instantiate: 30
+Get Pixel: 211
+Set Pixel: 195
+Write: 270
+---------------------------------------------
+buildFile: 72
+Instantiate: 22
+Get Pixel: 204
+Set Pixel: 172
+Write: 285
+---------------------------------------------
+buildFile: 37
+Instantiate: 23
+Get Pixel: 237
+Set Pixel: 175
+Write: 268
+---------------------------------------------

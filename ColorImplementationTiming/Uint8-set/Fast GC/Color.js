@@ -10,7 +10,7 @@
  */
 
 //@ts-check
-import {format} from "../../renderer/scene/util/UtilExport.js";
+import {format} from "../../../renderer/scene/util/UtilExport.js";
 
 export default class Color
 {
@@ -126,7 +126,10 @@ export default class Color
         if(rgba instanceof Uint8ClampedArray == false)
             throw new Error("RGBA needs to be a uint8clamped array");
 
-        return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
+        const col = new Color();
+        col.#rgb = rgba;
+        
+        return col;
     }
 
     /**

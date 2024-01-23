@@ -1,1 +1,3 @@
 https://blog.dennisokeeffe.com/blog/2023-10-27-nodejs-profile-flag
+https://cjihrig.com/profiling_with_v8_tick_profiler
+https://nodejs.org/en/guides/simple-profiling/

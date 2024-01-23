@@ -1,0 +1,37 @@
+buildFile: 20
+Instantiate: 4
+Get Pixel: 122
+Set Pixel: 257
+Write: 94
+---------------------------------------------
+buildFile: 19
+Instantiate: 5
+Get Pixel: 123
+Set Pixel: 273
+Write: 74
+---------------------------------------------
+buildFile: 20
+Instantiate: 4
+Get Pixel: 117
+Set Pixel: 354
+Write: 78
+---------------------------------------------
+buildFile: 15
+Instantiate: 3
+Get Pixel: 119
+Set Pixel: 391
+Write: 132
+---------------------------------------------
+buildFile: 19
+Instantiate: 4
+Get Pixel: 152
+Set Pixel: 385
+Write: 79
+---------------------------------------------
+AVG
+buildFile: 18.6
+Instantiate: 4
+Get Pixel: 126.6
+Set Pixel: 332
+Write: 91.4
+---------------------------------------------

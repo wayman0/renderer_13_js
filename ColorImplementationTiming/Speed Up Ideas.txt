@@ -1,0 +1,80 @@
+https://itnext.io/speed-up-javascript-array-processing-8d601c57bb0d
+
+https://stackoverflow.com/questions/18364175/best-practices-for-reducing-garbage-collector-activity-in-javascript#:~:text=Specifically%2C%20look%20out%20for%20opportunities%20to%3A%201%20Pull,catching%20exceptions%20on%20normal%20code-paths.%20...%20More%20items
+Ways to speed up GC 
+Avoid doing these, and pool and reuse objects where possible.
+    create an object via new or via literal syntax [...], or {}.
+    concatenate strings.
+    enter a scope that contains function declarations.
+    perform an action that triggers an exception.
+    evaluate a function expression: (function (...) { ... }).
+    perform an operation that coerces to Object like Object(myNumber) or Number.prototype.toString.call(42)
+    call a builtin that does any of these under the hood, like Array.prototype.slice.
+    use arguments to reflect over the parameter list.
+
+    
+    split a string or match with a regular expression.
+
+As a general principle you'd want to cache as much as possible and do as little creating and destroying 
+The first thing that pops in my head is to reduce the use of anonymous functions
+
+setpixel(new Color())
+this will copy the new color into the fb.pixelbuffer, this causes the passed Color object to be gc'd instantly
+
+myColor = new Color()
+setPixel(myColor);
+this will copy the values of myColor into the fb.pixelbuffer, 
+however since I still have a reference to myColor
+it shouldn't be gc'd.  However this wastes memory.  
+
+If we set the fb to be an array of Color pointers and set each pointer to be the passed color 
+this should cut down on gc.  But have to be careful of pointer management.  
+
+myColor = new Color();
+fb.setPixel(myColor);
+myColor.changeAlpha(2);
+
+this will change the fb colors alpha along with my color alpha.  
+To avoid this can make the color class offer no mutative functions but 
+changing the fb color wont be a problem because myColor and the fb will point to the same object
+then I cahnge the fb to point to a new Color not touching my color 
+
+myColor = new Color();
+fb.setPixel(x, y, myColor);
+fb.setPixel(x, y, new Color());
+
+myColor = new Color();
+fb.setPixel(x, y, myColor);
+myColor2 = fb.getPixel(x, y);
+
+now I have 3 pointers to the same color object, myColor, the fb, and myColor2
+this shouldn't be a problem because the Color class will be made to be nonmutative.  
+
+However, if I change the fb to be an array of Colors, will this affect the writing to the canvas?
+Canvas is a Uint8ClampedArray, fb is an array of Color which is a Uint8ClampedArray.  
+
+What if we do 
+pixelbuffer = new Array(width * height) 
+pixelbuffer[0] = new Uint8ClampedArray(4);
+
+setPixel(x, y, myColor)
+{
+    pixelBuffer[width * y + x] = myColor.rgb;
+}
+
+this changes the pointer at the index to point to the passed color rgb
+but still doesn't fix writing to the canvas?
+
+I need a way to keep the pixelbuffer as a Uint8ClampedArray and set each 'pixel' to POINT to the passed color
+what if we made the Color class use the same underlying buffer of the fb class, but that is backwards because 
+the color is given to the fb, not the fb is given to color.  
+
+https://stackoverflow.com/questions/19553448/typedarray-set-vs-unrolled-loop-javascript
+this article basically says that unless the two typed arrays you are copying from 
+share the same underlying ArrayBuffer a for loop will be faster then .set() 
+unless your arrays are large
+Since I don't think we can make a color and fb share an array buffer set wont be faster.  
+
+
+
+

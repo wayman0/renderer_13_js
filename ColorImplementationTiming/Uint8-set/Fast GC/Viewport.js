@@ -26,7 +26,7 @@
 
 //@ts-check
 import {FrameBuffer, Color} from "./FramebufferExport.js";
-import {format} from "../../renderer/scene/util/UtilExport.js";
+import {format} from "../../../renderer/scene/util/UtilExport.js";
 
 export default class Viewport
 {

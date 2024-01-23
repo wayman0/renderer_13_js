@@ -1,28 +1,27 @@
-Statistical profiling result from isolate-000002B175189D00-11516-v8.log, (87 ticks, 0 unaccounted, 0 excluded).
+Statistical profiling result from isolate-000001BE2836D590-14300-v8.log, (81 ticks, 0 unaccounted, 0 excluded).
 
  [Shared libraries]:
    ticks  total  nonlib   name
-     63   72.4%          C:\Program Files\nodejs\node.exe
-      4    4.6%          C:\WINDOWS\SYSTEM32\ntdll.dll
+     45   55.6%          C:\Program Files\nodejs\node.exe
+     19   23.5%          C:\WINDOWS\SYSTEM32\ntdll.dll
 
  [JavaScript]:
    ticks  total  nonlib   name
-      9   10.3%   45.0%  LazyCompile: *getPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:437:15
-      4    4.6%   20.0%  LazyCompile: *setPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:475:15
-      4    4.6%   20.0%  LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      1    1.1%    5.0%  LazyCompile: *getGreen file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/Color.js:336:13
-      1    1.1%    5.0%  LazyCompile: *clearFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:395:12
-      1    1.1%    5.0%  Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      7    8.6%   41.2%  LazyCompile: *getPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:437:15
+      4    4.9%   23.5%  LazyCompile: *setPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:475:15
+      3    3.7%   17.6%  LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      2    2.5%   11.8%  LazyCompile: *dumpPixels2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:703:20
+      1    1.2%    5.9%  Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
 
  [C++]:
    ticks  total  nonlib   name
 
  [Summary]:
    ticks  total  nonlib   name
-     20   23.0%  100.0%  JavaScript
+     17   21.0%  100.0%  JavaScript
       0    0.0%    0.0%  C++
-      1    1.1%    5.0%  GC
-     67   77.0%          Shared libraries
+      6    7.4%   35.3%  GC
+     64   79.0%          Shared libraries
 
  [C++ entry points]:
    ticks    cpp   total   name
@@ -33,103 +32,119 @@ Statistical profiling result from isolate-000002B175189D00-11516-v8.log, (87 tic
   Callers occupying less than 1.0% are not shown.
 
    ticks parent  name
-     63   72.4%  C:\Program Files\nodejs\node.exe
-     52   82.5%    C:\Program Files\nodejs\node.exe
-     37   71.2%      LazyCompile: ~closeSync node:fs:541:19
-     37  100.0%        LazyCompile: ~writeFileSync node:fs:2207:23
-     36   97.3%          LazyCompile: ~appendFileSync node:fs:2273:24
-     36  100.0%            LazyCompile: ~<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:741:32
-      1    2.7%          LazyCompile: ~<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:737:32
-      3    5.8%      Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
-      1   33.3%        Function: ~<anonymous> node:internal/process/esm_loader:1:1
+     45   55.6%  C:\Program Files\nodejs\node.exe
+     35   77.8%    C:\Program Files\nodejs\node.exe
+     17   48.6%      LazyCompile: ~closeSync node:fs:541:19
+     17  100.0%        LazyCompile: ~writeFileSync node:fs:2207:23
+     16   94.1%          LazyCompile: ~appendFileSync node:fs:2273:24
+     16  100.0%            LazyCompile: ~<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:741:32
+      1    5.9%          LazyCompile: ~<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:737:32
+      4   11.4%      Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1   25.0%        LazyCompile: ~initializeSourceMapsHandlers node:internal/process/pre_execution:596:38
+      1  100.0%          LazyCompile: ~prepareExecution node:internal/process/pre_execution:51:26
+      1  100.0%            LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:35:36
+      1   25.0%        Function: ~<anonymous> node:internal/process/esm_loader:1:1
       1  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
       1  100.0%            Function: ~<anonymous> node:internal/modules/cjs/loader:1:1
-      1   33.3%        Function: ~<anonymous> node:internal/modules/esm/fetch_module:1:1
+      1   25.0%        Function: ~<anonymous> node:internal/modules/esm/loader:1:1
       1  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
-      1  100.0%            Function: ~<anonymous> node:internal/modules/esm/get_format:1:1
-      1   33.3%        Function: ~<anonymous> node:internal/fs/promises:1:1
+      1  100.0%            Function: ~<anonymous> node:internal/process/esm_loader:1:1
+      1   25.0%        Function: ~<anonymous> node:internal/modules/esm/load:1:1
       1  100.0%          Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
-      1  100.0%            Function: ~<anonymous> node:internal/modules/esm/load:1:1
-      3    5.8%      Function: ^moduleStrategy node:internal/modules/esm/translators:114:56
-      3  100.0%        Function: ^moduleProvider node:internal/modules/esm/loader:452:28
-      3  100.0%          C:\Program Files\nodejs\node.exe
-      1    1.9%      LazyCompile: ~toRealPath node:internal/modules/cjs/loader:449:20
+      1  100.0%            Function: ~<anonymous> node:internal/modules/esm/loader:1:1
+      2    5.7%      Function: ^moduleStrategy node:internal/modules/esm/translators:114:56
+      2  100.0%        Function: ^moduleProvider node:internal/modules/esm/loader:452:28
+      2  100.0%          C:\Program Files\nodejs\node.exe
+      1    2.9%      LazyCompile: ~value node:internal/console/constructor:337:20
+      1  100.0%        LazyCompile: ~log node:internal/console/constructor:376:6
+      1  100.0%          C:\Program Files\nodejs\node.exe
+      1  100.0%            Script: ~<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      1    2.9%      LazyCompile: ~toRealPath node:internal/modules/cjs/loader:449:20
       1  100.0%        LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:555:28
       1  100.0%          LazyCompile: ~resolveMainPath node:internal/modules/run_main:15:25
       1  100.0%            LazyCompile: ~executeUserEntryPoint node:internal/modules/run_main:74:31
-      1    1.9%      LazyCompile: ~realpathSync node:fs:2474:22
-      1  100.0%        LazyCompile: ~toRealPath node:internal/modules/cjs/loader:449:20
-      1  100.0%          LazyCompile: ~Module._findPath node:internal/modules/cjs/loader:555:28
-      1  100.0%            LazyCompile: ~resolveMainPath node:internal/modules/run_main:15:25
-      1    1.9%      LazyCompile: ~prepareExecution node:internal/process/pre_execution:51:26
-      1  100.0%        LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:35:36
-      1  100.0%          Function: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    1.9%      LazyCompile: ~patchProcessObject node:internal/process/pre_execution:134:28
+      1    2.9%      LazyCompile: ~patchProcessObject node:internal/process/pre_execution:134:28
       1  100.0%        LazyCompile: ~prepareExecution node:internal/process/pre_execution:51:26
       1  100.0%          LazyCompile: ~prepareMainThreadExecution node:internal/process/pre_execution:35:36
       1  100.0%            Function: ~<anonymous> node:internal/main/run_main_module:1:1
-      1    1.9%      LazyCompile: ~<anonymous> node:internal/modules/run_main:55:29
-      1  100.0%        LazyCompile: ~loadESM node:internal/process/esm_loader:88:41
+      1    2.9%      LazyCompile: *getPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:437:15
+      1  100.0%        LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
       1  100.0%          C:\Program Files\nodejs\node.exe
-      1    1.9%      LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      1    2.9%      LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
       1  100.0%        C:\Program Files\nodejs\node.exe
-      1    1.9%      Function: ^statSync node:fs:1588:18
+      1    2.9%      Function: ^statSync node:fs:1588:18
       1  100.0%        Function: ^tryStatSync node:internal/modules/esm/resolve:176:3
       1  100.0%          Function: ^finalizeResolution node:internal/modules/esm/resolve:290:28
       1  100.0%            Function: ^moduleResolve node:internal/modules/esm/resolve:923:23
-      1    1.9%      Function: ^realpathSync node:fs:2474:22
+      1    2.9%      Function: ^realpathSync node:fs:2474:22
       1  100.0%        LazyCompile: ~finalizeResolution node:internal/modules/esm/resolve:290:28
       1  100.0%          LazyCompile: ~moduleResolve node:internal/modules/esm/resolve:923:23
       1  100.0%            LazyCompile: ~defaultResolve node:internal/modules/esm/resolve:1063:30
-      1    1.9%      Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      1  100.0%        C:\Program Files\nodejs\node.exe
-      5    7.9%    LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      5  100.0%      C:\Program Files\nodejs\node.exe
-      2    3.2%    LazyCompile: *getPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:437:15
-      1   50.0%      LazyCompile: *dumpPixels2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:703:20
-      1  100.0%        LazyCompile: ~dumpFB2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:678:16
-      1  100.0%          Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      1  100.0%            C:\Program Files\nodejs\node.exe
-      1   50.0%      LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      1  100.0%        C:\Program Files\nodejs\node.exe
-      1    1.6%    LazyCompile: ~clearFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:395:12
-      1  100.0%      LazyCompile: ~FrameBuffer file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:50:16
-      1  100.0%        LazyCompile: ~interpretData file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:178:25
-      1  100.0%          LazyCompile: ~#buildFileOffline file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:166:35
-      1  100.0%            C:\Program Files\nodejs\node.exe
-
-      9   10.3%  LazyCompile: *getPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:437:15
-      6   66.7%    LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      6  100.0%      C:\Program Files\nodejs\node.exe
-      3   33.3%    LazyCompile: *dumpPixels2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:703:20
-      3  100.0%      LazyCompile: ~dumpFB2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:678:16
-      3  100.0%        Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      3  100.0%          C:\Program Files\nodejs\node.exe
-
-      4    4.6%  LazyCompile: *setPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:475:15
-      4  100.0%    LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      4  100.0%      C:\Program Files\nodejs\node.exe
-
-      4    4.6%  LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      4  100.0%    C:\Program Files\nodejs\node.exe
-
-      4    4.6%  C:\WINDOWS\SYSTEM32\ntdll.dll
-      1   25.0%    C:\Program Files\nodejs\node.exe
-      1  100.0%      LazyCompile: ~#createModuleJob node:internal/modules/esm/loader:451:19
-      1  100.0%        LazyCompile: ~getModuleJob node:internal/modules/esm/loader:410:21
+      1    2.9%      Function: ^nextHookFactory node:internal/modules/esm/loader:114:25
+      1  100.0%        Function: ^resolve node:internal/modules/esm/loader:789:16
+      1  100.0%          Function: ^getModuleJob node:internal/modules/esm/loader:410:21
+      1  100.0%            Function: ^<anonymous> node:internal/modules/esm/module_job:76:41
+      1    2.9%      Function: ^interpretData file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:178:25
+      1  100.0%        LazyCompile: ~#buildFileOffline file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:166:35
       1  100.0%          C:\Program Files\nodejs\node.exe
-
-      1    1.1%  LazyCompile: *getGreen file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/Color.js:336:13
-      1  100.0%    Function: ^dumpPixels2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:703:20
+      1    2.9%      Function: ^compileForInternalLoader node:internal/bootstrap/loaders:319:27
+      1  100.0%        Function: ^requireBuiltin node:internal/bootstrap/loaders:356:24
+      1  100.0%          LazyCompile: ~initializeCJSLoader node:internal/process/pre_execution:557:29
+      1  100.0%            LazyCompile: ~setupUserModules node:internal/process/pre_execution:120:26
+      1    2.9%      C:\Program Files\nodejs\node.exe
+      1  100.0%        LazyCompile: ~getOwn node:internal/bootstrap/loaders:188:16
+      1  100.0%          LazyCompile: ~syncExports node:internal/bootstrap/loaders:307:14
+      1  100.0%            LazyCompile: ~<anonymous> node:internal/bootstrap/loaders:293:15
+      3    6.7%    LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      3  100.0%      C:\Program Files\nodejs\node.exe
+      1    2.2%    LazyCompile: *setPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:475:15
+      1  100.0%      LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      1  100.0%        C:\Program Files\nodejs\node.exe
+      1    2.2%    LazyCompile: *getPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:437:15
+      1  100.0%      LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      1  100.0%        C:\Program Files\nodejs\node.exe
+      1    2.2%    LazyCompile: *dumpPixels2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:703:20
       1  100.0%      LazyCompile: ~dumpFB2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:678:16
       1  100.0%        Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
       1  100.0%          C:\Program Files\nodejs\node.exe
 
-      1    1.1%  LazyCompile: *clearFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:395:12
-      1  100.0%    LazyCompile: ~FrameBuffer file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:50:16
-      1  100.0%      Script: ~<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
-      1  100.0%        C:\Program Files\nodejs\node.exe
+     19   23.5%  C:\WINDOWS\SYSTEM32\ntdll.dll
+     12   63.2%    C:\Program Files\nodejs\node.exe
+      9   75.0%      LazyCompile: ~removeListener node:events:675:28
+      9  100.0%        LazyCompile: ~handleMainPromise node:internal/modules/run_main:62:33
+      9  100.0%          C:\Program Files\nodejs\node.exe
+      1    8.3%      LazyCompile: ~runMainESM node:internal/modules/run_main:51:20
+      1  100.0%        LazyCompile: ~executeUserEntryPoint node:internal/modules/run_main:74:31
+      1  100.0%          Function: ~<anonymous> node:internal/main/run_main_module:1:1
+      1    8.3%      LazyCompile: ~formatWithOptions node:internal/util/inspect:2133:27
+      1  100.0%        LazyCompile: ~value node:internal/console/constructor:337:20
+      1  100.0%          LazyCompile: ~log node:internal/console/constructor:376:6
+      1  100.0%            C:\Program Files\nodejs\node.exe
+      1    8.3%      LazyCompile: ~debug node:internal/util/debuglog:76:15
+      1  100.0%        LazyCompile: ~logger node:internal/util/debuglog:95:18
+      1  100.0%          LazyCompile: ~set node:internal/modules/esm/module_map:23:6
+      1  100.0%            LazyCompile: ~#createModuleJob node:internal/modules/esm/loader:451:19
 
-      1    1.1%  Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      7    8.6%  LazyCompile: *getPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:437:15
+      5   71.4%    LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      5  100.0%      C:\Program Files\nodejs\node.exe
+      2   28.6%    LazyCompile: *dumpPixels2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:703:20
+      2  100.0%      LazyCompile: ~dumpFB2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:678:16
+      2  100.0%        Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      2  100.0%          C:\Program Files\nodejs\node.exe
+
+      4    4.9%  LazyCompile: *setPixelFB file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:475:15
+      4  100.0%    LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      4  100.0%      C:\Program Files\nodejs\node.exe
+
+      3    3.7%  LazyCompile: *<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      3  100.0%    C:\Program Files\nodejs\node.exe
+
+      2    2.5%  LazyCompile: *dumpPixels2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:703:20
+      2  100.0%    LazyCompile: ~dumpFB2File file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/FrameBuffer.js:678:16
+      2  100.0%      Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
+      2  100.0%        C:\Program Files\nodejs\node.exe
+
+      1    1.2%  Function: ^<anonymous> file:///E:/Javascript%20Renderers/Javascript-Renderer-9v2/renderer_10_js/ColorImplementationTiming/RegArr/test.js:1:1
       1  100.0%    C:\Program Files\nodejs\node.exe
 

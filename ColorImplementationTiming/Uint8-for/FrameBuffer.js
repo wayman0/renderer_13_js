@@ -237,12 +237,11 @@ export default class FrameBuffer
             if(g < 0) g += 256;
             if(b < 0) b += 256;
 
-            //fb.pixelBuffer[fbIndex + 0] = r;
-            //fb.pixelBuffer[fbIndex + 1] = g;
-            //fb.pixelBuffer[fbIndex + 2] = b;
-            //fb.pixelBuffer[fbIndex + 3] = a;
+            fb.pixelBuffer[fbIndex + 0] = r;
+            fb.pixelBuffer[fbIndex + 1] = g;
+            fb.pixelBuffer[fbIndex + 2] = b;
+            fb.pixelBuffer[fbIndex + 3] = a;
             
-            fb.pixelBuffer.set([r, g, b, a], fbIndex);
             fbIndex += 4;
         }
         
@@ -413,17 +412,18 @@ export default class FrameBuffer
         // we loop over every pixel in the pixelBuffer
         // so instead of looping over every single number
         // we acces every fourth number, the start of each pixel
-        //for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
-        //{
-        //    this.#pixelBuffer[startPixel + 0] = color.getRed();
-        //    this.#pixelBuffer[startPixel + 1] = color.getGreen();
-        //    this.#pixelBuffer[startPixel + 2] = color.getBlue();
-        //    this.#pixelBuffer[startPixel + 3] = color.getAlpha();
-        //}
+        const rgba = color.rgb;
+        for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
+        {
+            this.#pixelBuffer[startPixel + 0] = rgba[0];
+            this.#pixelBuffer[startPixel + 1] = rgba[1];
+            this.#pixelBuffer[startPixel + 2] = rgba[2];
+            this.#pixelBuffer[startPixel + 3] = rgba[3];
+        }
 
         // see page 278 and 279 of the js book
-        for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
-            this.#pixelBuffer.set(color.rgb, startPixel);
+        //for(let startPixel = 0; startPixel < this.#pixelBuffer.length; startPixel += 4)
+        //    this.#pixelBuffer.set(color.rgb, startPixel);
     }
 
 
@@ -453,16 +453,16 @@ export default class FrameBuffer
         //const startPixelData = y*this.#width + x;
         const startPixelData = this.width * 4 * y + 4 * x;
 
-        //const r = this.#pixelBuffer[startPixelData + 0];
-        //const g = this.#pixelBuffer[startPixelData + 1];
-        //const b = this.#pixelBuffer[startPixelData + 2];
-        //const a = this.#pixelBuffer[startPixelData + 3];
+        const r = this.#pixelBuffer[startPixelData + 0];
+        const g = this.#pixelBuffer[startPixelData + 1];
+        const b = this.#pixelBuffer[startPixelData + 2];
+        const a = this.#pixelBuffer[startPixelData + 3];
 
-        //return new Color(r, g, b, a);
+        return new Color(r, g, b, a);
         //return this.#pixelBuffer[index];
 
         // see page 279 of the js book
-        return Color.buildRGBA(this.#pixelBuffer.slice(startPixelData, startPixelData + 4));
+        //return Color.buildRGBA(this.#pixelBuffer.slice(startPixelData, startPixelData + 4));
     }
 
 
@@ -504,8 +504,14 @@ export default class FrameBuffer
                             "(" + x + ", " + y + ") " +
                             "[w= " + this.getWidthFB() + ", h= " + this.getHeightFB() + "]");
 
+        const rgba = color.rgb;
+        this.#pixelBuffer[index + 0] = rgba[0];
+        this.#pixelBuffer[index + 1] = rgba[1];
+        this.#pixelBuffer[index + 2] = rgba[2];
+        this.#pixelBuffer[index + 3] = rgba[3];
+        
         // see page 278 - 279 of the js book
-        this.#pixelBuffer.set(color.rgb, index);
+        //this.#pixelBuffer.set(color.rgb, index);
     /*
         see if the given color is supposed to be blended, if so then call blending function.
 
@@ -721,14 +727,14 @@ export default class FrameBuffer
         {
             for(let x = upperLeftX; x < lowerRightX; x += 1)
             {
-                const col = this.getPixelFB(x, y);
+                const rgba = this.getPixelFB(x, y).rgb;
                 
                 // see page 278 - 279 of the js book
-                colorData.set(col.rgb.slice(0, 3), index);
+                //colorData.set(col.rgb.slice(0, 3), index);
 
-                //colorData[index+ 0] = col.getRed();
-                //colorData[index+ 1] = col.getGreen();
-                //colorData[index+ 2] = col.getBlue();
+                colorData[index+ 0] = rgba[0];
+                colorData[index+ 1] = rgba[1];
+                colorData[index+ 2] = rgba[2];
                 index += 3;
             }
         }
