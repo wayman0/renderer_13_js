@@ -74,9 +74,6 @@ export default class Viewport
 
         this.#bgColorVP = color;
         this.#parent = parent;
-
-        // we don't need this line of code
-        //this.clearVP(this.#bgColorVP);
     }
 
     /**
@@ -96,23 +93,6 @@ export default class Viewport
                                 0,
                                 0,
                                 parent.getBackgroundColorFB());
-
-        /*
-        we don't need this code it is just repeating setting the 
-        fb to be its own color
-        since this function uses the fb's data
-        and the vp is the whole fb
-        */
-       
-        /*
-        for (let x = 0; x < parent.getWidthFB(); x += 1)
-        {
-            for (let y = 0; y < parent.getHeightFB(); y += 1)
-            {
-                vp.setPixelVP(x, y, parent.getPixelFB(x, y));
-            }
-        }
-        */
         return vp;
     }
 
@@ -344,32 +324,19 @@ export default class Viewport
      *
      * @param {Color} color, the color to set this {Viewport} pixels to
      */
-    clearVP(color)
+    clearVP(color = this.#bgColorVP)
     {
         if (color instanceof Color == false)
             throw new Error("Color is not of type Color");
 
-        /*
-        for (let x = 0; x < this.getWidthVP(); x += 1)
-        {
-            for (let y = 0; y < this.getHeightVP(); y += 1)
-            {
-                this.setPixelVP(x, y, color);
-            }
-        }
-        */
-
-        //const c = Color.convert2Int(color);
+        const rgba = color.rgb;
         for(let pixel = 0; pixel < this.getWidthVP() * this.getHeightVP()*4; pixel += 4)
         {
-            this.parent.pixelBuffer[pixel + 0] = color.getRed();
-            this.parent.pixelBuffer[pixel + 1] = color.getGreen();
-            this.parent.pixelBuffer[pixel + 2] = color.getBlue();
-            this.parent.pixelBuffer[pixel + 3] = color.getAlpha();
+            this.parent.pixelBuffer[pixel + 0] = rgba[0];
+            this.parent.pixelBuffer[pixel + 1] = rgba[1];
+            this.parent.pixelBuffer[pixel + 2] = rgba[2];
+            this.parent.pixelBuffer[pixel + 3] = rgba[3];
         }
-
-        for(let pixel = 0; pixel < this.getWidthVP() * this.getHeightVP()*4; pixel += 4)
-            this.parent.pixelBuffer.set(color.rgb, pixel);
     }
 
 
@@ -482,19 +449,7 @@ export default class Viewport
             }
             result += "\n";
         }
-        /*
-        let result = "Viewport [w = " + this.getWidthVP() + ", h = " + this.getHeightVP() + "]\n";
 
-        for (let y = 0; y < this.getHeightVP(); ++y)
-        {
-            for (let x = 0; x < this.getWidthVP(); ++x)
-            {
-                const color = this.getPixelVP(x, y);
-                result += color.getRed() + " " + color.getGreen() + " " + color.getBlue() + " " + color.getAlpha() + " | ";
-            }
-            result += "\n";
-        }
-        */
         return result;
     }
 
