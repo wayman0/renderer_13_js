@@ -1,1 +1,0 @@
-node test.js >> ../pipelineFunc.txt

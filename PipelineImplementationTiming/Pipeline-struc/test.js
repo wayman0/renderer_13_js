@@ -1,11 +1,41 @@
 //Import what is necessary for your code
 import {Scene, Position, Matrix, Model, Vertex, LineSegment} from "../../renderer/scene/SceneExport.js";
-import {renderFB, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma} from "./PipelineExport.js";
+import {renderFB, setRastDebug, setNearDebug, setClipDebug, setDebugScene, setDebugPosition, setDoNearClipping, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma} from "./PipelineExport.js";
 import {FrameBuffer, Viewport, Color} from "../../renderer/framebuffer/FramebufferExport.js";
 import {Sphere, Cube2} from "../../renderer/models_L/ModelsExport.js";
 import {default as OBJ} from "../../renderer/models_L/OBJModelNode.js";
 import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
 
+const mod = new Model();
+mod.addVertex(new Vertex(-1, 0, 0),
+              new Vertex(1, 0, 0));
+mod.addPrimitive(new LineSegment([0, 1], [0, 0]))
+
+const pos = new Position();
+const mat = Matrix.translate(0, 0, -3);
+const scene = new Scene();
+const fb = new FrameBuffer(500, 500, Color.black);
+
+scene.addPosition(pos);
+pos.setModel(mod);
+pos.setMatrix(mat);
+ModelShading.setRainbowPrimitiveColors(mod);
+
+scene.debug = true;
+pos.debug = true;
+
+setClipDebug(true);
+setDebugPosition(true);
+setDebugScene(true);
+setDoNearClipping(true);
+setNearDebug(true);
+setRastDebug(true);
+
+renderFB(scene, fb);
+
+fb.dumpFB2File("check.ppm");
+
+/*
 console.log("Sphere Rotate 1 Degree for 360 Degrees");
 
 //Create a default sphere from the Models import
@@ -121,6 +151,20 @@ console.log("All Four Rotate 1 Degree 360 Degrees")
 time = 0; 
 scene = new Scene();
 
+scene.debug = true;
+
+spherePos.debug = true;
+airplanePos.debug = true;
+cowPos.debug = true;
+cubePos.debug = true;
+
+setClipDebug(true);
+setDebugPosition(true);
+setDebugScene(true);
+setDoNearClipping(true);
+setNearDebug(true);
+setRastDebug(true);
+
 scene.addPosition(spherePos);
 scene.addPosition(airplanePos);
 scene.addPosition(cowPos);
@@ -132,7 +176,7 @@ cowPos.setMatrix(      Matrix.translate(-3, -3, -5));
 cubePos.setMatrix(     Matrix.translate( 3, -3, -5));
 
 fb.clearFB();
-fb.dumpFB2File("Loop All 4.ppm");
+fb.dumpFB2File("Struc All 4.ppm");
 
 for(let rot = 0; rot < 360; rot += 1)
 {
@@ -151,3 +195,4 @@ for(let rot = 0; rot < 360; rot += 1)
 }
 
 console.log("All 4 Avg: " + (time/360));
+*/

@@ -1,0 +1,1 @@
+node ./Pipeline-struc/test.js >> pipelineStruc.txt
