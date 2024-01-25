@@ -141,7 +141,7 @@ function renderPosition(scene, position, ctm, vp)
         logVertexList("0. Model    ", model);
 
         //const model1 = M2V(position, ctm2);        
-        const model1 = new Model(model.vertexList.map(M2V, {ctm:ctm}),
+        const model1 = new Model(model.vertexList.map(M2V, {ctm:ctm2}),
                                  model.primitiveList,
                                  model.colorList,
                                  position.name + "::" + model.name,
