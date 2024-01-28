@@ -13,6 +13,7 @@ import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
 import * as PipelineFunc from "./Pipeline-func/PipelineExport.js";
 import * as PipelineLoop from "./Pipeline-loop/PipelineExport.js";
 import * as PipelineStruc from "./Pipeline-struc/PipelineExport.js";
+import * as PipelineStatic from "./Pipeline-static/PipelineExport.js";
 
 //alert("Sphere Rotate 1 Degree for 360 Degrees");
 
@@ -43,6 +44,10 @@ let strucTimer = 0;
 let strucStart = 0; 
 let strucStop = 0;
 
+let staticTimer = 0; 
+let staticStart = 0;
+let staticStop = 0;
+
 let fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
 {
@@ -62,12 +67,19 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStruc.renderFB(scene, fb);
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
+
+    staticStart = new Date().getTime();
+    PipelineStatic.renderFB(scene, fb);
+    staticStop = new Date().getTime();
+    staticTimer += staticStop - staticStart;
 }
 
 console.log("Sphere Rotation: ");
-console.log("\tFunc Avg:  " + (funcTimer/360));
-console.log("\tLoop Avg:  " + (loopTimer/360));
-console.log("\tStruc Avg: " + (strucTimer/360));
+console.log("\tFunc Avg:  "  + (funcTimer/360));
+console.log("\tLoop Avg:  "  + (loopTimer/360));
+console.log("\tStruc Avg: "  + (strucTimer/360));
+console.log("\tStatic Avg: " + (staticTimer/360));
+
 
 
 //alert("Airplane Rotate 1 Degree 360 Degrees")
@@ -93,6 +105,10 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
+staticTimer = 0; 
+staticStart = 0;
+staticStop = 0;
+
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
 {
@@ -112,12 +128,19 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStruc.renderFB(scene, fb);
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
+
+    staticStart = new Date().getTime();
+    PipelineStatic.renderFB(scene, fb);
+    staticStop = new Date().getTime();
+    staticTimer += staticStop - staticStart;
 }
 
 console.log("Airplane Rotation: ");
-console.log("\tFunc Avg:  " + (funcTimer/360));
-console.log("\tLoop Avg:  " + (loopTimer/360));
-console.log("\tStruc Avg: " + (strucTimer/360));
+console.log("\tFunc Avg:  "  + (funcTimer/360));
+console.log("\tLoop Avg:  "  + (loopTimer/360));
+console.log("\tStruc Avg: "  + (strucTimer/360));
+console.log("\tStatic Avg: " + (staticTimer/360));
+
 
 
 scene = new Scene();
@@ -142,6 +165,10 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
+staticTimer = 0; 
+staticStart = 0;
+staticStop = 0;
+
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
 {
@@ -161,12 +188,18 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStruc.renderFB(scene, fb);
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
+
+    staticStart = new Date().getTime();
+    PipelineStatic.renderFB(scene, fb);
+    staticStop = new Date().getTime();
+    staticTimer += staticStop - staticStart;
 }
 
 console.log("Cube Rotation: ");
-console.log("\tFunc Avg:  " + (funcTimer/360));
-console.log("\tLoop Avg:  " + (loopTimer/360));
-console.log("\tStruc Avg: " + (strucTimer/360));
+console.log("\tFunc Avg:  "  + (funcTimer/360));
+console.log("\tLoop Avg:  "  + (loopTimer/360));
+console.log("\tStruc Avg: "  + (strucTimer/360));
+console.log("\tStatic Avg: " + (staticTimer/360));
 
 scene = new Scene();
 
@@ -190,6 +223,10 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
+staticTimer = 0; 
+staticStart = 0;
+staticStop = 0;
+
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
 {
@@ -209,12 +246,19 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStruc.renderFB(scene, fb);
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
+
+    staticStart = new Date().getTime();
+    PipelineStatic.renderFB(scene, fb);
+    staticStop = new Date().getTime();
+    staticTimer += staticStop - staticStart;
 }
 
 console.log("Cow Rotation: ");
-console.log("\tFunc Avg:  " + (funcTimer/360));
-console.log("\tLoop Avg:  " + (loopTimer/360));
-console.log("\tStruc Avg: " + (strucTimer/360));
+console.log("\tFunc Avg:  "  + (funcTimer/360));
+console.log("\tLoop Avg:  "  + (loopTimer/360));
+console.log("\tStruc Avg: "  + (strucTimer/360));
+console.log("\tStatic Avg: " + (staticTimer/360));
+
 
 scene = new Scene();
 
@@ -240,6 +284,10 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
+staticTimer = 0; 
+staticStart = 0;
+staticStop = 0;
+
 for(let rot = 0; rot < 360; rot += 1)
 {
     spherePos.getMatrix().mult(Matrix.rotateY(1));
@@ -261,12 +309,18 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStruc.renderFB(scene, fb);
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
+
+    staticStart = new Date().getTime();
+    PipelineStatic.renderFB(scene, fb);
+    staticStop = new Date().getTime();
+    staticTimer += staticStop - staticStart;
 }
 
 console.log("All four Rotation: ");
-console.log("\tFunc Avg:  " + (funcTimer/360));
-console.log("\tLoop Avg:  " + (loopTimer/360));
-console.log("\tStruc Avg: " + (strucTimer/360));
+console.log("\tFunc Avg:  "  + (funcTimer/360));
+console.log("\tLoop Avg:  "  + (loopTimer/360));
+console.log("\tStruc Avg: "  + (strucTimer/360));
+console.log("\tStatic Avg: " + (staticTimer/360));
 
 scene = new Scene();
 const position = new Array(5);
@@ -362,6 +416,10 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
+staticTimer = 0; 
+staticStart = 0;
+staticStop = 0;
+
 for(let k = 0; k < 360; ++k)
 {
     for(let i = 0; i < position.length; ++i)
@@ -389,11 +447,17 @@ for(let k = 0; k < 360; ++k)
     PipelineStruc.renderFB(scene, fb);
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
+
+    staticStart = new Date().getTime();
+    PipelineStatic.renderFB(scene, fb);
+    staticStop = new Date().getTime();
+    staticTimer += staticStop - staticStart;
     
     topLevelP.getMatrix().mult(Matrix.rotateY(1));
 }
 
 console.log("Geometries Rotation: ");
-console.log("\tFunc Avg:  " + (funcTimer/360));
-console.log("\tLoop Avg:  " + (loopTimer/360));
-console.log("\tStruc Avg: " + (strucTimer/360));
+console.log("\tFunc Avg:  "  + (funcTimer/360));
+console.log("\tLoop Avg:  "  + (loopTimer/360));
+console.log("\tStruc Avg: "  + (strucTimer/360));
+console.log("\tStatic Avg: " + (staticTimer/360));

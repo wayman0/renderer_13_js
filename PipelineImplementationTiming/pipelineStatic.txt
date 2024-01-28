@@ -1,0 +1,6 @@
+Sphere Avg: 5.375
+Airplane Avg: 23
+Cube Avg: 101.91111111111111
+Cow Avg: 2.9472222222222224
+All four Avg: 137.46944444444443
+Geometries Avg: 50.06666666666667
