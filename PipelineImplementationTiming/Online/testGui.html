@@ -25,6 +25,12 @@
                 height:100%;
             }
 
+            #Page
+            {
+                height:200%;
+                overflow-y: scroll;
+            }
+
             #Func
             {
                 top:0%;
@@ -51,120 +57,216 @@
                 left:0%;
                 width:100%;
             }
+
+            #Static1
+            {
+                top:100%;
+                height:30%;
+
+                left:0%;
+                width:100%;
+            }
+            
+            #Static2
+            {
+                top:133%;
+                height: 30%;
+
+                left:0%;
+                width:100%;
+            }
         </style>
     </head>
 
     <body>
-        <div id = "Func", class = "row">
-            <div class = "imageContainer">
-                <canvas id = "funcScene1Pixels", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+        <div id = "Page">
+            <div id = "Func", class = "row">
+                <div class = "imageContainer">
+                    <canvas id = "funcScene1Pixels", class = "image"></canvas>
+                    <input type = "text", id = "funcScene1Text", class = "text">
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "funcScene2", class = "image"></canvas>
+                    <input type = "text", id = "funcScene2Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "funcScene3", class = "image"></canvas>
+                    <input type = "text", id = "funcScene3Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "funcScene4", class = "image"></canvas>
+                    <input type = "text", id = "funcScene4Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "funcScene5", class = "image"></canvas>
+                    <input type = "text", id = "funcScene5Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "funcScene6", class = "image"></canvas>
+                    <input type = "text", id = "funcScene6Text", class = "text">
+
+                </div>
             </div>
 
-            <div class = "imageContainer">
-                <canvas id = "funcScene2", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+            <div id = "Loop", class = "row">
+                <div class = "imageContainer">
+                    <canvas id = "loopScene1", class = "image"></canvas>
+                    <input type = "text", id = "loopScene1Text", class = "text">
 
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "loopScene2", class = "image"></canvas>
+                    <input type = "text", id = "loopScene2Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "loopScene3", class = "image"></canvas>
+                    <input type = "text", id = "loopScene3Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "loopScene4", class = "image"></canvas>
+                    <input type = "text", id = "loopScene4Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "loopScene5", class = "image"></canvas>
+                    <input type = "text", id = "loopScene5Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "loopScene6", class = "image"></canvas>
+                    <input type = "text", id = "loopScene6Text", class = "text">
+
+                </div>
             </div>
 
-            <div class = "imageContainer">
-                <canvas id = "funcScene3", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+            <div id = "Struc", class = "row">
+                <div class = "imageContainer">
+                    <canvas id = "strucScene1", class = "image"></canvas>
+                    <input type = "text", id = "strucScene1Text", class = "text">
 
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "strucScene2", class = "image"></canvas>
+                    <input type = "text", id = "strucScene2Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "strucScene3", class = "image"></canvas>
+                    <input type = "text", id = "strucScene3Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "strucScene4", class = "image"></canvas>
+                    <input type = "text", id = "strucScene4Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "strucScene5", class = "image"></canvas>
+                    <input type = "text", id = "strucScene5Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "strucScene6", class = "image"></canvas>
+                    <input type = "text", id = "strucScene6Text", class = "text">
+
+                </div>
             </div>
 
-            <div class = "imageContainer">
-                <canvas id = "funcScene4", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+            <div id = "Static1", class = "row">
+                <div class = "imageContainer">
+                    <canvas id = "staticAScene1", class = "image"></canvas>
+                    <input type = "text", id = "staticAScene1Text", class = "text">
 
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "staticAScene2", class = "image"></canvas>
+                    <input type = "text", id = "staticAScene2Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "staticAScene3", class = "image"></canvas>
+                    <input type = "text", id = "staticAScene3Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "staticAScene4", class = "image"></canvas>
+                    <input type = "text", id = "staticAScene4Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "staticAScene5", class = "image"></canvas>
+                    <input type = "text", id = "staticAScene5Text", class = "text">
+
+                </div>
+
+                <div class = "imageContainer">
+                    <canvas id = "staticAScene6", class = "image"></canvas>
+                    <input type = "text", id = "staticAScene6Text", class = "text">
+
+                </div>
             </div>
 
-            <div class = "imageContainer">
-                <canvas id = "funcScene5", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+            <div id = "Static2", class = "row">
+                <div class = "imageContainer">
+                    <canvas id = "staticBScene1", class = "image"></canvas>
+                    <input type = "text", id = "staticBScene1Text", class = "text">
 
-            </div>
+                </div>
 
-            <div class = "imageContainer">
-                <canvas id = "funcScene6", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+                <div class = "imageContainer">
+                    <canvas id = "staticBScene2", class = "image"></canvas>
+                    <input type = "text", id = "staticBScene2Text", class = "text">
 
-            </div>
-        </div>
+                </div>
 
-        <div id = "Loop", class = "row">
-            <div class = "imageContainer">
-                <canvas id = "funcScene1", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+                <div class = "imageContainer">
+                    <canvas id = "staticBScene3", class = "image"></canvas>
+                    <input type = "text", id = "staticBScene3Text", class = "text">
 
-            </div>
+                </div>
 
-            <div class = "imageContainer">
-                <canvas id = "funcScene2", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+                <div class = "imageContainer">
+                    <canvas id = "staticBScene4", class = "image"></canvas>
+                    <input type = "text", id = "staticBScene4Text", class = "text">
 
-            </div>
+                </div>
 
-            <div class = "imageContainer">
-                <canvas id = "funcScene3", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+                <div class = "imageContainer">
+                    <canvas id = "staticBScene5", class = "image"></canvas>
+                    <input type = "text", id = "staticBScene5Text", class = "text">
 
-            </div>
+                </div>
 
-            <div class = "imageContainer">
-                <canvas id = "funcScene4", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
+                <div class = "imageContainer">
+                    <canvas id = "staticBScene6", class = "image"></canvas>
+                    <input type = "text", id = "staticBScene6Text", class = "text">
 
-            </div>
-
-            <div class = "imageContainer">
-                <canvas id = "funcScene5", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
-
-            </div>
-
-            <div class = "imageContainer">
-                <canvas id = "funcScene6", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
-
-            </div>
-        </div>
-
-        <div id = "Struc", class = "row">
-            <div class = "imageContainer">
-                <canvas id = "funcScene1", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
-
-            </div>
-
-            <div class = "imageContainer">
-                <canvas id = "funcScene2", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
-
-            </div>
-
-            <div class = "imageContainer">
-                <canvas id = "funcScene3", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
-
-            </div>
-
-            <div class = "imageContainer">
-                <canvas id = "funcScene4", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
-
-            </div>
-
-            <div class = "imageContainer">
-                <canvas id = "funcScene5", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
-
-            </div>
-
-            <div class = "imageContainer">
-                <canvas id = "funcScene6", class = "image"></canvas>
-                <input type = "text", id = "funcScene1Text", class = "text">
-
+                </div>
             </div>
         </div>
 

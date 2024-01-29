@@ -12,6 +12,9 @@ import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
 import * as PipelineFunc from "./Pipeline-func/PipelineExport.js";
 import * as PipelineLoop from "./Pipeline-loop/PipelineExport.js";
 import * as PipelineStruc from "./Pipeline-struc/PipelineExport.js";
+import * as PipelineStatic1 from "./Pipeline-static-v1/PipelineExport.js";
+import * as PipelineStatic2 from "./Pipeline-static-v2/PipelineExport.js";
+
 
 const funcRow = document.getElementById("Func");
 const funcCanvasArr = funcRow?.getElementsByClassName("image");
@@ -25,12 +28,25 @@ const strucRow = document.getElementById("Struc");
 const strucCanvasArr = strucRow?.getElementsByClassName("image");
 const strucTextArr = strucRow?.getElementsByClassName("text");
 
-const funcTimers = new Array(3);
-const loopTimers = new Array(3);
-const strucTimers = new Array(3);
+const static1Row = document.getElementById("Static1");
+const static1CanvasArr = static1Row?.getElementsByClassName("image");
+const static1TextArr = static1Row?.getElementsByClassName("text");
 
-const timingHandles = new Array(6);
-const scenes = new Array(6);
+const static2Row = document.getElementById("Static2");
+const static2CanvasArr = static2Row?.getElementsByClassName("image");
+const static2TextArr = static2Row?.getElementsByClassName("text");
+
+const numRows = 5;
+const numScenes = 6;
+
+const funcTimers = new Array(numRows);
+const loopTimers = new Array(numRows);
+const strucTimers = new Array(numRows);
+const static1Timers = new Array(numRows);
+const static2Timers = new Array(numRows);
+
+const timingHandles = new Array(numScenes);
+const scenes = new Array(numScenes);
 
 const zeros = [0, 0, 0, 0, 0, 0];
 for(let x = 0; x < funcTimers.length; x += 1)
@@ -38,6 +54,8 @@ for(let x = 0; x < funcTimers.length; x += 1)
     funcTimers[x] = Array.from(zeros);
     loopTimers[x] = Array.from(zeros);
     strucTimers[x] = Array.from(zeros);
+    static1Timers[x] = Array.from(zeros);
+    static2Timers[x] = Array.from(zeros);
 }
 
 buildScene1();
@@ -47,7 +65,7 @@ buildScene4();
 buildScene5();
 buildScene6();
 
-const fps = 10;
+const fps = 1;
 timingHandles[0] = setInterval(runScene1, 1000/fps);
 timingHandles[1] = setInterval(runScene2, 1000/fps);
 timingHandles[2] = setInterval(runScene3, 1000/fps);
@@ -261,6 +279,8 @@ function displayScene(sceneNumber)
     displayFunc(sceneNumber-1);
     displayLoop(sceneNumber-1);
     displayStruc(sceneNumber-1);
+    displayStatic1(sceneNumber-1);
+    displayStatic2(sceneNumber-1);
 }
 
 function displayFunc(sceneIndex)
@@ -328,6 +348,51 @@ function displayStruc(sceneIndex)
     strucCanvas.getContext("2d").putImageData(new ImageData(strucFb.pixelBuffer, strucWidth, strucHeight), 0, 0);
     strucText.value = "Struc Avg: " + strucTimers[2][sceneIndex];
 }
+
+function displayStatic1(sceneIndex)
+{
+    const scene = scenes[sceneIndex];
+
+    const static1Text = static1TextArr[sceneIndex];
+    const static1Canvas = static1CanvasArr[sceneIndex];
+    const static1Width = static1Canvas.width;
+    const static1Height = static1Canvas.height;
+    const static1Fb = new FrameBuffer(static1Width, static1Height, Color.black);
+
+    const static1Start = new Date().getTime();
+    PipelineStatic1.renderFB(scene, static1Fb);
+    const static1End = new Date().getTime();
+
+    static1Timers[0][sceneIndex] += (static1End - static1Start);// the running total of rendering time
+    static1Timers[1][sceneIndex] += 1; // the running total of times rendered
+    static1Timers[2][sceneIndex] = static1Timers[0][sceneIndex]/static1Timers[1][sceneIndex]; // the average rendering time
+
+    static1Canvas.getContext("2d").putImageData(new ImageData(static1Fb.pixelBuffer, static1Width, static1Height), 0, 0);
+    static1Text.value = "Static 1 Avg: " + static1Timers[2][sceneIndex];
+}
+
+function displayStatic2(sceneIndex)
+{
+    const scene = scenes[sceneIndex];
+
+    const static2Text = static2TextArr[sceneIndex];
+    const static2Canvas = static2CanvasArr[sceneIndex];
+    const static2Width = static2Canvas.width;
+    const static2Height = static2Canvas.height;
+    const static2Fb = new FrameBuffer(static2Width, static2Height, Color.black);
+
+    const static2Start = new Date().getTime();
+    PipelineStatic2.renderFB(scene, static2Fb);
+    const static2End = new Date().getTime();
+
+    static2Timers[0][sceneIndex] += (static2End - static2Start);// the running total of rendering time
+    static2Timers[1][sceneIndex] += 1; // the running total of times rendered
+    static2Timers[2][sceneIndex] = static2Timers[0][sceneIndex]/static2Timers[1][sceneIndex]; // the average rendering time
+
+    static2Canvas.getContext("2d").putImageData(new ImageData(static2Fb.pixelBuffer, static2Width, static2Height), 0, 0);
+    static2Text.value = "Static 2 Avg: " + static2Timers[2][sceneIndex];
+}
+
 
 document.addEventListener("click", mousePress);
 function mousePress(e)

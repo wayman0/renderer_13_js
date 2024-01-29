@@ -1,6 +1,6 @@
 //Import what is necessary for your code
 import {Scene, Position, Matrix, Model, Vertex, LineSegment} from "../../../renderer/scene/SceneExport.js";
-import {renderFB, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma, setDebugScene} from "./PipelineExport.js";
+import {renderFB, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma, setDebugScene, render} from "./PipelineExport.js";
 import {FrameBuffer, Viewport, Color} from "../../../renderer/framebuffer/FramebufferExport.js";
 import {Sphere, Cube2, TriangularPrism, 
         Cylinder, ConeFrustum, Box, Cone, 

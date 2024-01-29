@@ -1,15 +1,15 @@
 //Import what is necessary for your code
-import {Scene, Position, Matrix, Model, Vertex, LineSegment} from "../../renderer/scene/SceneExport.js";
+import {Scene, Position, Matrix, Model, Vertex, LineSegment} from "../../../renderer/scene/SceneExport.js";
 import {renderFB, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma, setDebugScene, render} from "./PipelineExport.js";
-import {FrameBuffer, Viewport, Color} from "../../renderer/framebuffer/FramebufferExport.js";
+import {FrameBuffer, Viewport, Color} from "../../../renderer/framebuffer/FramebufferExport.js";
 import {Sphere, Cube2, TriangularPrism, 
         Cylinder, ConeFrustum, Box, Cone, 
         Octahedron, ParametricCurve, 
         SurfaceOfRevolution, Tetrahedron, 
-        Torus, Axes3D, PanelXY, PanelXZ} from "../../renderer/models_L/ModelsExport.js";
-import {default as OBJ} from "../../renderer/models_L/OBJModelNode.js";
-import {default as GRS} from "../../renderer/models_L/GRSModelNode.js";
-import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
+        Torus, Axes3D, PanelXY, PanelXZ} from "../../../renderer/models_L/ModelsExport.js";
+import {default as OBJ} from "../../../renderer/models_L/OBJModelNode.js";
+import {default as GRS} from "../../../renderer/models_L/GRSModelNode.js";
+import * as ModelShading from "../../../renderer/scene/util/UtilExport.js";
 
 //console.log("Sphere Rotate 1 Degree for 360 Degrees");
 
@@ -235,19 +235,6 @@ const vpWidth = 1800;
 const vpHeight = 900;
 const frame = new FrameBuffer(vpWidth, vpHeight);
 
-for(let i = 0; i < position.length; ++i)
-{
-    for(let j = 0; j < position[i].length; ++j)
-    {
-        position[i][j].matrix2Identity()
-                      .mult(Matrix.translate(-4+4*j, 0, 6-3*i));
-    }
-}
-
-frame.clearFB();
-renderFB(scene, frame);
-frame.dumpFB2File("geometres.ppm");
-
 for(let k = 0; k < 360; ++k)
 {
     for(let i = 0; i < position.length; ++i)
@@ -273,9 +260,5 @@ for(let k = 0; k < 360; ++k)
 
     topLevelP.getMatrix().mult(Matrix.rotateY(1));
 }
-
-frame.clearFB();
-renderFB(scene, frame);
-frame.dumpFB2File("geometries.ppm");
 
 console.log("Geometries Avg: " + (time/360));

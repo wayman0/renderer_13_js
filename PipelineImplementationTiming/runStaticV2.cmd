@@ -1,0 +1,1 @@
+node ./Pipeline-static-v2/test.js >> pipelineStaticV2.txt

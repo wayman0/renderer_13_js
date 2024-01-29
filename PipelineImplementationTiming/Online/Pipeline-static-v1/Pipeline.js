@@ -24,9 +24,9 @@
 */
 
 //@ts-check
-import {Camera, Matrix, Model, OrthoNorm, PerspNorm, Position, Scene, Vector, Vertex, Primitive, LineSegment, Point} from "../../renderer/scene/SceneExport.js";
-import {check} from "../../renderer/scene/util/UtilExport.js";
-import {FrameBuffer, Viewport, Color} from "../../renderer/framebuffer/FramebufferExport.js";
+import {Camera, Matrix, Model, OrthoNorm, PerspNorm, Position, Scene, Vector, Vertex, Primitive, LineSegment, Point} from "../../../renderer/scene/SceneExport.js";
+import {check} from "../../../renderer/scene/util/UtilExport.js";
+import {FrameBuffer, Viewport, Color} from "../../../renderer/framebuffer/FramebufferExport.js";
 import {clip, M2V, NearClip, Project, rasterize, V2C, debugPosition, debugScene, logMessage, logVertexList, logColorList, logPrimitiveList, setDebugScene, setDebugPosition} from "./PipelineExport.js";
 
 /**@type {Color} */ export var DEFAULT_COLOR = Color.white;
@@ -124,7 +124,16 @@ function renderPosition(scene, position, ctm, vp)
 
     logMessage("---- Transformation matrix:\n" + position.getMatrix());
 
-    ctm2 = ctm.timesMatrix(position.getMatrix());
+    // this accumulates each 'equal level' position instead of only nested positions
+    // due to it being a 'global' variable it never 'resets' itself to the upper lvl pos
+    //ctm2 = ctm.timesMatrix(position.getMatrix());
+
+    // this will use a non global variable to allow it to 'reset' itself to the upper lvl pos
+    const locCTM2 = ctm.timesMatrix(position.getMatrix());
+    // then set the global variable to be the local variable to allow it to follow the 
+    // local variables 'resetting' of itself to be the upper lvl pos
+    ctm2 = locCTM2;
+
 
     if (position.getModel() != null && position.getModel() != undefined && position.getModel().visible)
     {
@@ -210,7 +219,7 @@ function renderPosition(scene, position, ctm, vp)
     for(const p of position.nestedPositions)
     {
         if (p.visible)
-            renderPosition(scene, p, ctm2, vp);
+            renderPosition(scene, p, locCTM2, vp);
         else
             logMessage("====== Hidden Position" + position.getName() + " =====");
     }

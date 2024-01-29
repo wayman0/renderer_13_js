@@ -13,7 +13,8 @@ import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
 import * as PipelineFunc from "./Pipeline-func/PipelineExport.js";
 import * as PipelineLoop from "./Pipeline-loop/PipelineExport.js";
 import * as PipelineStruc from "./Pipeline-struc/PipelineExport.js";
-import * as PipelineStatic from "./Pipeline-static/PipelineExport.js";
+import * as PipelineStatic1 from "./Pipeline-static-v1/PipelineExport.js";
+import * as PipelineStatic2 from "./Pipeline-static-v2/PipelineExport.js";
 
 //alert("Sphere Rotate 1 Degree for 360 Degrees");
 
@@ -44,9 +45,13 @@ let strucTimer = 0;
 let strucStart = 0; 
 let strucStop = 0;
 
-let staticTimer = 0; 
-let staticStart = 0;
-let staticStop = 0;
+let static1Timer = 0; 
+let static1Start = 0;
+let static1Stop = 0;
+
+let static2Timer = 0;
+let static2Start = 0;
+let static2Stop = 0;
 
 let fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
@@ -68,17 +73,23 @@ for(let rot = 0; rot < 360; rot += 1)
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
 
-    staticStart = new Date().getTime();
-    PipelineStatic.renderFB(scene, fb);
-    staticStop = new Date().getTime();
-    staticTimer += staticStop - staticStart;
+    static1Start = new Date().getTime();
+    PipelineStatic1.renderFB(scene, fb);
+    static1Stop = new Date().getTime();
+    static1Timer += static1Stop - static1Start;
+
+    static2Start = new Date().getTime();
+    PipelineStatic2.renderFB(scene, fb);
+    static2Stop = new Date().getTime();
+    static2Timer += static2Stop - static2Start;
 }
 
 console.log("Sphere Rotation: ");
 console.log("\tFunc Avg:  "  + (funcTimer/360));
 console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
-console.log("\tStatic Avg: " + (staticTimer/360));
+console.log("\tStatic 1 Avg: " + (static1Timer/360));
+console.log("\tStatic 2 Avg: " + (static2Timer/360));
 
 
 
@@ -105,9 +116,13 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
-staticTimer = 0; 
-staticStart = 0;
-staticStop = 0;
+static1Timer = 0; 
+static1Start = 0;
+static1Stop = 0;
+
+static2Timer = 0;
+static2Start = 0;
+static2Stop = 0;
 
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
@@ -129,18 +144,23 @@ for(let rot = 0; rot < 360; rot += 1)
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
 
-    staticStart = new Date().getTime();
-    PipelineStatic.renderFB(scene, fb);
-    staticStop = new Date().getTime();
-    staticTimer += staticStop - staticStart;
+    static1Start = new Date().getTime();
+    PipelineStatic1.renderFB(scene, fb);
+    static1Stop = new Date().getTime();
+    static1Timer += static1Stop - static1Start;
+
+    static2Start = new Date().getTime();
+    PipelineStatic2.renderFB(scene, fb);
+    static2Stop = new Date().getTime();
+    static2Timer += static2Stop - static2Start;
 }
 
 console.log("Airplane Rotation: ");
 console.log("\tFunc Avg:  "  + (funcTimer/360));
 console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
-console.log("\tStatic Avg: " + (staticTimer/360));
-
+console.log("\tStatic 1 Avg: " + (static1Timer/360));
+console.log("\tStatic 2 Avg: " + (static2Timer/360));
 
 
 scene = new Scene();
@@ -165,9 +185,13 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
-staticTimer = 0; 
-staticStart = 0;
-staticStop = 0;
+static1Timer = 0; 
+static1Start = 0;
+static1Stop = 0;
+
+static2Timer = 0;
+static2Start = 0;
+static2Stop = 0;
 
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
@@ -189,18 +213,23 @@ for(let rot = 0; rot < 360; rot += 1)
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
 
-    staticStart = new Date().getTime();
-    PipelineStatic.renderFB(scene, fb);
-    staticStop = new Date().getTime();
-    staticTimer += staticStop - staticStart;
+    static1Start = new Date().getTime();
+    PipelineStatic1.renderFB(scene, fb);
+    static1Stop = new Date().getTime();
+    static1Timer += static1Stop - static1Start;
+
+    static2Start = new Date().getTime();
+    PipelineStatic2.renderFB(scene, fb);
+    static2Stop = new Date().getTime();
+    static2Timer += static2Stop - static2Start;
 }
 
 console.log("Cube Rotation: ");
 console.log("\tFunc Avg:  "  + (funcTimer/360));
 console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
-console.log("\tStatic Avg: " + (staticTimer/360));
-
+console.log("\tStatic 1 Avg: " + (static1Timer/360));
+console.log("\tStatic 2 Avg: " + (static2Timer/360));
 scene = new Scene();
 
 const cowMod = new OBJ("../../../assets/cow.obj");
@@ -223,9 +252,13 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
-staticTimer = 0; 
-staticStart = 0;
-staticStop = 0;
+static1Timer = 0; 
+static1Start = 0;
+static1Stop = 0;
+
+static2Timer = 0;
+static2Start = 0;
+static2Stop = 0;
 
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
@@ -247,18 +280,23 @@ for(let rot = 0; rot < 360; rot += 1)
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
 
-    staticStart = new Date().getTime();
-    PipelineStatic.renderFB(scene, fb);
-    staticStop = new Date().getTime();
-    staticTimer += staticStop - staticStart;
+    static1Start = new Date().getTime();
+    PipelineStatic1.renderFB(scene, fb);
+    static1Stop = new Date().getTime();
+    static1Timer += static1Stop - static1Start;
+
+    static2Start = new Date().getTime();
+    PipelineStatic2.renderFB(scene, fb);
+    static2Stop = new Date().getTime();
+    static2Timer += static2Stop - static2Start;
 }
 
 console.log("Cow Rotation: ");
 console.log("\tFunc Avg:  "  + (funcTimer/360));
 console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
-console.log("\tStatic Avg: " + (staticTimer/360));
-
+console.log("\tStatic 1 Avg: " + (static1Timer/360));
+console.log("\tStatic 2 Avg: " + (static2Timer/360));
 
 scene = new Scene();
 
@@ -284,9 +322,13 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
-staticTimer = 0; 
-staticStart = 0;
-staticStop = 0;
+static1Timer = 0; 
+static1Start = 0;
+static1Stop = 0;
+
+static2Timer = 0;
+static2Start = 0;
+static2Stop = 0;
 
 for(let rot = 0; rot < 360; rot += 1)
 {
@@ -310,17 +352,23 @@ for(let rot = 0; rot < 360; rot += 1)
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
 
-    staticStart = new Date().getTime();
-    PipelineStatic.renderFB(scene, fb);
-    staticStop = new Date().getTime();
-    staticTimer += staticStop - staticStart;
+    static1Start = new Date().getTime();
+    PipelineStatic1.renderFB(scene, fb);
+    static1Stop = new Date().getTime();
+    static1Timer += static1Stop - static1Start;
+
+    static2Start = new Date().getTime();
+    PipelineStatic2.renderFB(scene, fb);
+    static2Stop = new Date().getTime();
+    static2Timer += static2Stop - static2Start;
 }
 
 console.log("All four Rotation: ");
 console.log("\tFunc Avg:  "  + (funcTimer/360));
 console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
-console.log("\tStatic Avg: " + (staticTimer/360));
+console.log("\tStatic 1 Avg: " + (static1Timer/360));
+console.log("\tStatic 2 Avg: " + (static2Timer/360));
 
 scene = new Scene();
 const position = new Array(5);
@@ -416,9 +464,13 @@ strucTimer = 0;
 strucStart = 0; 
 strucStop = 0;
 
-staticTimer = 0; 
-staticStart = 0;
-staticStop = 0;
+static1Timer = 0; 
+static1Start = 0;
+static1Stop = 0;
+
+static2Timer = 0;
+static2Start = 0;
+static2Stop = 0;
 
 for(let k = 0; k < 360; ++k)
 {
@@ -448,11 +500,16 @@ for(let k = 0; k < 360; ++k)
     strucStop = new Date().getTime();
     strucTimer += strucStop - strucStart;
 
-    staticStart = new Date().getTime();
-    PipelineStatic.renderFB(scene, fb);
-    staticStop = new Date().getTime();
-    staticTimer += staticStop - staticStart;
+    static1Start = new Date().getTime();
+    PipelineStatic1.renderFB(scene, fb);
+    static1Stop = new Date().getTime();
+    static1Timer += static1Stop - static1Start;
     
+    static2Start = new Date().getTime();
+    PipelineStatic2.renderFB(scene, fb);
+    static2Stop = new Date().getTime();
+    static2Timer += static2Stop - static2Start;
+
     topLevelP.getMatrix().mult(Matrix.rotateY(1));
 }
 
@@ -460,4 +517,5 @@ console.log("Geometries Rotation: ");
 console.log("\tFunc Avg:  "  + (funcTimer/360));
 console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
-console.log("\tStatic Avg: " + (staticTimer/360));
+console.log("\tStatic 1 Avg: " + (static1Timer/360));
+console.log("\tStatic 2 Avg: " + (static2Timer/360));
