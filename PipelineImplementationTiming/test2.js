@@ -1,14 +1,14 @@
 //Import what is necessary for your code
-import {Scene, Position, Matrix, Model, Vertex, LineSegment} from "../../renderer/scene/SceneExport.js";
-import {FrameBuffer, Viewport, Color} from "../../renderer/framebuffer/FramebufferExport.js";
+import {Scene, Position, Matrix, Model, Vertex, LineSegment} from "../renderer/scene/SceneExport.js";
+import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
 import {Sphere, Cube2, TriangularPrism, 
         Cylinder, ConeFrustum, Box, Cone, 
         Octahedron, ParametricCurve, 
         SurfaceOfRevolution, Tetrahedron, 
-        Torus, Axes3D, PanelXY, PanelXZ} from "../../renderer/models_L/ModelsExport.js";
-import {default as OBJ} from "../../renderer/models_L/OBJModel.js";
-import {default as GRS} from "../../renderer/models_L/GRSModel.js";
-import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
+        Torus, Axes3D, PanelXY, PanelXZ} from "../renderer/models_L/ModelsExport.js";
+import {default as OBJ} from "../renderer/models_L/OBJModel.js";
+import {default as GRS} from "../renderer/models_L/GRSModel.js";
+import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 
 import * as PipelineFunc from "./Pipeline-func/PipelineExport.js";
 import * as PipelineLoop from "./Pipeline-loop/PipelineExport.js";
