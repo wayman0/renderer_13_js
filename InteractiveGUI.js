@@ -63,14 +63,14 @@ display();
 
 function handleModelList(e)
 {
-    handleColorList();
-
     const modelSelected = modelList.selectedIndex;
     scene.getPosition(currentModel).setModel(modArr[modelSelected]);
 
+    handleColorList();
+
     modInd[currentModel] = modelSelected;
-    modelList.selectedIndex = modInd[currentModel];
-    colorList.selectedIndex = colInd[currentModel];
+    
+    updateGui();
 
     display();
 }
@@ -102,8 +102,6 @@ function handleColorList(e)
             color = Color.magenta;
 
         ModelShading.setColor(scene.getPosition(currentModel).getModel(), color);
-
-        console.log(color);
     }
 
     colInd[currentModel] = colorSelected;
@@ -113,19 +111,30 @@ function handleColorList(e)
 
 function handleAxisList(e)
 {
-    alert("axis change");
+    if(axisList.selectedIndex == 0)
+        currentAxis = 0;
+    else if(axisList.selectedIndex == 1)
+        currentAxis = 1;
+    else if(axisList.selectedIndex == 2)
+        currentAxis = 2;
 }
 
 function handleModelInvisible(e)
 {
     if(e.target == modInv[0])
-        alert("model 1 inv");
+        currentModel = 0;
     else if(e.target == modInv[1])
-        alert("model 2 inv");
+        currentModel = 1;
     else if(e.target == modInv[2])
-        alert("model 3 inv");
+        currentModel = 2;
     else if(e.target == modInv[3])
-        alert("model 4 inv")
+        currentModel = 3;
+
+    modVis[currentModel] = !modInv[currentModel].checked;
+    
+    updateGui();
+
+    display();
 }
 
 function handleModelSelected(e)
@@ -139,9 +148,7 @@ function handleModelSelected(e)
     else if(e.target == modSel[3])
         currentModel = 3;
     
-    scene.getPosition(4).setMatrix(scene.getPosition(currentModel).getMatrix());
-    modelList.selectedIndex = modInd[currentModel];
-    colorList.selectedIndex = colInd[currentModel];
+    updateGui();
 
     display();
 }
@@ -149,9 +156,44 @@ function handleModelSelected(e)
 function handleIncrDecr(e)
 {
     if(e.target == modMove[0])
-        alert("Decrease but");
+        decreaseTranslation();
     else if(e.target == modMove[1])
-        alert("Increase but");
+        increaseTranslation();
+
+    display();
+}
+
+function increaseTranslation()
+{
+    let transMatrix = Matrix.identity();
+    if(currentAxis == 0)
+        transMatrix = Matrix.translate(.1, 0, 0);
+    else if(currentAxis == 1)
+        transMatrix = Matrix.translate(0, .1, 0);
+    else if(currentAxis == 2)
+        transMatrix = Matrix.translate(0, 0, .1);
+
+    scene.getPosition(currentModel).getMatrix().mult(transMatrix);
+}
+
+function decreaseTranslation()
+{
+    let transMatrix = Matrix.identity();
+    if(currentAxis == 0)
+        transMatrix = Matrix.translate(-.1, 0, 0);
+    else if(currentAxis == 1)
+        transMatrix = Matrix.translate(0, -.1, 0);
+    else if(currentAxis == 2)
+        transMatrix = Matrix.translate(0, 0, -.1);
+
+    scene.getPosition(currentModel).getMatrix().mult(transMatrix);
+}
+
+function updateGui()
+{
+    scene.getPosition(4).setMatrix(scene.getPosition(currentModel).getMatrix());
+    modelList.selectedIndex = modInd[currentModel];
+    colorList.selectedIndex = colInd[currentModel];
 }
 
 function display()
@@ -170,6 +212,9 @@ function display()
     //Set the canvas to be the size of the resizer
     ctx.canvas.width = w;
     ctx.canvas.height = h;
+
+    for(let index = 0; index < modVis.length; index += 1)
+        scene.getPosition(index).getModel().visible = modVis[index];
 
     //Create a framebuffer to be the size of the resizer/canvas and render the scene into it
     const fb = new FrameBuffer(w, h, Color.black);
