@@ -33,7 +33,9 @@ export default class BarycentricTriangle extends Model
    */
    constructor(n, theta = 0)
    {
-      super(undefined, undefined, undefined, format("Barycentric Triangle(%.2f,%d)", theta, n));
+      super(undefined, undefined, undefined, 
+            format("Barycentric Triangle(%.2f,%d)", theta, n),
+            true);
 
       if (n < 0)
          throw new Error("n must be greater than or equal to 0");
@@ -115,12 +117,12 @@ export default class BarycentricTriangle extends Model
                vIndex12     = index + 2,
                vIndex20     = index + 3;
          // 6 new line segments
-         this.addPrimitive(new LineSegment([vIndex0,  vIndexCenter]),
-                           new LineSegment([vIndex1,  vIndexCenter]),
-                           new LineSegment([vIndex2,  vIndexCenter]),
-                           new LineSegment([vIndex01, vIndexCenter]),
-                           new LineSegment([vIndex12, vIndexCenter]),
-                           new LineSegment([vIndex20, vIndexCenter]));
+         this.addPrimitive(LineSegment.buildVertex(vIndex0,  vIndexCenter),
+                           LineSegment.buildVertex(vIndex1,  vIndexCenter),
+                           LineSegment.buildVertex(vIndex2,  vIndexCenter),
+                           LineSegment.buildVertex(vIndex01, vIndexCenter),
+                           LineSegment.buildVertex(vIndex12, vIndexCenter),
+                           LineSegment.buildVertex(vIndex20, vIndexCenter));
 
          this.barycentric(vIndex0, vIndex01, vIndexCenter, n-1);
          this.barycentric(vIndex0, vIndex20, vIndexCenter, n-1);

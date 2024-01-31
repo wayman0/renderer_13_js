@@ -51,7 +51,7 @@
                 background-color: black;
             }
 
-            #ModelInvisible
+            #modInv
             {
                 display:flex;
                 flex-direction: column;
@@ -89,7 +89,7 @@
                     <canvas id = "pixels"></canvas>
                 </div>
 
-                <div id = "ModelInvisible"> Make Invisible
+                <div id = "modInv"> Make Invisible
                     <label> 
                         <input type = "checkbox" id = "m1Inv" class = "modInv" name = "Invisible">
                         Model 1
@@ -170,13 +170,14 @@
                 </select>
 
                 <div id = "ModelMovement">
-                    <select id = "axis" class = "dropDownList"> 
+                    <select id = "ModelAxisList" class = "dropDownList"> 
                         <option value = "x" > x Axis </option>
                         <option value = "y" > y Axis </option>
                         <option value = "z" > z Axis </option>
                     </select>
-                    <button type = "button" id = "decrease" class = "ModelMovementButton"> Decrease </button>
-                    <button type = "button" id = "increase" class = "ModelMovementButton"> Increase </button>
+
+                    <button type = "button" id = "decrease" class = "modMove"> Decrease </button>
+                    <button type = "button" id = "increase" class = "modMove"> Increase </button>
                 </div>
 
             </div>
