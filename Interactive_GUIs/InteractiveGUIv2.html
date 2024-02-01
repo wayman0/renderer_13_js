@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+    <head>
+        <style>
+            #page
+            {
+                position:absolute;
+                
+                top:0%;
+                left:0%;
+                
+                width: 100%;
+                height:100%;
+            }
+
+            #ModelSelection
+            {
+                width:100%;
+                height:10%;
+
+                display:flex;
+                justify-content: center;
+                align-items: center;
+                column-gap: 5pt;
+            }
+            .modSel
+            {
+                width: 5%;
+                height:25%;
+            }
+
+            #middle
+            {
+                display:flex;
+                flex-direction: row;
+                column-gap: 10pt;
+                width:100%;
+                height:75%
+            }
+            
+            #resizer
+            {
+                resize:both;
+                overflow: hidden;
+                width:50%;
+                height:100%;
+            }
+            #pixels
+            {
+                width:100%;
+                height:100%;
+                background-color: black;
+            }
+
+            #modInv
+            {
+                display:flex;
+                flex-direction: column;
+                justify-content: center;
+
+                row-gap: 5pt;
+
+            }
+
+            #bottom
+            {
+                display:flex;
+                flex-direction: row;
+                align-items: center;
+                column-gap: 5pt;
+
+                width:100%;
+                height:10%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id = "page">
+
+            <div id = "ModelSelection">
+                <button type = "button" id = "m1Sel" class = "modSel">Model 1</button>
+                <button type = "button" id = "m2Sel" class = "modSel">Model 2</button>
+                <button type = "button" id = "m3Sel" class = "modSel">Model 3</button>
+                <button type = "button" id = "m4Sel" class = "modSel">Model 4</button>
+            </div>
+
+            <div id = "middle">
+                <div id = "resizer">
+                    <canvas id = "pixels"></canvas>
+                </div>
+
+                <div id = "modInv"> Make Invisible
+                    <label> 
+                        <input type = "checkbox" id = "m1Inv" class = "modInv" name = "Invisible">
+                        Model 1
+                    </label> 
+
+                    <label> 
+                        <input type = "checkbox" id = "m2Inv" class = "modInv" name = "Invisible">
+                        Model 2
+                    </label>
+
+                    <label> 
+                        <input type = "checkbox" id = "m3Inv" class = "modInv" name = "Invisible">
+                        Model 3
+                    </label> 
+
+                    <label> 
+                        <input type = "checkbox" id = "m4Inv" class = "modInv" name = "Invisible">
+                        Model 4
+                    </label> 
+                </div>
+            </div>
+
+            <div id = "bottom">
+                <select id = "ModelTypeList" class = "dropDownList">
+                    <option value = "disk"              > 01 - Disk </option>
+                    <option value = "ring"              > 02 - Ring </option>
+                    <option value = "barytriangle"      > 03 - Barycentric Triangle </option>
+                    <option value = "cube2a"            > 04 - Cube 2a</option>
+                    <option value = "cube2b"            > 05 - Cube 2b</option>
+                    <option value = "cube3"             > 06 - Cube 3</option>
+                    <option value = "cube4"             > 07 - Cube 4</option>
+                    <option value = "tetrahedron"       > 08 - Tetrahedron</option>
+                    <option value = "octahedron30"      > 09 - Octahedron 30</option>
+                    <option value = "octahedron20"      > 10 - Octahedron 20</option>
+                    <option value = "dodecahedron"      > 11 - Dodecahedron</option>
+                    <option value = "icosahedron"       > 12 - Icosahedron</option>
+                    <option value = "icosidodecahedron" > 13 - Icosidodecahedron</option>
+                    <option value = "pyramid"           > 14 - Pyramid</option>
+                    <option value = "pyramidfrustum"    > 15 - Pyramid Frustum</option>
+                    <option value = "trianglepyramid"   > 16 - Triangle Pyramid</option>
+                    <option value = "cone"              > 17 - Cone</option>
+                    <option value = "conefrustum"       > 18 - Cone Frustum</option>
+                    <option value = "cylinder"          > 19 - Cylinder</option>
+                    <option value = "sphere"            > 20 - Sphere</option>
+                    <option value = "spheresub4"        > 21 - Sphere Subdivided 4</option>
+                    <option value = "spheresub6"        > 22 - Sphere Subdivided 6</option>
+                    <option value = "spheresub7"        > 23 - Sphere Subdivided 7</option>
+                    <option value = "torus"             > 24 - Torus</option>
+                    <option value = "torussector"       > 25 - Torus Sector</option>
+                    <option value = "bronto"            > 26 - Bronto</option>
+                    <option value = "cow"               > 27 - Cow</option>
+                    <option value = "cessna"            > 28 - Cessna</option>
+                    <option value = "apple"             > 29 - Apple</option>
+                    <option value = "teapot"            > 30 - Teapot</option>
+                    <option value = "bunny"             > 31 - Bunny</option>
+                    <option value = "parcurve"          > 32 - Parametric Curve</option>
+                    <option value = "parsurface1"       > 33 - Parametric Surface 1</option>
+                    <option value = "parsurface2"       > 34 - Parametric Surface 2</option>
+                    <option value = "parsurface3"       > 35 - parametric Surface 3</option>
+                    <option value = "surfacerev1"       > 36 - Surface Revolution 1</option>
+                    <option value = "surfacerev2"       > 37 - Surface Revolution 2</option>
+                    <option value = "surfacerev3"       > 38 - Surface Revolution 3</option>
+                    <option value = "panelxy"           > 39 - Panel XY</option>
+                    <option value = "panelxz"           > 40 - Panel XZ </option>
+                    <option value = "panelyz"           > 41 - Panel YZ</option>
+                </select>
+
+                <select id = "ModelColorList" class = "dropDownList"> 
+                    <option value = "randCol"     > Random Color </option>
+                    <option value = "randVertCol" > Random Vertex Color</option>
+                    <option value = "randEdgeCol" > Random Edge Color </option>
+                    <option value = "red"         > Red </option>
+                    <option value = "green"       > Green </option>
+                    <option value = "blue"        > Blue </option>
+                    <option value = "orange"      > Orange </option>
+                    <option value = "cyan"        > Cyan </option>
+                    <option value = "magenta"     > Magenta </option>
+                </select>
+
+                <div id = "ModelMovement">
+                    <select id = "ModelAxisList" class = "dropDownList"> 
+                        <option value = "x" > x Axis </option>
+                        <option value = "y" > y Axis </option>
+                        <option value = "z" > z Axis </option>
+                    </select>
+
+                    <button type = "button" id = "decrease" class = "modMove"> Decrease </button>
+                    <button type = "button" id = "increase" class = "modMove"> Increase </button>
+                </div>
+
+            </div>
+        </div>
+
+        <script src = "./InteractiveGUIv2.js" type = "module"></script>
+    </body>
+</html>

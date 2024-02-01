@@ -1,10 +1,10 @@
 //@ts-check
 
-import {Scene, Position, Matrix} from "./renderer/scene/SceneExport.js";
-import * as ModelShading from "./renderer/scene/util/ModelShading.js";
+import {Scene, Position, Matrix, Model} from ".././renderer/scene/SceneExport.js";
+import { FrameBuffer, Color } from ".././renderer/framebuffer/FramebufferExport.js";
+import { render, renderFB } from ".././renderer/pipeline/PipelineExport.js";
+import * as ModelShading from ".././renderer/scene/util/ModelShading.js";
 import {modArr, sphereCursor} from "./ModelList.js";
-import { FrameBuffer, Color } from "./renderer/framebuffer/FramebufferExport.js";
-import { renderFB } from "./renderer/pipeline/PipelineExport.js";
 
 const modelList = document.getElementById("ModelTypeList");
 const colorList = document.getElementById("ModelColorList");
@@ -31,32 +31,33 @@ for(const button of modSel)
 for(const button of modMove)
     button?.addEventListener("click", handleIncrDecr);
 
-const scene = new Scene();
-let currentModel = 0;
+const scenes = [new Scene(), new Scene(), new Scene(), new Scene()];
+let currentScene = 0;
 let currentAxis = 2;
 
 const modInd = [6, 26, 32, 23];
 const colInd = [6, 4, 5, 7];
 const modVis = [true, true, true, true];
 
-for(const index of modInd)
-    scene.addPosition(Position.buildFromModel(modArr[index]));
-scene.addPosition(Position.buildFromModel(sphereCursor));
+for(let index = 0; index < scenes.length; index += 1)
+    scenes[index].addPosition(Position.buildFromModel(modArr[modInd[index]]));
+scenes[currentScene].addPosition(Position.buildFromModel(sphereCursor));
 
-ModelShading.setColor(scene.getPosition(0).getModel(), Color.orange);
-ModelShading.setColor(scene.getPosition(1).getModel(), Color.green);
-ModelShading.setColor(scene.getPosition(2).getModel(), Color.blue);
-ModelShading.setColor(scene.getPosition(3).getModel(), Color.cyan);
-ModelShading.setColor(scene.getPosition(4).getModel(), Color.red);
+ModelShading.setColor(scenes[0].getPosition(0).getModel(), Color.orange);
+ModelShading.setColor(scenes[1].getPosition(0).getModel(), Color.green);
+ModelShading.setColor(scenes[2].getPosition(0).getModel(), Color.blue);
+ModelShading.setColor(scenes[3].getPosition(0).getModel(), Color.cyan);
+ModelShading.setColor(sphereCursor, Color.red);
 
-scene.getPosition(0).setMatrix(Matrix.translate(-1.5,  1.5, -3));
-scene.getPosition(1).setMatrix(Matrix.translate( 1.5,  1.5, -3));
-scene.getPosition(2).setMatrix(Matrix.translate(-1.5, -1.5, -3));
-scene.getPosition(3).setMatrix(Matrix.translate( 1.5, -1.5, -3));
-scene.getPosition(4).setMatrix(scene.getPosition(currentModel).getMatrix());
+scenes[0].getPosition(0).setMatrix(Matrix.translate(0, 0, -3));
+scenes[1].getPosition(0).setMatrix(Matrix.translate(0, 0, -3));
+scenes[2].getPosition(0).setMatrix(Matrix.translate(0, 0, -3));
+scenes[3].getPosition(0).setMatrix(Matrix.translate(0, 0, -3));
+scenes[currentScene].getPosition(1).setMatrix(scenes[currentScene].getPosition(0).getMatrix());
 
-modelList.selectedIndex = modInd[currentModel];
-colorList.selectedIndex = colInd[currentModel];
+
+modelList.selectedIndex = modInd[currentScene];
+colorList.selectedIndex = colInd[currentScene];
 axisList.selectedIndex  = currentAxis;
 
 display();
@@ -64,11 +65,11 @@ display();
 function handleModelList(e)
 {
     const modelSelected = modelList.selectedIndex;
-    scene.getPosition(currentModel).setModel(modArr[modelSelected]);
+    scenes[currentScene].getPosition(0).setModel(modArr[modelSelected]);
 
     handleColorList();
 
-    modInd[currentModel] = modelSelected;
+    modInd[currentScene] = modelSelected;
     
     updateGui();
 
@@ -79,11 +80,11 @@ function handleColorList(e)
 {
     let colorSelected = colorList.selectedIndex;
     if(colorSelected == 0)
-        ModelShading.setRandomColor(scene.getPosition(currentModel).getModel());
+        ModelShading.setRandomColor(scenes[currentScene].getPosition(0).getModel());
     else if(colorSelected == 1)
-        ModelShading.setRandomVertexColor(scene.getPosition(currentModel).getModel());
+        ModelShading.setRandomVertexColor(scenes[currentScene].getPosition(0).getModel());
     else if(colorSelected == 2)
-        ModelShading.setRandomPrimitiveColor(scene.getPosition(currentModel).getModel());
+        ModelShading.setRandomPrimitiveColor(scenes[currentScene].getPosition(0).getModel());
     else
     {
         let color = Color.white;
@@ -101,10 +102,10 @@ function handleColorList(e)
         else if(colorSelected == 8)
             color = Color.magenta;
 
-        ModelShading.setColor(scene.getPosition(currentModel).getModel(), color);
+        ModelShading.setColor(scenes[currentScene].getPosition(0).getModel(), color);
     }
 
-    colInd[currentModel] = colorSelected;
+    colInd[currentScene] = colorSelected;
 
     display();
 }
@@ -121,17 +122,21 @@ function handleAxisList(e)
 
 function handleModelInvisible(e)
 {
-    if(e.target == modInv[0])
-        currentModel = 0;
-    else if(e.target == modInv[1])
-        currentModel = 1;
-    else if(e.target == modInv[2])
-        currentModel = 2;
-    else if(e.target == modInv[3])
-        currentModel = 3;
+    // remove the cursor 
+    scenes[currentScene].positionList.length = 1;
 
-    modVis[currentModel] = !modInv[currentModel].checked;
-    
+    if(e.target == modInv[0])
+        currentScene = 0;
+    else if(e.target == modInv[1])
+        currentScene = 1;
+    else if(e.target == modInv[2])
+        currentScene = 2;
+    else if(e.target == modInv[3])
+        currentScene = 3;
+
+    modVis[currentScene] = !modInv[currentScene].checked;
+    scenes[currentScene].addPosition(Position.buildFromModel(sphereCursor));
+
     updateGui();
 
     display();
@@ -139,15 +144,19 @@ function handleModelInvisible(e)
 
 function handleModelSelected(e)
 {
+    // remove the cursor position
+    scenes[currentScene].positionList.length = 1;
+
     if(e.target == modSel[0])
-        currentModel = 0;
+        currentScene = 0;
     else if(e.target == modSel[1])
-        currentModel = 1;
+        currentScene = 1;
     else if(e.target == modSel[2])
-        currentModel = 2;
+        currentScene = 2;
     else if(e.target == modSel[3])
-        currentModel = 3;
+        currentScene = 3;
     
+    scenes[currentScene].addPosition(Position.buildFromModel(sphereCursor));
     updateGui();
 
     display();
@@ -173,7 +182,7 @@ function increaseTranslation()
     else if(currentAxis == 2)
         transMatrix = Matrix.translate(0, 0, .1);
 
-    scene.getPosition(currentModel).getMatrix().mult(transMatrix);
+    scenes[currentScene].getPosition(0).getMatrix().mult(transMatrix);
 }
 
 function decreaseTranslation()
@@ -186,14 +195,14 @@ function decreaseTranslation()
     else if(currentAxis == 2)
         transMatrix = Matrix.translate(0, 0, -.1);
 
-    scene.getPosition(currentModel).getMatrix().mult(transMatrix);
+    scenes[currentScene].getPosition(0).getMatrix().mult(transMatrix);
 }
 
 function updateGui()
 {
-    scene.getPosition(4).setMatrix(scene.getPosition(currentModel).getMatrix());
-    modelList.selectedIndex = modInd[currentModel];
-    colorList.selectedIndex = colInd[currentModel];
+    scenes[currentScene].getPosition(1).setMatrix(scenes[currentScene].getPosition(0).getMatrix());
+    modelList.selectedIndex = modInd[currentScene];
+    colorList.selectedIndex = colInd[currentScene];
 }
 
 function display()
@@ -214,14 +223,24 @@ function display()
     ctx.canvas.height = h;
 
     for(let index = 0; index < modVis.length; index += 1)
-        scene.getPosition(index).getModel().visible = modVis[index];
+        scenes[index].getPosition(0).getModel().visible = modVis[index];
 
     //Create a framebuffer to be the size of the resizer/canvas and render the scene into it
-    const fb = new FrameBuffer(w, h, Color.black);
-    renderFB(scene, fb);
+    const fb = new FrameBuffer(w, h);
+    const vpW = w/2;
+    const vpH = h/2;
 
-    // could also do;
-    //render(scene, fb.vp);
-    //write the framebuffer to the canvas
-    ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
+    fb.setViewport(vpW, vpH, 0, 0);
+    render(scenes[0], fb.vp);
+
+    fb.setViewport(vpW, vpH, vpW, 0);
+    render(scenes[1], fb.vp);
+
+    fb.setViewport(vpW, vpH, 0, vpH);
+    render(scenes[2], fb.vp);
+
+    fb.setViewport(vpW, vpH, vpW, vpH);
+    render(scenes[3], fb.vp);
+
+    ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), 0, 0);
 }

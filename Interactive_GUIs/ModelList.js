@@ -1,6 +1,6 @@
-import * as Models from "./renderer/models_L/ModelsExport.js";
-import {default as GRS} from "./renderer/models_L/GRSModel.js";
-import {default as OBJ} from "./renderer/models_L/OBJModel.js";
+import * as Models from "../renderer/models_L/ModelsExport.js";
+import {default as GRS} from "../renderer/models_L/GRSModel.js";
+import {default as OBJ} from "../renderer/models_L/OBJModel.js";
 
 export const sphereCursor = new Models.Sphere(.1, 10, 10);
 export const modArr = 
@@ -39,12 +39,12 @@ export const modArr =
     new Models.Torus(0.75, 0.25, 12, 16),            // 24
     new Models.TorusSector(0.75, 0.25, 0, 2*Math.PI, Math.PI, 2*Math.PI, 6, 16), // 25
     // model files
-    new GRS("./assets/grs/bronto.grs"),           // 26
-    new OBJ("./assets/cow.obj"),            // 27
-    new OBJ("./assets/cessna.obj"),         // 28
-    new OBJ("./assets/apple.obj"),          // 29
-    new OBJ("./assets/teapot.obj"),         // 30
-    new OBJ("./assets/stanford_bunny.obj"), // 31
+    new GRS("../assets/grs/bronto.grs"),           // 26
+    new OBJ("../assets/cow.obj"),            // 27
+    new OBJ("../assets/cessna.obj"),         // 28
+    new OBJ("../assets/apple.obj"),          // 29
+    new OBJ("../assets/teapot.obj"),         // 30
+    new OBJ("../assets/stanford_bunny.obj"), // 31
     // parametric curves and surfaces
     new Models.ParametricCurve(),                                       // 32
     new Models.ParametricSurface(),                                     // 33
