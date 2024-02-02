@@ -330,12 +330,19 @@ export default class Viewport
             throw new Error("Color is not of type Color");
 
         const rgba = color.rgb;
-        for(let pixel = 0; pixel < this.getWidthVP() * this.getHeightVP()*4; pixel += 4)
+        for(let y = 0; y < this.height; y += 1)
         {
-            this.parent.pixelBuffer[pixel + 0] = rgba[0];
-            this.parent.pixelBuffer[pixel + 1] = rgba[1];
-            this.parent.pixelBuffer[pixel + 2] = rgba[2];
-            this.parent.pixelBuffer[pixel + 3] = rgba[3];
+            //        how many rows till the vp * size per row        + how many rows we have covered
+            let vpStartIndex = this.#vp_ul_y * (this.parent.width * 4) + (y * this.parent.width * 4);
+            for(let x = this.#vp_ul_x * 4; x < (this.width + this.#vp_ul_x) * 4; x += 4)
+            {
+                const pixel = vpStartIndex  + x;
+
+                this.parent.pixelBuffer[pixel + 0] = rgba[0];
+                this.parent.pixelBuffer[pixel + 1] = rgba[1];
+                this.parent.pixelBuffer[pixel + 2] = rgba[2];
+                this.parent.pixelBuffer[pixel + 3] = rgba[3];
+            }
         }
     }
 
