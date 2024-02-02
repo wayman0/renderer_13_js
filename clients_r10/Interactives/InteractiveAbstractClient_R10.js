@@ -404,17 +404,17 @@ export function setUpViewing()
         {
             //@ts-ignore
             const width = (h * aspectRatio); const xOffset = (w - width) / 2;
-            fb.setViewport(xOffset, 0, width, h);
+            fb.setViewport(width, h, xOffset/2, 0);
         }
         else
         {
             //@ts-ignore
             const height = (w / aspectRatio); const yOffset = (h - height) / 2;
-            fb.setViewport(0, yOffset, w, height);
+            fb.setViewport(w, height, 0, yOffset/2);
         }
 
-        fb.clearFBDefault();
-        fb.vp.clearVPDefault();
+        fb.clearFB(Color.gray);
+        fb.vp.clearVP(Color.blakc);
     }
     else // The viewport is the whole framebuffer.
     {
@@ -423,11 +423,7 @@ export function setUpViewing()
         fb.vp.clearVPDefault();
     }
 
-    const startTime = new Date().getTime();
     render(scene, fb.vp);
-    const endTime = new Date().getTime();
-
-    console.log("render time: " + (endTime - startTime));
 
     /*
     if (takeScreenshot)
