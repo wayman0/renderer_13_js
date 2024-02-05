@@ -92,20 +92,20 @@ async function runOnline(grsModule, interUtilModule)
     //setPosModels(grsModule);
 
     // set the models
-    birdhead.setModel(  await new grsModule.default(path + "birdhead.grs"));
-    brontov2.setModel(  await new grsModule.default(path + "bronto_v2.grs"));
-    bronto.setModel(    await new grsModule.default(path + "bronto.grs"));
-    dragon.setModel(    await new grsModule.default(path + "dragon.grs"));
-    house.setModel(     await new grsModule.default(path + "house.grs"));
-    knight.setModel(    await new grsModule.default(path + "knight.grs"));
-    kochcurve.setModel( await new grsModule.default(path + "kochcurve.grs"));
-    monkeytree.setModel(await new grsModule.default(path + "monkeytree.grs"));
-    rexv2.setModel(     await new grsModule.default(path + "rex_v2.grs"));
-    rex.setModel(       await new grsModule.default(path + "rex.grs"));
-    scenePos.setModel(  await new grsModule.default(path + "scene.grs"));
-    usav2.setModel(     await new grsModule.default(path + "usa_v2.grs"));
-    usa.setModel(       await new grsModule.default(path + "usa.grs"));
-    vinci.setModel(     await new grsModule.default(path + "vinci.grs"));
+    birdhead.setModel(  await grsModule.default(path + "birdhead.grs"));
+    brontov2.setModel(  await grsModule.default(path + "bronto_v2.grs"));
+    bronto.setModel(    await grsModule.default(path + "bronto.grs"));
+    dragon.setModel(    await grsModule.default(path + "dragon.grs"));
+    house.setModel(     await grsModule.default(path + "house.grs"));
+    knight.setModel(    await grsModule.default(path + "knight.grs"));
+    kochcurve.setModel( await grsModule.default(path + "kochcurve.grs"));
+    monkeytree.setModel(await grsModule.default(path + "monkeytree.grs"));
+    rexv2.setModel(     await grsModule.default(path + "rex_v2.grs"));
+    rex.setModel(       await grsModule.default(path + "rex.grs"));
+    scenePos.setModel(  await grsModule.default(path + "scene.grs"));
+    usav2.setModel(     await grsModule.default(path + "usa_v2.grs"));
+    usa.setModel(       await grsModule.default(path + "usa.grs"));
+    vinci.setModel(     await grsModule.default(path + "vinci.grs"));
 
     interUtilModule.setScene(scene);
     interUtilModule.setNumberInteractiveModels(scene.positionList.length -1);

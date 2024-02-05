@@ -91,15 +91,15 @@ async function runOnline(objModule, interUtilModule)
     //setPosModels(objModule);
 
     // set the models
-        apple.setModel(await new objModule.default(path + "apple.obj"));     
-       cessna.setModel(await new objModule.default(path + "cessna.obj"));    
-          cow.setModel(await new objModule.default(path + "cow.obj"));       
-      galleon.setModel(await new objModule.default(path + "galleon.obj"));   
-    greatRhom.setModel(await new objModule.default(path + "great_rhombicosidodecahedron.obj")); 
-        horse.setModel(await new objModule.default(path + "horse.obj"));     
-    smallRhom.setModel(await new objModule.default(path + "small_rhombicosidodecahedron.obj")); 
-    stanBunny.setModel(await new objModule.default(path + "stanford_bunny.obj")); 
-       teapot.setModel(await new objModule.default(path + "teapot.obj"));
+        apple.setModel(await objModule.default(path + "apple.obj"));     
+       cessna.setModel(await objModule.default(path + "cessna.obj"));    
+          cow.setModel(await objModule.default(path + "cow.obj"));       
+      galleon.setModel(await objModule.default(path + "galleon.obj"));   
+    greatRhom.setModel(await objModule.default(path + "great_rhombicosidodecahedron.obj")); 
+        horse.setModel(await objModule.default(path + "horse.obj"));     
+    smallRhom.setModel(await objModule.default(path + "small_rhombicosidodecahedron.obj")); 
+    stanBunny.setModel(await objModule.default(path + "stanford_bunny.obj")); 
+       teapot.setModel(await objModule.default(path + "teapot.obj"));
 
     setModelColor();
 

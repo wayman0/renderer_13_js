@@ -39,12 +39,12 @@ export const modArr =
     new Models.Torus(0.75, 0.25, 12, 16),            // 24
     new Models.TorusSector(0.75, 0.25, 0, 2*Math.PI, Math.PI, 2*Math.PI, 6, 16), // 25
     // model files
-    new GRS("../assets/grs/bronto.grs"),           // 26
-    new OBJ("../assets/cow.obj"),            // 27
-    new OBJ("../assets/cessna.obj"),         // 28
-    new OBJ("../assets/apple.obj"),          // 29
-    new OBJ("../assets/teapot.obj"),         // 30
-    new OBJ("../assets/stanford_bunny.obj"), // 31
+    await GRS("../assets/grs/bronto.grs"),           // 26
+    await OBJ("../assets/cow.obj"),            // 27
+    await OBJ("../assets/cessna.obj"),         // 28
+    await OBJ("../assets/apple.obj"),          // 29
+    await OBJ("../assets/teapot.obj"),         // 30
+    await OBJ("../assets/stanford_bunny.obj"), // 31
     // parametric curves and surfaces
     new Models.ParametricCurve(),                                       // 32
     new Models.ParametricSurface(),                                     // 33
