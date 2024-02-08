@@ -190,6 +190,46 @@ export default class Color
     }
 
     /**
+     * Darkens the given color by the given factor
+     * Does not mess with the alpha value
+     * 
+     * NON MUTATING, returns a new color
+     * 
+     * Uses the formula rgb * (1-darkFactor)
+     * 
+     * @param {number} darkFactor a decimal saying how much darker the color should be
+     * @returns {Color} the new darker color
+     */
+    darker(darkFactor = .1)
+    {
+        return this.#darklight(1-darkFactor);
+    }
+
+    /**
+     * Lightens the given color by the given factor
+     * Does not mess with the alpha value
+     * 
+     * NON MUTATING, returns a new color
+     * 
+     * Uses the formula rgb * (1-lightFactor)
+     * 
+     * @param {number} lightFactor a decimal saying how much lighter the color should be
+     * @returns {Color} the new lighter color
+     */
+    lighter(lightFactor = .1)
+    {
+        return this.#darklight(1+lightFactor);
+    }
+
+    #darklight(factor)
+    {
+        return new Color(this.#rgb[0] * factor, 
+                         this.#rgb[1] * factor, 
+                         this.#rgb[2] * factor, 
+                         this.#rgb[3]);
+    }
+
+    /**
      * Get the red value of the color
      * @returns {number} the red value of the color
      */
