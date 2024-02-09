@@ -52,7 +52,7 @@ export default class Cube extends Model
 
       @param {string} name  a {link String} that is a name for this {@code Cube}
    */
-   constructor(name)
+   constructor(name = "Cube")
    {
       super(undefined, undefined, undefined, name);
 

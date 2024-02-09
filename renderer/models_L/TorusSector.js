@@ -173,4 +173,26 @@ export default class TorusSector extends Model
             this.addPrimitive(LineSegment.buildVertex( (i * k) + j, (i * k) + (j+1) ));
       }
    }
+
+   
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {TorusSector} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new TorusSector(this.#r1, this.#r2, this.#theta1, this.#theta2, this.#phi1, this.#phi2, n, k);
+   }
 }//TorusSector

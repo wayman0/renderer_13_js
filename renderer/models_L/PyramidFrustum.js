@@ -125,4 +125,26 @@ export default class PyramidFrustum extends Model
          index += 4;
       }
    }
+
+   
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {PyramidFrustum} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new PyramidFrustum(this.#s1, this.#s2, this.#h, n, k);
+   }
 }//PyramidFrustum

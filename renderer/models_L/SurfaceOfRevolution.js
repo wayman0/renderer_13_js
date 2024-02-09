@@ -20,9 +20,9 @@ import {format} from "../scene/util/UtilExport.js";
 
 export default class SurfaceOfRevolution extends ParametricSurface
 {
-   /**@type {Function} the first component of the parametric curve  */ static x(y, t) {return (0.5 * (1 + Math.cos(Math.PI * y))) * Math.cos(t);}
-   /**@type {Function} the second component of the parametric curve */ static y(y, t) {return (0.5 * (1 + Math.cos(Math.PI * y))) * Math.sin(t);}
-   /**@type {Function} the second component of the parametric curve */ static z(y, t) {return 0.5 * (1 + Math.cos(Math.PI * y));}
+   /**the first  component of the parametric curve  */ static x(y, t) {return (0.5 * (1 + Math.cos(Math.PI * y))) * Math.cos(t);}
+   /**the second component of the parametric curve  */ static y(y, t) {return (0.5 * (1 + Math.cos(Math.PI * y))) * Math.sin(t);}
+   /**the second component of the parametric curve  */ static z(y, t) {return (0.5 * (1 + Math.cos(Math.PI * y)));}
 
    /**
       Create a surface of revolution around the y-axis

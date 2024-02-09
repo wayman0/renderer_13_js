@@ -115,4 +115,25 @@ export default class ConeFrustum extends Model
          this.addPrimitive(LineSegment.buildVertex(indexes[n-1][j], bottomCenterIndex));
       }
    }
+
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new ConeFrustum with the same parameters but different line counts
+    * @param {number} n the new number of horizontal lines
+    * @param {number} k the new number of vertical lines
+    * @returns {ConeFrustum} the new Cone Frustum with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new ConeFrustum(this.#r1, this.#h, this.#r2, n, k);
+   }
 }//ConeFrustum

@@ -236,4 +236,26 @@ export default class Tetrahedron extends Model
          this.addPrimitive(LineSegment.buildVertex(v0, index));
       }
    }
+
+   
+   getHorizCount()
+   {
+      return this.#n1;
+   }
+
+   getVertCount()
+   {
+      return this.#n2;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {Tetrahedron} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new Tetrahedron(n, k, k, n);
+   }
 }//Tetrahedron

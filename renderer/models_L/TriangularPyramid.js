@@ -137,4 +137,25 @@ export default class TriangularPyramid extends Model
          index += 3;
       }
    }
+   
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {TriangularPyramid} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new TriangularPyramid(this.#r, this.#h, n, k);
+   }
 }//TriangularPyramid

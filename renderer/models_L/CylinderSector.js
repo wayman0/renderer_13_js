@@ -143,4 +143,25 @@ export default class CylinderSector extends Model
          //                                v[n-1][j]
       }
    }
+
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {CylinderSector} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new CylinderSector(this.#r, this.#h, this.#theta1, this.#theta2, n, k);
+   }
 }//CylinderSector

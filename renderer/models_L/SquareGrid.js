@@ -90,4 +90,25 @@ export default class SquareGrid extends Model
       }
 
    }
+   
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {SquareGrid} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new SquareGrid(this.#r, n, k);
+   }
 }//SquareGrid

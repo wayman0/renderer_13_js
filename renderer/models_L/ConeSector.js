@@ -151,4 +151,27 @@ export default class ConeSector extends Model
             this.addPrimitive(LineSegment.buildVertex(indexes[i][j], indexes[i+1][j]));
       }
    }
+
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new cone sector with the same parameters as this cone sector
+    * just with a different count of vertical and horizontal lines
+    * 
+    * @param {number} n the number of horiz lines 
+    * @param {number} k the number of vert lines 
+    * @returns {ConeSector} a new cone sector with the same parameters as the calling conesector just different number of horiz/vert lines
+    */
+   remake(n, k)
+   {
+      return new ConeSector(this.#r, this.#h, this.#t, this.#theta1, this.#theta2, n, k);
+   }
 }//ConeSector

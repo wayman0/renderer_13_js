@@ -132,4 +132,26 @@ export default class BarycentricTriangle extends Model
          this.barycentric(vIndex2, vIndex20, vIndexCenter, n-1);
       }
    }
+
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return Math.round(this.#theta);
+   }
+
+   /**
+    * Make a new Barycentric Triangle with the given parameters 
+    * 
+    * @param {number} n number of barycentric subdivisions of this triangle
+    * @param {number} k rotation of the equilateral triangle
+    * @returns {BarycentricTriangle} the new barycentric triangle with the given parameters
+    */
+   remake(n, k)
+   {
+      return new BarycentricTriangle(n, k);
+   }
 }//BarycentricTriangle

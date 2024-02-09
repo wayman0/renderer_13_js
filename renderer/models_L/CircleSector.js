@@ -85,4 +85,31 @@ export default class CircleSector extends Model
          this.addPrimitive(LineSegment.buildVertex(i, i+1));
       }
    }
+
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#n;
+   }
+
+   /**
+    * Build a new Circle Sector with the same parameters as this circle sector
+    * just with a different number of lines
+    * 
+    * @param {number} n the number of horizontal lines 
+    * @param {number} k the number of vertical lines
+    * @returns {CircleSector} the new circle sector with the different line counts
+    */
+   remake(n, k)
+   {
+      let newN = n;
+      if(n == this.#n)
+         newN = k;
+
+      return new CircleSector(this.#r, this.#theta1, this.#theta2, newN);
+   }
 }//CircleSector

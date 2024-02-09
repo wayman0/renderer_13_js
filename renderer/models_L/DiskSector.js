@@ -128,4 +128,26 @@ export default class DiskSector extends Model
             this.addPrimitive(LineSegment.buildVertex( (i * k) + j, (i * k) + (j + 1) ));
       }
    }
+
+   
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {DiskSector} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new DiskSector(this.#r, this.#theta1, this.#theta2, n, k);
+   }
 }//DiskSector

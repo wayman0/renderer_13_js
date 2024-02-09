@@ -121,4 +121,26 @@ export default  class RingSector extends Model
             this.addPrimitive(LineSegment.buildVertex( (i * k) + j, ((i+1) * k) + j ));
       }
    }
+
+   
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {RingSector} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new RingSector(this.#r1, this.#r2, this.#theta1, this.#theta2, n, k);
+   }
 }//RingSector

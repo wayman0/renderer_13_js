@@ -21,15 +21,20 @@ import {format} from "../scene/util/UtilExport.js";
 
 export default class ParametricSurface extends Model
 {
-   /**@type {Function} the default function for calculating x component*/ static x(s, t){return Math.sin(Math.PI*s) * Math.sin(Math.PI*t)};
-   /**@type {Function} the default function for calculating y component*/ static y(s, t){return Math.sin(Math.PI*s) * Math.sin(Math.PI*t)};
-   /**@type {Function} the default function for calculating z component*/ static z(s, t){return Math.sin(Math.PI*s) * Math.sin(Math.PI*t)};
-   /**@type {number}   the default start value for the first variable  */ s1;
-   /**@type {number}   the default end value for the first variable    */ s2;
-   /**@type {number}   the default start value for the second variable */ t1;
-   /**@type {number}   the default end value for the second variable   */ t2;
-   /**@type {number}   */ n;
-   /**@type {number}   */ k;
+   /**the default function for calculating x component*/ static x(s, t){return Math.sin(Math.PI*s) * Math.sin(Math.PI*t)};
+   /**the default function for calculating y component*/ static y(s, t){return Math.sin(Math.PI*s) * Math.sin(Math.PI*t)};
+   /**the default function for calculating z component*/ static z(s, t){return Math.sin(Math.PI*s) * Math.sin(Math.PI*t)};
+
+   /**@type {number}   the default start value for the first variable  */ #s1;
+   /**@type {number}   the default end value for the first variable    */ #s2;
+   /**@type {number}   the default start value for the second variable */ #t1;
+   /**@type {number}   the default end value for the second variable   */ #t2;
+   /**@type {number}   */ #n;
+   /**@type {number}   */ #k;
+   /**@type {Function} */ #xF;
+   /**@type {Function} */ #yF;
+   /**@type {Function} */ #zF;
+
 
    /**
       Create a parametric surface in space,
@@ -60,6 +65,11 @@ export default class ParametricSurface extends Model
         typeof zFunc != "function")
             throw new Error("xfunc, yfunc, zfunc are supposed to be functions");
 
+      if(typeof s1 != "number" || typeof s2 != "number" || 
+         typeof t1 != "number" || typeof t2 != "number" ||
+         typeof n  != "number" || typeof k  != "number")
+            throw new Error("S1, S2, T1, T2, N and K must be numerical");
+
       super(undefined, undefined, undefined, format("Parametric Surface(%d,%d)", n, k));
 
       if (n < 2)
@@ -67,15 +77,16 @@ export default class ParametricSurface extends Model
       if (k < 2)
          throw new Error("k must be greater than 1");
 
-      ParametricSurface.x = xFunc;
-      ParametricSurface.y = yFunc;
-      ParametricSurface.z = zFunc;
-      this.s1 = s1;
-      this.s2 = s2;
-      this.t1 = t1;
-      this.t2 = t2;
-      this.n = n;
-      this.k = k;
+      this.#xF = xFunc;
+      this.#yF = yFunc;
+      this.#zF = zFunc;
+      this.#s1 = s1;
+      this.#s2 = s2;
+      this.#t1 = t1;
+      this.#t2 = t2;
+      this.#n = n;
+      this.#k = k;
+
 
       // Create the surface's geometry.
 
@@ -121,5 +132,27 @@ export default class ParametricSurface extends Model
             //                              v[i][j]         v[i+1][j]
             this.addPrimitive(LineSegment.buildVertex( (i * k) + j, ((i+1) * k) + j ));
       }
+   }
+
+   
+   getHorizCount()
+   {
+      return this.#n;
+   }
+
+   getVertCount()
+   {
+      return this.#k;
+   }
+
+   /**
+    * Build a new Model using the same parameters but the given line counts
+    * @param {number} n the new horizontal line count
+    * @param {number} k the new vertical line count
+    * @returns {ParametricSurface} the new model with the same parameters but different line counts
+    */
+   remake(n, k)
+   {
+      return new ParametricSurface(this.#xF, this.#yF, this.#zF, this.#s1, this.#s2, this.#t1, this.#t2, n, k);
    }
 }//ParametricSurface
