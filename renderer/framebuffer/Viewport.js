@@ -70,10 +70,10 @@ export default class Viewport
             color = Color.Black;
         }
 
-        this.setViewport(width, height, upperLeftX, upperLeftY);
-
         this.#bgColorVP = color;
         this.#parent = parent;
+
+        this.setViewport(width, height, upperLeftX, upperLeftY, this.#bgColorVP);
     }
 
     /**
@@ -186,14 +186,18 @@ export default class Viewport
      * @param {number} height the height of this {Viewport}
      * @param {number} upperLeftX horizontal coordinate of this {Viewport}
      * @param {number} upperLeftY vertical coordinate of this {Viewport}
+     * @param {Color} bgCol the background color of this viewport
      */
-    setViewport(width, height, upperLeftX = 0, upperLeftY = 0)
+    setViewport(width, height, upperLeftX = 0, upperLeftY = 0, bgCol)
     {
         if (typeof width != "number"      ||
             typeof height != "number"     ||
             typeof upperLeftX != "number" ||
             typeof upperLeftY != "number")
                 throw new Error("All parameters must be numerical.");
+
+        if(bgCol instanceof Color == false)
+            throw new Error("Background Color must be a Color");
 
         upperLeftX = Math.round(upperLeftX);
         upperLeftY = Math.round(upperLeftY);
@@ -204,6 +208,9 @@ export default class Viewport
         this.#vp_ul_y = upperLeftY;
         this.#vp_lr_x = this.#vp_ul_x + width;
         this.#vp_lr_y = this.#vp_ul_y + height;
+        this.#bgColorVP = bgCol;
+
+        this.clearVP();
     }
 
 

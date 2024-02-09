@@ -58,7 +58,7 @@ export default class FrameBuffer
         this.#pixelBuffer = new Uint8ClampedArray(this.#width * this.#height * 4);
         this.#vp = Viewport.buildParent(this);
 
-        this.clearFB(this.#bgColorFB);
+        //this.clearFB(this.#bgColorFB);
     }
 
 
@@ -360,8 +360,9 @@ export default class FrameBuffer
      * @param {number} height this {@code FrameBuffer} default {Viewport}
      * @param {number} upperLeftX upper left hand x coordinate of this {@code FrameBuffer} default {Viewport}
      * @param {number} upperLeftY upper left hand y coordinate of this {@code FrameBuffer} default {Viewport}
-     */
-    setViewport(width, height, upperLeftX = 0, upperLeftY = 0)
+     * @param {Color} bgColVP the background color of this viewport 
+    */
+    setViewport(width, height, upperLeftX = 0, upperLeftY = 0, bgColVP = this.#bgColorFB)
     {
         if (typeof upperLeftX != "number" ||
             typeof upperLeftY != "number" ||
@@ -369,7 +370,7 @@ export default class FrameBuffer
             typeof height     != "number")
                 throw new Error("All Parameters must be Numerical");
 
-        this.#vp.setViewport(width, height, upperLeftX, upperLeftY);
+        this.#vp.setViewport(width, height, upperLeftX, upperLeftY, bgColVP);
     }
 
 
