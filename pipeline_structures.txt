@@ -1,0 +1,30 @@
+
+For Renderer 10 (hierarchical scenes).
+
+1) recurse on Positions
+2) iterate on pipeline stages
+
+or
+
+1') iterate on pipeline stages
+2') recurse on Positions
+
+
+For Renderer 11 (hierarchical models), 
+we add recursion on Models.
+
+1) recurse on Positions
+ ) recurse on Models
+2) iterate on pipeline stages
+
+or
+
+1) recurse on Positions
+2) iterate on pipeline stages
+ ) recurse on Models
+
+or
+
+1') iterate on pipeline stages
+2') recurse on Positions
+3') recurse on Models
