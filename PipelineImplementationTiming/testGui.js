@@ -58,12 +58,12 @@ for(let x = 0; x < funcTimers.length; x += 1)
     static2Timers[x] = Array.from(zeros);
 }
 
-buildScene1();
-buildScene2();
-buildScene3();
-buildScene4();
-buildScene5();
-buildScene6();
+await buildScene1();
+await buildScene2();
+await buildScene3();
+await buildScene4();
+await buildScene5();
+await buildScene6();
 
 const fps = 1;
 timingHandles[0] = setInterval(runScene1, 1000/fps);
@@ -123,11 +123,11 @@ function buildScene1()
     ModelShading.setRandomColor(mod);
 }
 
-function buildScene2()
+async function buildScene2()
 {
     scenes[1] = new Scene();
     scenes[1].addPosition(new Position());
-    scenes[1].getPosition(0).setModel(new OBJ("../../../assets/cessna.obj"));
+    scenes[1].getPosition(0).setModel(await OBJ("../../../assets/cessna.obj"));
     scenes[1].getPosition(0).setMatrix(Matrix.translate(0, 0, -3));
     
     ModelShading.setRandomColor(scenes[1].getPosition(0).getModel());
@@ -143,17 +143,17 @@ function buildScene3()
     ModelShading.setRandomColor(scenes[2].getPosition(0).getModel());
 }
 
-function buildScene4()
+async function buildScene4()
 {
     scenes[3] = new Scene();
     scenes[3].addPosition(new Position());
-    scenes[3].getPosition(0).setModel(new OBJ("../../../assets/cow.obj"));
+    scenes[3].getPosition(0).setModel(await OBJ("../../../assets/cow.obj"));
     scenes[3].getPosition(0).setMatrix(Matrix.translate(0, 0, -3));
 
     ModelShading.setRandomColor(scenes[3].getPosition(0).getModel());
 }
 
-function buildScene5()
+async function buildScene5()
 {   
     const topPos = new Position();
 
@@ -164,9 +164,9 @@ function buildScene5()
     topPos.addNestedPosition(new Position());
 
     topPos.getNestedPositions()[0].setModel(new Sphere());
-    topPos.getNestedPositions()[1].setModel(new OBJ("../../../assets/cessna.obj"));
+    topPos.getNestedPositions()[1].setModel(await OBJ("../../../assets/cessna.obj"));
     topPos.getNestedPositions()[2].setModel(new Cube2(40, 50, 60));
-    topPos.getNestedPositions()[3].setModel(new OBJ("../../../assets/cow.obj"));
+    topPos.getNestedPositions()[3].setModel(await OBJ("../../../assets/cow.obj"));
 
     topPos.getNestedPositions()[0].setMatrix(Matrix.translate(-3,  3, 0));
     topPos.getNestedPositions()[1].setMatrix(Matrix.translate( 3,  3, 0));
@@ -184,7 +184,7 @@ function buildScene5()
 
 }
 
-function buildScene6()
+async function buildScene6()
 {
     const position = new Array(5);
     for(let x = 0; x < position.length; x += 1)
@@ -197,13 +197,13 @@ function buildScene6()
     ModelShading.setColor(position[0][1].getModel(), Color.blue);
 
     position[0][2] = Position.buildFromModel(
-        new OBJ("../../../assets/great_rhombicosidodecahedron.obj"));
+        await OBJ("../../../assets/great_rhombicosidodecahedron.obj"));
     ModelShading.setColor(position[0][2].getModel(), Color.red);
 
-    position[1][0] = Position.buildFromModel(new GRS("../../../assets/grs/bronto.grs"));
+    position[1][0] = Position.buildFromModel(await GRS("../../../assets/grs/bronto.grs"));
     ModelShading.setColor(position[1][0].getModel(), Color.red);
 
-    position[1][1] = Position.buildFromModel(new OBJ("../../../assets/horse.obj"));
+    position[1][1] = Position.buildFromModel(await OBJ("../../../assets/horse.obj"));
     ModelShading.setColor(position[1][1].getModel(), Color.pink);
 
     position[1][2] = Position.buildFromModel(new ConeFrustum(0.5, 1.0, 1.0, 10, 10));
@@ -223,7 +223,7 @@ function buildScene6()
     position[3][0] = Position.buildFromModel(new ParametricCurve());
     ModelShading.setRandomPrimitiveColor(position[3][0].getModel());
 
-    position[3][1] = Position.buildFromModel(new OBJ("../../../assets/small_rhombicosidodecahedron.obj"));
+    position[3][1] = Position.buildFromModel(await OBJ("../../../assets/small_rhombicosidodecahedron.obj"));
     ModelShading.setColor(position[3][1].getModel(), Color.magenta);
 
     position[3][2] = Position.buildFromModel(new SurfaceOfRevolution());
