@@ -44,7 +44,8 @@
 */
 
 //@ts-check
-import {Model, Camera, Vertex} from "../scene/SceneExport.js";
+import {Model, Camera, Vertex, Position} from "../scene/SceneExport.js";
+import { logColorList, logMessage, logPrimitiveList, logVertexList } from "./PipelineLogger.js";
 
 /**
  *  Use the {@link Camera}'s view volume data to transform each
@@ -55,8 +56,16 @@ import {Model, Camera, Vertex} from "../scene/SceneExport.js";
  * @param {Camera} camera camera with the view volume data
  * @returns {Model} a new model with the vertexes in the normalized camera coordinate system
  */
-export default function view2camera(model, camera)
+export function view2cameraModel(model, camera)
 {
+   const normalizeMatrix = camera.getNormalizeMatrix();
+   const newVertexList = new Array();
+
+   // replace each vertex object with one that contains normalized camera coordinates
+   for(const v of model.vertexList)
+      newVertexList.push(normalizeMatrix.timesVertex(v));
+
+   /*
     const l = camera.left;
     const r = camera.right;
     const b = camera.bottom;
@@ -93,7 +102,7 @@ export default function view2camera(model, camera)
 
         newVertexList[x] = new Vertex(v_x, v_y, v_z);
     }
-
+    */
     // use map because we are 'mapping' from view space to camera space and it is non mutative
     /*
     // this method is slower
@@ -127,6 +136,78 @@ export default function view2camera(model, camera)
     return new Model(newVertexList,
                      model.primitiveList,
                      model.colorList,
+                     model.matrix, 
+                     model.nestedModels,
                      model.name,
                      model.visible);
+}
+
+/**
+ * Recursively transform a {@link Position}.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Position}'s rooted at the parameter {@code position}.
+ * 
+ * @param {Position} position the curretn {@link Position} object to recursively transform
+ * @param {Camera} camera the {@link Scene}'s {@link Camera} with the view volume data
+ * @return {Positon} a tree of transformed {@link Position} objects
+ */
+export function view2cameraPosition(position, camera)
+{
+   logMessage("==== 3. Render Position: " + position.name);
+   
+   // create a new position to hold the newly rendered model and the newly rendered subpositions
+   const pos2 = Position.buildFromModelName(position.model, position.name);
+   if(position.model.visible)
+      pos2.model = view2cameraNestedModel(position.model, camera);
+   else
+      logMessage("====== 3. Hidden model: " + position.model.name + " ======");
+
+   // do a preorder depth first traversal from this nested position
+   for(const pos of position.nestedPositions)
+      pos2.addNestedPosition(view2cameraPosition(pos, camera));
+
+   logMessage("==== 3. End position: " + position.name + " ====");
+
+   return pos2;
+}
+
+/**
+ * Recursively transform a {@link Model}.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Model}'s rooted at the parameter {@code model}.
+ * 
+ * @param {Model} model the current {@link Model} object to recursively transform
+ * @param {Camera} camera the {@link Scene}'s {@link Camera} with the view volume data
+ * @return {Model} a tree of transformed {@link Model} objects
+ */
+function view2cameraNestedModel(model, camera)
+{
+   logMessage("==== 3. View-to-Camera transformation of: " + model.name + " ====");
+
+   const mod2 = view2cameraModel(model, camera);
+
+   logVertexList("3. Camera    ", mod2);
+   logColorList("3. Camera    ", mod2);
+   logPrimitiveList("3. Camera    ", mod2);
+
+   // recursively transform every nested model of this model
+
+   // a new model list to hold the transformed nested models
+   const newNestedModelList = new Array();
+
+   // do a pre order depth first traversal from this model
+   for(const m of model.nestedModels)
+      newNestedModelList.push(view2cameraNestedModel(m, camera));
+
+   logMessage("==== 3. End Model: " + mod2.name + " ====");
+
+   return new Model(mod2.vertexList, 
+                    mod2.primitiveList, 
+                    mod2.colorList, 
+                    mod2.matrix, 
+                    newNestedModelList,
+                    mod2.name,
+                    mod2.visible);
 }

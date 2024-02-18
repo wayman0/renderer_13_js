@@ -10,8 +10,8 @@
 */
 
 //@ts-check
-import {NearLine, NearPoint, logPrimitive, logPrimitiveList} from "./PipelineExport.js";
-import {Camera, Model, Primitive, LineSegment, Point} from "../scene/SceneExport.js";
+import {NearLine, NearPoint, logColorList, logMessage, logPrimitive, logPrimitiveList, logVertexList} from "./PipelineExport.js";
+import {Camera, Model, Primitive, LineSegment, Point, Position} from "../scene/SceneExport.js";
 
 export var /**@type {boolean} doNearClipping whether to do near clipping */ doNearClipping = true;
 export var /**@type {boolean} nearDebug whether to debug near clipping */ nearDebug = false;
@@ -38,7 +38,7 @@ export var /**@type {boolean} nearDebug whether to debug near clipping */ nearDe
  * @param {Camera} camera the camera containing the near plane
  * @returns {Model} the new model containng the clipped primitives
  */
-export function clip(model, camera)
+export function clipModel(model, camera)
 {
     if (!doNearClipping)
     {
@@ -59,6 +59,8 @@ export function clip(model, camera)
     const model2 = new Model(model.vertexList,
                              model.primitiveList,
                              newColorList,
+                             model.matrix,
+                             model.nestedModels,
                              model.name,
                              model.visible);
 
@@ -126,10 +128,84 @@ export function clip(model, camera)
     return new Model(model2.vertexList,
                     newPrimitiveList,
                     model2.colorList,
+                    model2.matrix,
+                    model2.nestedModels,
                     model2.name,
                     model2.visible);
 }
 
+/**
+ * Recursively clip a {@link Position} at the {@link Camera}'s near plane.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Position}'s rooted at the parameter {@code position}.
+ * 
+ * @param {Position} position  the current {@link Position} object to recursively clip
+ * @param {Camera} camera  {@link Camera} that determines the near clipping plane
+ * @return {Position} a tree of clipped {@link Position} objects
+ * 
+ */
+export function clipPosition(position, camera)
+{
+    logMessage("==== 4. Render position: " + position.name + " ====");
+    
+    // create a new position to hold the newly rendered model and the newly rendered sub Postions
+    const pos2 = Position.buildFromModelName(position.model, position.name);
+
+    // if this model is visible render this positions model
+    if(position.model.visible)
+        pos2.model = clipNestedModel(position.model, camera);
+    else
+        logMessage("====== 4. Hidden Model: " + position.model.name + " ======");
+
+    // do a preorder depth first traversal from this nested position
+    for(const pos of position.nestedPositions)
+        pos2.addNestedPosition(clipPosition(pos, camera));
+
+    logMessage("==== 4. End position: " + position.name + " ====");
+
+    return pos2;
+}
+
+/**
+ * Recursively clip a {@link Model} at the {@link Camera}'s near plane.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Model}'s rooted at the parameter {@code model}.
+ * 
+ * @param {Model} model  the current {@link Model} object to recursively clip
+ * @param {Camera} camera  {@link Camera} that determines the near clipping plane
+ * @return {Model} a tree of clipped {@link Model} objects
+*/
+function clipNestedModel(model, camera)
+{
+    logMessage("==== 4. Near Clip model: " + model.name + " ====");
+
+    const mod2 = clipModel(model, camera);
+
+    logVertexList("4. Near Clipped  ", mod2);
+    logColorList("4. Near Clipped  ", mod2);
+    logPrimitiveList("4. Near Clipped  ", mod2);
+
+    // recursivly clip every nested model of this model.
+
+    // a new model list to hold the transformed nested models.
+    const newNestedModelList = new Array();
+
+    // do a pre order depth first traversal from this nested position
+    for(const m of model.nestedModels)
+        newNestedModelList.push(clipNestedModel(m, camera));
+
+    logMessage("==== 4. End Model: " + mod2.name + " ====");
+
+    return new Model(mod2.vertexList, 
+                     mod2.primitiveList, 
+                     mod2.colorList, 
+                     mod2.matrix,
+                     newNestedModelList,
+                     mod2.name, 
+                     mod2.visible);
+}
 
 /**
  * Set whether or not to do nearClipping.

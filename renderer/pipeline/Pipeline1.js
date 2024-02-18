@@ -27,7 +27,10 @@
 import {Camera, Matrix, Model, OrthoNorm, PerspNorm, Position, Scene, Vector, Vertex, Primitive, LineSegment, Point} from "../scene/SceneExport.js";
 import {check} from "../scene/util/UtilExport.js";
 import {FrameBuffer, Viewport, Color} from "../framebuffer/FramebufferExport.js";
-import {clip, M2W, W2V, NearClip, Project, rasterize, V2C, debugPosition, debugScene, logMessage, logVertexList, logColorList, logPrimitiveList, setDebugScene, setDebugPosition} from "./PipelineExport.js";
+import {clipModel as clip, model2worldModel as M2W, world2viewModel as W2V, 
+        NearClipModel as NearClip, projectModel as Project, rasterizeModel as rasterize, 
+        view2cameraModel as V2C, debugPosition, debugScene, 
+        logMessage, logVertexList, logColorList, logPrimitiveList, setDebugScene, setDebugPosition} from "./PipelineExport.js";
 
 /**@type {Color} */ export var DEFAULT_COLOR = Color.white;
 
@@ -199,13 +202,10 @@ function renderModel(scene, model, ctm, vp)
     for (const m of model.nestedModels)
     {
        if ( m.visible )
-       {
           renderModel(scene, m, ctm2, vp); // recursion
-       }
        else
-       {
           logMessage("====== Hidden model: " + m.name + " ======");
-       }
     }
+
     logMessage("====== End Model: " + model.name + " ======");
 }

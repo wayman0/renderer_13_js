@@ -10,8 +10,8 @@
 */
 
 //@ts-check
-import {RastLine, RastPoint, logPrimitive} from "./PipelineExport.js";
-import {Model, LineSegment, Primitive, Point} from "../scene/SceneExport.js";
+import {RastLine, RastPoint, logMessage, logPrimitive} from "./PipelineExport.js";
+import {Model, LineSegment, Primitive, Point, Position} from "../scene/SceneExport.js";
 import {Viewport} from "../framebuffer/FramebufferExport.js";
 
 /**@type {boolean} */export var rastDebug = false;
@@ -25,7 +25,7 @@ import {Viewport} from "../framebuffer/FramebufferExport.js";
  * @param {Model} model the model containing the primitives to be rasterized
  * @param {Viewport} vp the viewport to recieve the rasterized primitive
  */
-export function rasterize(model, vp)
+export function rasterizeModel(model, vp)
 {
     for (const p of model.primitiveList)
     {
@@ -46,6 +46,55 @@ export function rasterize(model, vp)
     }
 }
 
+/**
+ * Recursively rasterize a {@link Position}.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Position}'s rooted at the parameter {@code position}.
+ *       
+ * @param {Position} position  the current {@link Position} object to recursively rasterize
+ * @param {Viewport} vp       {@link FrameBuffer.Viewport} to hold rendered image of the {@link Scene}
+ */
+export function rasterizePosition(position, vp)
+{
+    logMessage("==== 7. Render Position: " + position.name + " ====");
+
+    // render this positions model if the model is visible
+    if(position.model.visible)
+        rasterizeNestedModel(position.model, vp);
+    else
+        logMessage("====== 7. Hidden model: " + position.model.name + " ======");
+
+    // do a pre order depth first traversal from this nested position
+    for(const pos of position.nestedPositions)
+        rasterizePosition(pos, vp);
+
+    logMessage("==== 7. End position: " + position.name + " ====");
+}
+
+/**
+ * Recursively rasterize a {@link Model}.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Model}'s rooted at the parameter {@code model}.
+ *       
+ * @param {Model} model  the current {@link Model} object to recursively rasterize
+ * @param {Viewport} vp     {@link FrameBuffer.Viewport} to hold rendered image of the {@link Scene}
+ */
+function rasterizeNestedModel(model, vp)
+{
+    logMessage("==== 7. Rasterize model: " + model.name + " ====");
+    
+    rasterizeModel(model, vp);
+
+    // recursively rasterize every nested model of this model
+
+    // do a pre order depth first traversal from this nested position
+    for(const m of model.nestedModels)
+        rasterizeNestedModel(m, vp);
+
+    logMessage("==== 7. End Model: " + model.name + " ====");
+}
 
 /**
  * Set rastDebug to be the specified value

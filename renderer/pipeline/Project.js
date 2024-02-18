@@ -65,7 +65,8 @@
 */
 
 //@ts-check
-import {Model, Vertex, Camera} from "../scene/SceneExport.js";
+import {Model, Vertex, Camera, Position} from "../scene/SceneExport.js";
+import { logMessage, logVertexList } from "./PipelineLogger.js";
 
 /**
  *  Project each {@link Vertex} from a {@link Model} to
@@ -75,7 +76,7 @@ import {Model, Vertex, Camera} from "../scene/SceneExport.js";
  * @param {Camera} camera the scenes camera object
  * @returns {Model} a new model containing the projected vertexes
  */
-export default function project(model, camera)
+export function projectModel(model, camera)
 {
    /*
     const newVertexList = new Array();
@@ -104,6 +105,78 @@ export default function project(model, camera)
     return new Model(newVertexList,
                      model.primitiveList,
                      model.colorList,
+                     model.matrix,
+                     model.nestedModels,
                      model.name,
                      model.visible);
+}
+
+/**
+ * Recursively project a {@link Position}.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Position}'s rooted at the parameter {@code position}.
+ * 
+ * @param {Position} position  the current {@link Position} object to recursively project
+ * @param {Camera} camera    the {@link Scene}'s {@link Camera} with the view volume data
+ * @return {Position} a tree of projected {@link Position} objects
+*/
+export function projectPosition(position, camera)
+{
+   logMessage("==== 5. Render position: " + position.name + " ====");
+
+   //create a new position to hold the newly rendered model and the newly rendered sub positions
+   const pos2 = Position.buildFromModelName(position.model, position.name);
+
+   // render this positions model if it is visible
+   if(position.model.visible)
+      pos2.model = projectNestedModel(position.model, camera);
+   else
+      logMessage("====== 5. Hidden model: " + position.model.name + " ======");
+
+   // do a preorder depth first traversal from this nested position
+   for(const pos of position.nestedPositions)
+      pos2.addNestedPosition(projectPosition(pos, camera));
+
+   logMessage("==== 5. End position: " + position.name + " ====");
+
+   return pos2;
+}
+
+/** 
+ * Recursively project a {@link Model}.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Model}'s rooted at the parameter {@code model}.
+ *       
+ * @param {Model} model   the current {@link Model} object to recursively project
+ * @param {Camera} camera  a reference to the {@link Scene}'s {@link Camera} object
+ * @return {Model} a tree of projected {@link Model} objects
+*/
+function projectNestedModel(model, camera)
+{
+   logMessage("==== 5. Project model: " + model.name + " ====");
+
+   const mod2 = projectModel(model, camera);
+
+   logVertexList("5. Projected", mod2);
+
+   // recursively project every nested model of this model
+
+   // a new model list to hold the transformed nested models
+   const newNestedModelList = new Array();
+
+   // do a pre order depth first traversal from this nested position
+   for(const m of model.nestedModels)
+      newNestedModelList.push(projectNestedModel(m, camera));
+
+   logMessage("==== 5. End Model: " + mod2.name + " ====");
+
+   return new Model(mod2.vertexList, 
+                    mod2.primitiveList, 
+                    mod2.colorList, 
+                    mod2.matrix,
+                    newNestedModelList, 
+                    mod2.name, 
+                    mod2.visible);
 }

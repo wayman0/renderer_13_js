@@ -12,8 +12,8 @@
 */
 
 //@ts-check
-import {LineClip, PointClip, logPrimitive} from "./PipelineExport.js";
-import {Model, Primitive, LineSegment, Point} from "../scene/SceneExport.js";
+import {LineClip, PointClip, logColorList, logMessage, logPrimitive, logPrimitiveList, logVertexList} from "./PipelineExport.js";
+import {Model, Primitive, LineSegment, Point, Position} from "../scene/SceneExport.js";
 
 export var /**@type {boolean} whether to debug clipping */clipDebug = false;
 
@@ -37,7 +37,7 @@ export var /**@type {boolean} whether to debug clipping */clipDebug = false;
  * @param {Model} model the model containing the primitives to be clipped
  * @returns {Model} a new model containing the clipped primitives
  */
-export function clip(model)
+export function clipModel(model)
 {
     // have to do this way because new Array(model.colorList()) gives error
     // and can't just pass the color list itself
@@ -53,6 +53,8 @@ export function clip(model)
     const model2 = new Model(model.vertexList,
                              model.primitiveList,
                              newColorList,
+                             model.matrix, 
+                             model.nestedModels,
                              model.name,
                              model.visible);
 
@@ -119,10 +121,81 @@ export function clip(model)
     return new Model(model2.vertexList,
                      newPrimitiveList,
                      model2.colorList,
+                     model2.matrix,
+                     model2.nestedModels,
                      model2.name,
                      model2.visible);
 }
 
+/**
+ * Recursively clip a {@link Position}.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Position}'s rooted at the parameter {@code position}.
+ *       
+ * @param {Position} position  the current {@link Position} object to recursively clip
+ * @return {Position} a tree of clipped {@link Position} objects
+ */
+export function clipPosition(position)
+{
+    logMessage("==== 6. Render position: " + position.name + " ====");
+
+    // create a new position to hold the newly rendered model and the newly rendered sub positions
+    const pos2 = Position.buildFromModelName(position.model, position.name);
+
+    // render this positions model if it is visible
+    if(position.model.visible)
+        pos2.model = clipNestedModel(position.model);
+    else
+        logMessage("====== 6. Hidden model: " + position.model.name + " ======");
+
+    // do a pre order depth first traversal from this nested position
+    for(const pos of position.nestedPositions)
+        pos2.addNestedPosition(clipPosition(p));
+
+    logMessage("==== 6. End position: " + position.name +  " ====");
+
+    return pos2;
+}
+
+/**
+ * Recursively clip a {@link Model}.
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Model}'s rooted at the parameter {@code model}.
+ *       
+ * @param {Model} model  the current {@link Model} object to recursively clip
+ * @return {Model} a tree of clipped {@link Model} objects
+ */
+function clipNestedModel(model)
+{
+    logMessage("==== 6. Clip Model: " + model.name + " ====");
+
+    const mod2 = clipModel(model);
+
+    logVertexList("6. clipped  ", mod2);
+    logColorList("6. Clipped  ", mod2);
+    logPrimitiveList("6. Clipped  ", mod2);
+
+    // recursively clip every nested model of this model
+
+    // a new model list to hold the transformed nested models
+    const newNestedModelList = new Array();
+
+    // do a pre order depth first traversel from this nested position
+    for(const m of model.nestedModels)
+        newNestedModelList.push(clipNestedModel(m));
+
+    logMessage("==== 6. End Model: " + mod2.name + " ====");
+
+    return new Model(mod2.vertexList, 
+                     mod2.primitiveList, 
+                     mod2.colorList, 
+                     mod2.matrix,
+                     newNestedModelList,
+                     mod2.name, 
+                     mod2.visible);
+}
 
 /**
  * Set whether or not to debug clipping

@@ -27,7 +27,7 @@ import {Model, Position, Matrix, Vertex} from "../scene/SceneExport.js";
  * @param {Matrix} ctm the current model to view transformation matrix
  * @returns {Model} a new model with vertexes inside the cameras view coordinate system
  */
-export default function model2view(position, ctm)
+export function model2viewModel(position, ctm)
 {
     const model = position.model;
     /*
@@ -46,4 +46,9 @@ export default function model2view(position, ctm)
                      model.colorList,
                      position.name + "::" + model.name,
                      model.visible);
+}
+
+export function model2viewPosition()
+{
+   
 }
