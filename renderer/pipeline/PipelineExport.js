@@ -59,6 +59,8 @@ export {default as LineClip} from "./Clip_Line.js";
 export {default as PointClip} from "./Clip_Point.js";
 export * from "./Clip.js";
 export {default as M2V} from "./Model2View.js";
+export {default as M2W} from "./Model2World.js";
+export {default as W2V} from "./World2View.js";
 export {default as NearLine} from "./NearClip_Line.js";
 export {default as NearPoint} from "./NearClip_Point.js";
 export {doNearClipping, setDoNearClipping, nearDebug, setNearDebug, clip as NearClip} from "./NearClip.js";

@@ -27,7 +27,7 @@
 import {Camera, Matrix, Model, OrthoNorm, PerspNorm, Position, Scene, Vector, Vertex, Primitive, LineSegment, Point} from "../scene/SceneExport.js";
 import {check} from "../scene/util/UtilExport.js";
 import {FrameBuffer, Viewport, Color} from "../framebuffer/FramebufferExport.js";
-import {clip, M2V, NearClip, Project, rasterize, V2C, debugPosition, debugScene, logMessage, logVertexList, logColorList, logPrimitiveList, setDebugScene, setDebugPosition} from "./PipelineExport.js";
+import {clip, M2W, W2V, NearClip, Project, rasterize, V2C, debugPosition, debugScene, logMessage, logVertexList, logColorList, logPrimitiveList, setDebugScene, setDebugPosition} from "./PipelineExport.js";
 
 /**@type {Color} */ export var DEFAULT_COLOR = Color.white;
 
@@ -41,20 +41,6 @@ export function renderFB(scene, fb)
 {
     if (fb instanceof FrameBuffer == false)
         throw new Error("FB must be a framebuffer");
-
-    render(scene, fb.vp);
-}
-
-export function renderFB2(scene, fb2)
-{
-    const fb = new FrameBuffer(fb2.width, fb2.height, fb2.bgColorFB);
-    fb.setViewport(fb2.vp.width, fb2.vp.height, fb2.vp.upperLeftX, fb2.vp.upperLeftY);
-
-    for(let x = 0; x < fb2.width; x += 1)
-    {
-        for(let y = 0; y < fb2.height; y += 1)
-            fb.setPixelFB(x, y, fb2.getPixelFB(x, y));
-    }
 
     render(scene, fb.vp);
 }
@@ -74,16 +60,12 @@ export function render(scene, vp)
     if (vp instanceof Viewport == false)
         throw new Error("VP must be a Viewport data type");
 
-    //TypeError: Assignment to constant variable.
-    //debugScene = scene.debug;
     setDebugScene(scene.debug);
 
     logMessage("/n== Begin Renderering of Scene (Pipeline1): " + scene.name + " ==");
 
     for(const position of scene.positionList)
     {
-        //TypeError: Assignment to constant variable.
-        //debugPosition = position.debug;
         setDebugPosition(position.debug);
 
         if (position.visible)
@@ -123,46 +105,7 @@ function renderPosition(scene, position, ctm, vp)
     const ctm2 = ctm.timesMatrix(position.getMatrix());
 
     if (position.getModel() != null && position.getModel() != undefined && position.getModel().visible)
-    {
-        logMessage("====== Render model: " + position.getModel().name + " ======");
-
-        check(position.getModel());
-
-        if ( position.getModel().colorList.length == 0 &&
-            !(position.getModel().vertexList.length == 0))
-        {
-            for(let i = 0; i < position.getModel().vertexList.length; ++i)
-                position.getModel().addColor(DEFAULT_COLOR);
-
-            console.log("***WARNING: Added default color to model: " + position.getModel().name + ".");
-        }
-
-        logVertexList("0. Model    ", position.getModel());
-
-        const model1 = M2V(position, ctm2);
-        logVertexList("1. View      ", model1);
-
-        const model2 = V2C(model1, scene.camera);
-        logVertexList("2. Camera    ", model2);
-        logColorList("2. Camera    ", model2);
-        logPrimitiveList("2. Camera    ", model2);
-
-        const model3 = NearClip(model2, scene.camera);
-        logVertexList("3. NearClipped", model3);
-        logColorList("3. NearClipped", model3);
-        logPrimitiveList("3. NearClipped", model3);
-
-        const model4 = Project(model3, scene.camera);
-        logVertexList("4. Projected  ", model4);
-
-        const model5 = clip(model4);
-        logVertexList("5. Clipped    ", model5);
-        logColorList("5. Clipped    ", model5);
-        logPrimitiveList("5. Clipped    ", model5);
-
-        rasterize(model5, vp);
-        logMessage("====== End Model: " + position.getModel().getName() + " =====");
-    }
+        renderModel(scene, position.getModel(), ctm2, vp);
     else
     {
         if (position.getModel() != null && position.getModel() != undefined)
@@ -178,4 +121,91 @@ function renderPosition(scene, position, ctm, vp)
         else
             logMessage("====== Hidden Position" + position.getName() + " =====");
     }
+
+    logMessage("==== End position: " + position.name + " ====");
+}
+
+/**
+ * Recursively render a {@link Model}
+ * 
+ * <p>
+ * This method does a pre-order, depth-first-traversal of the tree of
+ * {@link Model}'s rooted at the parameter {@code model}.
+ * <p>
+ * The pre-order "visit node" operation in this traversal first updates the
+ * "current transformation matrix", ({@code ctm}), using the {@link Matrix}
+ * in {@code model} and then renders the geometry in {@code model}
+ * using the updated {@code ctm} in the {@link Model2View} stage.
+ *
+ * @param {Scene} scene the {@link Scene} that we are rendering
+ * @param {Model} model the curren {@link Model} object to recursively render
+ * @param {Matrix} ctm the current model to view transformation {@link Matrix}
+ * @param {Viewport} vp the {@link Viewport} to hold the rendered image of the {@link Scene}
+ */
+function renderModel(scene, model, ctm, vp)
+{
+    logMessage("====== Render Model: " + model.name + " ======");
+    check(model);
+    
+    // Mostly for compatibility with renderers 1 through 3.
+    if (   model.colorList.length == 0 && model.vertexList.length != 0)
+    {
+        for (let i = 0; i < model.vertexList.length; ++i)
+            model.addColor( DEFAULT_COLOR );
+
+        console.log("***WARNING: Added default color to model: " + model.name + ".");
+    }
+
+    logVertexList("0. Model        ", model);
+
+    // Update the current model-to-world transformation matrix.
+    const ctm2 = ctm.timesMatrix( model.matrix );
+
+    // 1. Apply the current model-to-world coordinate transformation.
+    const model1 = M2W(model, ctm2);
+    logVertexList("1. World        ", model1);
+
+    // 2. Apply the Camera's world-to-view coordinate transformation.
+    const model2 = W2V(model1, scene.camera);
+    logVertexList("2. View         ", model2);
+
+    // 3. Apply the Camera's normalizing view-to-camera coordinate transformation.
+    const model3 = V2C(model2, scene.camera);
+    logVertexList("3. Camera       ", model3);
+    logColorList("3. Camera       ", model3);
+    logPrimitiveList("3. Camera       ", model3);
+
+    // 4. Clip primitives to the camera's near plane.
+    const model4 = NearClip(model3, scene.camera);
+    logVertexList("4. Near_Clipped", model4);
+    logColorList("4. Near_Clipped", model4);
+    logPrimitiveList("4. Near_Clipped", model4);
+
+    // 5. Apply the Camera's projection transformation.
+    const model5 = Project(model4, scene.camera);
+    logVertexList("5. Projected   ", model5);
+
+    // 6. Clip primitives to the camera's view rectangle.
+    const model6 = clip(model5);
+    logVertexList("6. Clipped     ", model6);
+    logColorList("6. Clipped     ", model6);
+    logPrimitiveList("6. Clipped     ", model6);
+
+    // 7. Rasterize every visible primitive into pixels.
+    rasterize(model6, vp);
+
+    // Recursively transform every nested Model of this Model.
+    // Do a pre-order, depth-first-traversal from this Model.
+    for (const m of model.nestedModels)
+    {
+       if ( m.visible )
+       {
+          renderModel(scene, m, ctm2, vp); // recursion
+       }
+       else
+       {
+          logMessage("====== Hidden model: " + m.name + " ======");
+       }
+    }
+    logMessage("====== End Model: " + model.name + " ======");
 }
