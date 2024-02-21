@@ -29,6 +29,8 @@ export {default as Icosidodecahedron} from "./Icosidodecahedron.js";
 export {default as Octahedron} from "./Octahedron.js";
 export {default as Tetrahedron} from "./Tetrahedron.js";
 
+export {default as SierpinskiSponge} from "./SierpinskiSponge.js";
+export {default as SierpinskiTriangle} from "./SierpinskiTriangle.js";
 /*
 these need to be imported from their actual files
 so as to avoid any node errors
