@@ -100,7 +100,7 @@ export function render(scene, vp)
     scene3 = Scene.buildFromCameraName(scene.camera, scene.name);
     logMessage("== 3. Begin view-to-camera transformation of Scene ====");
     for(const pos of scene2.positionList)
-        scene3.addPosition(V2C(position, scene.camera));
+        scene3.addPosition(V2C(pos, scene.camera));
     logMessage("== 3. End view-to-camera transformation of SCene ====");
 
     scene4 = Scene.buildFromCameraName(scene.camera, scene.name);

@@ -360,6 +360,29 @@ export default class Model
     }
 
     /**
+     * @param {Matrix} m the matrix to set this model's matrix to be
+     */
+    set matrix(m)
+    {
+        if(m instanceof Matrix == false)
+            throw new Error("M must be a matrix");
+
+        this.#matrix = m;
+    }
+
+    /**
+     * 
+     * @param {Matrix} m the matrix to set this model's matrix to be 
+     */
+    setMatrix(m)
+    {
+        if(m instanceof Matrix == false)
+            throw new Error("M must be a Matrix");
+
+        this.#matrix = m;
+    }
+
+    /**
      * Get the {@link Vertex} at the specified index in this models vertexList.
      *
      * @param {number} [index=0] the index into this models vertexList

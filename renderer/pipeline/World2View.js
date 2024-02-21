@@ -33,7 +33,7 @@ export function world2viewModel(model, camera)
 {
     // We translate each vertex in the opposite
     // direction of what the camera was translated by
-    const negViewVector = camera.getViewVector().timesConstant(-1);
+    const negViewVector = camera.getViewVector().timesScalar(-1);
 
     // A new vertex list to hold the transformed vertices
     const newVertexList = new Array();
