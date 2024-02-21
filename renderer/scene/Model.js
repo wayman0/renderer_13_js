@@ -85,18 +85,18 @@ export default class Model
      * @param {Vertex[]} [vList=new Array()] an array of {@link Vertex}s for this model
      * @param {Primitive[]} [pList=new Array()] an array of {@link Primitive}s for this model
      * @param {Color[]} [cList=new Array()] an array of {@link Color}s for this model
-     * @param {string} [name=""] the name for this model
-     * @param {boolean} [vis=true] whether this model should be seen by the renderer
      * @param {Matrix} [mat=Matrix.identity()] the transformation matrix for this model
      * @param {Model[]} [nestMod=new Array()] the list of nested models this model contains
+     * @param {string} [name=""] the name for this model
+     * @param {boolean} [vis=true] whether this model should be seen by the renderer
      */
     constructor(vList= new Array(),
                 pList= new Array(),
                 cList = new Array(),
-                name = "",
-                vis = true,
                 mat = Matrix.identity(),
-                nestMod = new Array())
+                nestMod = new Array(),
+                name = "",
+                vis = true)
     {
         if (Array.isArray(vList) == false)
             throw new Error("Vertex list must be array");
@@ -197,7 +197,7 @@ export default class Model
      */
     static buildName(name = "")
     {
-        return new Model(new Array(), new Array(), new Array(), name);
+        return new Model(new Array(), new Array(), new Array(), undefined, undefined, name);
     }
 
     /**
@@ -211,7 +211,7 @@ export default class Model
     static buildNameMatrix(name = "", mat = Matrix.identity())
     {
         return new Model(new Array(), new Array(), new Array(), 
-                         name, true, mat, new Array());
+                         mat, new Array(), name);
     }
 
 
@@ -224,8 +224,9 @@ export default class Model
      */
     static buildRend9Model(vList = new Array(), pList = new Array(), cList = new Array, name = "", vis = true)
     {
-        return new Model(vList, pList, cList, name, vis, 
-                         Matrix.identity(), new Array());
+        return new Model(vList, pList, cList, 
+                         Matrix.identity(), new Array(),
+                         name, vis);
     }
 
     /**
@@ -506,9 +507,8 @@ export default class Model
      */
     transform(matrix)
     {
-        return new Model(this.#vertexList, this.#primitiveList,
-                         this.#colorList, this.#name, this.visible,
-                         matrix, this.#nestedModels);
+        return new Model(this.#vertexList, this.#primitiveList, this.#colorList,
+                         matrix, this.#nestedModels, this.#name, this.visible);
     }
 
     /**
