@@ -377,6 +377,31 @@ export default class Position
       this.#matrix = Matrix.translate(dx, dy, dz);
    }
 
+   /**
+    * Create a new Position that is essentially the same as this Position but holding a reference to the given model
+    * 
+    * @param {Model} model the model object to place at the new Position
+    * @return {Position} a new position with the given model
+    */
+   changeModel(model)
+   {
+      return new Position(model, this.#matrix, this.#name, 
+                          this.#nestedPositions, 
+                          this.visible, this.debug);
+   }
+
+   /**
+    * Create a new Position that is essentailly the same as this Position but holding a reference to the given Matrix
+    * 
+    * @param {Matrix} matrix the matrix object to use in the new Position
+    * @return {Position} the new position holding the given matrix
+    */
+   transform(matrix)
+   {
+      return new Position( this.#model, matrix, this.#name,
+                           this.#nestedPositions,
+                           this.visible, this.debug);
+   }
 
    /**
     * For debugging purposes.

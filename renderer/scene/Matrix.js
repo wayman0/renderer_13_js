@@ -471,6 +471,80 @@ export default class Matrix
 
 
    /**
+    * Assuming that the 3-by-3 "rotation part" of this 4-by-4
+    * {@code Matrix} represents a pure rotation, return the
+    * rotation's three Euler angles, in radians, in the
+    * order {@code [x, y, z]} for rotations in the order
+    * {@code R_z * R_y * R_x}.
+    * <p>
+    * A 3-by-3 matrix is a rotation matrix if its inverse is
+    * equal to its transpose and its determinant is equal to 1.
+    * <p>
+    * See <a href="http://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf" target="_top">
+    *              http://eecs.qmul.ac.uk/~gslabaugh/publications/euler.pdf</a>
+    * @return {Array} an array of 3 doubles which are this rotation's Euler angles in radians
+    */
+   rot2euler()
+   {
+      const r11 = this.v1.x,
+            r12 = this.v2.x,
+            r13 = this.v3.x,
+            r21 = this.v1.y,
+            r31 = this.v1.z,
+            r32 = this.v2.z,
+            r33 = this.v3.z;
+      
+      let rx, ry, rz;
+
+      if(r31 != 1 && r31 != -1)
+      {
+         ry = -Math.asin(r31);
+
+         rx =  Math.atan2( r32/Math.cos(ry),
+                           r33/Math.cos(ry));
+
+         rz =  Math.atan2( r21/Math.cos(ry),
+                           r11/Math.cos(ry));
+      }
+      else
+      {
+         if(r31 == -1)
+         {
+            ry = Math.PI/2;
+            rx = Math.atan2(r12, r13);
+         }
+         else
+         {
+            ry = -Math.PI/2;
+            rx =  Math.atan2(-r12, -r13);
+         }
+
+         rz = 0;
+      }
+
+      return [rx, ry, rz];
+   }
+
+   /**
+    * Assuming that this {@code Matrix} represents a 3D rotation,
+    * return the rotation matrix formed by multiplying this matrix's
+    * three Euler angle rotations in the order {@code R_z * R_y * R_x}.
+    * <p>
+    * This is mainly for debugging. If this matrix is really a pure
+    * rotation, then this method will return a copy of this matrix.
+    *
+    * @return {Matrix} the "eulerized" version of this {@code Matrix}
+    */
+   eulerize()
+   {
+      const euler = this.rot2euler();
+
+      return Matrix.rotateZ(euler[2] * (180/Math.PI)).timesMatrix(
+             Matrix.rotateY(euler[1] * (180/Math.PI)).timesMatrix(
+             Matrix.rotateX(euler[0] * (180/Math.PI))));
+   }
+
+   /**
     * For debugging.
     *
     * @returns {string} representation of this {@code Matrix}

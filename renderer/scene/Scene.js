@@ -170,7 +170,16 @@ export default class Scene
         this.#camera = cam;
     }
 
-
+    /**
+     * Create a new Scene that is essentially the same as this SCene but holding a reference to the given Camera
+     * 
+     * @param {Camera} cam the camera object for the noew Scene
+     * @return {Scene}
+     */
+    changeCamera(cam)
+    {
+        return new Scene(cam, this.#positionList, this.#name, this.debug);
+    }
     /**
      * Get the array of positions for this scene.
      * @returns {Position[]} this scenes array of positions
@@ -279,6 +288,24 @@ export default class Scene
 			}
         }
 
+        return undefined;
+    }
+
+    /**
+     * Get the first position with the given name in this scenes array of positions
+     * 
+     * @param {string} name the name of the position 
+     * @returns {Position | undefined} returns the position containing the given name
+     */
+    getPositionByName(name)
+    {
+        if(typeof name != "string")
+            throw new Error("name must be a string");
+
+        for(let pos of this.#positionList)
+            if(name === pos.name)
+                return pos;
+        
         return undefined;
     }
 

@@ -71,16 +71,13 @@ import {Color} from "../framebuffer/FramebufferExport.js";
 
 export default class Model
 {
-    /**@type {Vertex[]} #vertexList the array of vertexes for this model */#vertexList;
-
-    // should the type of primitive list be made into
-    // @type{LineSegment[]|Point[]}
-    // or would that be a problem if a model contains a combo of points and linesegments
-
-    /**@type {Primitive[]} #primitiveList the array of primitives for this model */#primitiveList;
-    /**@type {Color[]} #colorList the array of colors for this model */#colorList;
-    /**@type {string} #name the name for this model */#name;
-    /**@type {boolean} visible whether or not this model should be "seen" */visible;
+    /**@type {Vertex[]}    #vertexList the array of vertexes for this model */            #vertexList;
+    /**@type {Primitive[]} #primitiveList the array of primitives for this model */       #primitiveList;
+    /**@type {Color[]}     #colorList the array of colors for this model */               #colorList;
+    /**@type {string}      #name the name for this model */                               #name;
+    /**@type {boolean}      visible whether or not this model should be "seen" */          visible;
+    /**@type {Matrix}      #matirx transformation matrix for this model */                #matrix;
+    /**@type {Model[]}     #nestedModels the list of nested models this model contains */ #nestedModels;
 
     /**
      * Construct a {@code Model} with all the given data.
@@ -90,12 +87,16 @@ export default class Model
      * @param {Color[]} [cList=new Array()] an array of {@link Color}s for this model
      * @param {string} [name=""] the name for this model
      * @param {boolean} [vis=true] whether this model should be seen by the renderer
+     * @param {Matrix} [mat=Matrix.identity()] the transformation matrix for this model
+     * @param {Model[]} [nestMod=new Array()] the list of nested models this model contains
      */
     constructor(vList= new Array(),
                 pList= new Array(),
                 cList = new Array(),
                 name = "",
-                vis = true)
+                vis = true,
+                mat = Matrix.identity(),
+                nestMod = new Array())
     {
         if (Array.isArray(vList) == false)
             throw new Error("Vertex list must be array");
@@ -105,6 +106,12 @@ export default class Model
 
         if (Array.isArray(cList) == false)
             throw new Error("Color List must be array");
+
+        if(Array.isArray(nestMod) == false)
+            throw new Error("Nested Models must be an array");
+
+        if(mat instanceof Matrix == false)
+            throw new Error("Matrix must be a Matrix");
 
         if (typeof name != "string")
             throw new Error("Name must be a string");
@@ -160,8 +167,25 @@ export default class Model
             }
         }
 
+        let modelLength = 0;
+        this.#nestedModels = new Array();
+        for(let x = 0; x < nestMod.length; x += 1)
+        {
+            if(nestMod[x] instanceof Model == false)
+            {
+                this.#nestedModels.length = modelLength;
+                throw new Error("Nested Models must only contain Models");
+            }
+            else
+            {
+                this.#nestedModels.push(nestMod[x]);
+                modelLength += 1;
+            }
+        }
+
         this.#name = name;
         this.visible = vis;
+        this.#matrix = mat;
     }
 
 
@@ -176,6 +200,33 @@ export default class Model
         return new Model(new Array(), new Array(), new Array(), name);
     }
 
+    /**
+     * Create an empty model with the given name and matrix
+     * 
+     * @param {string} [name = ""] the name of the model
+     * @param {Matrix} [mat = Matrix.identity()] the matrix for this moodel
+     * 
+     * @return {Model} the empty model with the given name and matrix;
+     */
+    static buildNameMatrix(name = "", mat = Matrix.identity())
+    {
+        return new Model(new Array(), new Array(), new Array(), 
+                         name, true, mat, new Array());
+    }
+
+
+    /**
+     * @param {Vertex[]} [vList=new Array()] an array of {@link Vertex}s for this model
+     * @param {Primitive[]} [pList=new Array()] an array of {@link Primitive}s for this model
+     * @param {Color[]} [cList=new Array()] an array of {@link Color}s for this model
+     * @param {string} [name=""] the name for this model
+     * @param {boolean} [vis=true] whether this model should be seen by the renderer
+     */
+    static buildRend9Model(vList = new Array(), pList = new Array(), cList = new Array, name = "", vis = true)
+    {
+        return new Model(vList, pList, cList, name, vis, 
+                         Matrix.identity(), new Array());
+    }
 
     /**
      * @returns {Vertex[]} returns a reference to this models array of vertexes
@@ -267,6 +318,45 @@ export default class Model
         this.#name = n;
     }
 
+    /**
+     * Get this models nested models list 
+     * 
+     * @returns {Model[]} the nested models for this model
+     */
+    getNestedModels()
+    {
+        return this.#nestedModels;
+    }
+
+    /**
+    * Get this models nested models list 
+    * 
+    * @returns {Model[]} the nested models for this model
+    */
+    get nestedModels()
+    {
+        return this.#nestedModels;
+    }
+
+    /**
+     * Get this models matrix 
+     * 
+     * @returns {Matrix} this models matrix
+     */
+    getMatrix()
+    {
+        return this.#matrix;
+    }
+
+    /**
+     * Get this models matrix 
+     * 
+     * @returns {Matrix} this models matrix
+     */
+    get matrix()
+    {
+        return this.#matrix;
+    }
 
     /**
      * Get the {@link Vertex} at the specified index in this models vertexList.
@@ -360,6 +450,66 @@ export default class Model
         }
     }
 
+    /**
+     * Get a reference to the nested model at the given 
+     * index in this models list of nested models
+     * 
+     * @param {number} [index=0] 
+     * @returns {Model} the model at the given index
+     */
+    getNestedModel(index = 0)
+    {
+        if(typeof index != "number")    
+            throw new Error("index must be a number");
+
+        return this.nestedModels[index];
+    }
+
+    /**
+     * Add a nested Model(s) to this Models list of nested models
+     * 
+     * @param {Model[]} mod the model to be added to this models  
+     */
+    addNestedModel(... mod)
+    {
+        for(const m of mod)
+        {
+            if(m instanceof Model == false)
+                throw new Error("Can only add models to this models nested models list");
+
+            this.#nestedModels.push(m);
+        }
+    }
+
+    /**
+     * Set a reference to the given Model object at the given index in this models list of nested models
+     * 
+     * @param {number} index the index to set the new model at
+     * @param {Model} mod the model to be put at the given index
+     */
+    setNestedModel(index, mod)
+    {
+        if(typeof index == "number")
+            throw new Error("Index must be a number");
+        
+        if(mod instanceof Model == false)
+            throw new Error("Model must be a Model");
+
+        this.#nestedModels[index] = mod;
+    }
+
+    /**
+     * Create a new Model that is essentailly the same as this Model but holding a reference to the given Matrix
+     * 
+     * @param {Matrix} matrix the Matrix object to use in the new Model
+     * @return {Model} the new translated model 
+     */
+    transform(matrix)
+    {
+        return new Model(this.#vertexList, this.#primitiveList,
+                         this.#colorList, this.#name, this.visible,
+                         matrix, this.#nestedModels);
+    }
 
     /**
      * For debugging.
@@ -373,6 +523,7 @@ export default class Model
         result += "Model has " + this.#vertexList.length + " vertices.\n";
         result += "Model has " + this.#colorList.length + " colors.\n";
         result += "Model has " + this.#primitiveList.length + " primitives.\n";
+        result += "Model has " + this.#nestedModels.length  + " nested models.\n";
 
         let i = 0;
         for (let v of this.#vertexList)
@@ -393,6 +544,11 @@ export default class Model
             ++i;
         }
 
+        result += this.#matrix.toString() + "\n";
+        
+        for(const m of this.#nestedModels)
+            result += m.toString();
+        
         return result;
     }
 

@@ -67,6 +67,7 @@
 
 //@ts-check
 import {format} from "../scene/util/UtilExport.js";
+import {Vector, OrthoNorm, PerspNorm, Matrix} from "./SceneExport.js";
 
 export default class Camera
 {
@@ -76,6 +77,7 @@ export default class Camera
     /**@type {number} top the top wall of the view valumne*/ top;
     /**@type {number} n the front wall of the view valumne*/ n;
     /**@type {boolean} perspective whether the camera is projecting ortho or perspective*/ perspective;
+    /**@type {Vector} the vector to determine the camera's location in world space */ #viewVector;
 
     /**
      * Set up this {@code Camera}'s view volume as a specified by {@param} persp
@@ -86,16 +88,17 @@ export default class Camera
      * @param {number} [t=1] the top edge of view rectangle in the near plane
      * @param {number} [near=1] the front edge of view rectangle in the near plane, distance from origin to view plane
      * @param {boolean} [persp=true] whether to project perspective or orthographic
-     */
-    constructor(l = -1, r = -l, b = -1, t = -b, near = 1, persp = true)
+     * @param {Vector} [viewVect=new Vector(0, 0, 0)] the vector determining the cameras location in world space 
+    */
+    constructor(l = -1, r = -l, b = -1, t = -b, near = 1, persp = true, viewVect = new Vector(0, 0, 0))
     {
         if (typeof persp != "boolean")
             throw new Error("Perspective must be a boolean");
 
         if(persp)
-            this.projPerspective(l, r, b, t, near);
+            this.projPerspective(l, r, b, t, near, viewVect);
         else
-            this.projOrtho(l, r, b, t, near);
+            this.projOrtho(l, r, b, t, near, viewVect);
     }
 
 
@@ -108,8 +111,9 @@ export default class Camera
      * @param {number} [bottom=-1] the bottom edge of view rectangle in the near plane
      * @param {number} [top=-1*bottom] the top edge of view rectangle in the near plane
      * @param {number} [near=1] the front edge of view rectangle in the near plane, distance from origin to view plane
+     * @param {Vector} [viewVect=new Vector(0, 0, 0)] the vector to determine this camears location in world space
      */
-    projPerspective(left = -1, right = -1 * left, bottom = -1, top = -1 * bottom, near = 1)
+    projPerspective(left = -1, right = -1 * left, bottom = -1, top = -1 * bottom, near = 1, viewVect = new Vector(0, 0, 0))
     {
         if (typeof left != "number"   ||
             typeof right != "number"  ||
@@ -118,11 +122,15 @@ export default class Camera
             typeof near != "number")
                 throw new Error("All parameters must be numerical");
 
+        if(viewVect instanceof Vector == false)
+            throw new Error("View Vector must be a Vector");
+
         this.left = left;
         this.right = right;
         this.bottom = bottom;
         this.top = top;
         this.n = -1 * near;
+        this.#viewVector = viewVect;
 
         this.perspective = true;
     }
@@ -151,12 +159,47 @@ export default class Camera
         this.right = this.top * aspect;
         this.left = -1 * this.right;
         this.n = -1 * near;
+        this.#viewVector = new Vector(0, 0, 0);
         this.perspective = true;
 
         // why do we call this fucntion? the only difference is the one line this.perspective = true?
         // this.projPerspective(this.left, this.right, this.bottom, this.top, this.near);
     }
 
+    /**
+     * Set up this {@code Camera}'s view volume as a perspective projection
+     * of an infinite view pyramid extending along the negative z-axis.
+     * <p>
+     * Use {@code focalLength} to determine the image plane. So the
+     * {@code left}, {@code right}, {@code bottom}, {@code top}
+     * parameters are used in the plane {@code z = -focalLength}.
+     * <p>
+     * The {@code focalLength} parameter can be used to zoom an
+     * asymmetric view volume, much like the {@code fovy} parameter
+     * for the symmetric view volume, or the "near" parameter for
+     * the OpenGL gluPerspective() function.
+     * 
+     * @param {number} [l= -1] the left edge of the view rectangle in the image plane
+     * @param {number} [r= -l] the right edge of the view rectangle in the image plane
+     * @param {number} [b= -1] the bottom edge of the view rectangle in the image plane
+     * @param {number} [t= -b] the top edge of the view rectangle in the image plane
+     * @param {number} [fLength=1] the distance from the origin to the image plane
+     */
+    projPerspectiveFocalLength(l = -1, r = -l, b = -1, t = -b, fLength = 1)
+    {
+        if(typeof l != "number" || typeof r != "number" ||
+            typeof b != "number" || typeof t != "number" ||
+            typeof fLength != "number")
+                throw new Error("All parameters must be numerical");
+
+        this.perspective = true;
+        this.left = l/ fLength;
+        this.right = r/fLength;        
+        this.bottom = b/fLength;    
+        this.top = t/fLength;   
+        this.n = -.1;
+        this.#viewVector = new Vector(0, 0, 0); 
+    }
 
     /**
      * Set up this {@code Camera}'s view volume as a parallel (orthographic)
@@ -168,8 +211,9 @@ export default class Camera
      * @param {number} [bottom=-1] bottom edge of view rectangle in the xy-plane
      * @param {number} [top=-1] top edge of view rectangle in the xy-plane
      * @param {number} [near=-1] distance from the origin to the near plane
+     * @param {Vector} [viewVect=new Vector(0, 0, 0)]  this cameras location in world space
      */
-    projOrtho(left = -1, right = 1, bottom = -1, top = 1, near = -1)
+    projOrtho(left = -1, right = 1, bottom = -1, top = 1, near = -1, viewVect = new Vector(0, 0, 0))
     {
         if (typeof left != "number"   ||
             typeof right != "number"  ||
@@ -178,12 +222,15 @@ export default class Camera
             typeof near != "number")
                 throw new Error("All parameters must be numerical");
 
+        if(viewVect instanceof Vector == false)
+            throw new Error("View Vector must be a Vector");
+
         this.left = left;
         this.right = right;
         this.bottom = bottom;
         this.top = top;
         this.n = -1 * near;
-
+        this.#viewVector = viewVect;
         this.perspective = false;
     }
 
@@ -209,12 +256,79 @@ export default class Camera
         this.right = this.top * aspect;
         this.left = -1 * this.right;
         this.n = -1 * near;
+        this.#viewVector = new Vector(0, 0, 0);
         this.perspective = false;
 
         // why do we call this fucntion? the only difference is the one line this.perspective = false?
         // this.projPerspective(this.left, this.right, this.bottom, this.top, this.near);
     }
 
+    /**
+     * Create a new {@code Camera} that is essentially the same as this
+     * {@code Camera} but with the given distance from the camera to
+     * the near clipping plane.
+     * <p>
+     * When {@code near} is positive, the near clipping plane is in
+     * front of the camera. When {@code near} is negative, the near
+     * clipping plane is behind the camera.
+     * 
+     * @param {number} near  distance from the new {@code Camera} to its near clipping plane
+     * @return {Camera} a new {@code Camera} object with the given value for near
+    */
+    changeNear(near)
+    {
+       return new Camera(this.left,
+                         this.right,
+                         this.bottom,
+                         this.top,
+                         -near,
+                         this.perspective,
+                         this.#viewVector);
+    }
+
+    /**
+     * Create a new {@code Camera} that is essentially the same as
+     * this {@code Camera} but with the given location.
+     * 
+     * @param {number} x  translated location, in the x-direction, for the new {@code Camera}
+     * @param {number} y  translated location, in the y-direction, for the new {@code Camera}
+     * @param {number} z  translated location, in the z-direction, for the new {@code Camera}
+     * @return {Camera} a new {@code Camera} object with the given translated location
+    */
+    translate(x, y, z)
+    {
+        return new Camera(this.left,
+                        this.right,
+                        this.bottom,
+                        this.top,
+                        this.n,
+                        this.perspective,
+                        new Vector(x, y, z));  // viewVector
+    }
+
+    /**
+     * Get a reference to this {@code Camera}'s view {@link Vector}.
+     * 
+     * @return {Vector} a reference to this {@code Camera}'s {@link Vector} object
+    */
+    getViewVector()
+    {
+       return this.#viewVector;
+    }
+   
+   
+    /**
+       Get a reference to this {@code Camera}'s normalization {@link Matrix}.
+
+       @return {Matrix} a reference to this {@code Camera}'s normalizing {@link Matrix} object
+    */
+    getNormalizeMatrix()
+    {
+        if (this.perspective)
+           return PerspNorm(this.left, this.right, this.bottom, this.top, this.n);
+        else
+           return OrthoNorm(this.left, this.right, this.bottom, this.top);
+    }
 
     /**
       For debugging.
@@ -223,7 +337,8 @@ export default class Camera
     */
     toString()
     {
-        const fovy = 2 * (180 / Math.PI) * Math.atan(this.top/(-1*this.n));
+        const fovy =  (180/Math.PI) * Math.atan(this.top)
+                    + (180/Math.PI) * Math.atan(-this.bottom);
         const ratio = (this.right - this.left) / (this.top - this.bottom);
 
         let result = "";
@@ -235,7 +350,11 @@ export default class Camera
                +  "  top = "    + this.top + "\n"
                +  "  near = "   + -1 * this.n + "\n"
                +  "  (fovy = " + fovy
-               +  format(", aspect ratio = %.2f)", ratio );
+               +  format(", aspect ratio = %.2f)", ratio )
+               +  "Normalization Matrix\n"
+               +  this.getNormalizeMatrix().toString + "\n"
+               +  "Translation Vector\n" 
+               +  "  " + this.#viewVector.toString();
 
         return result;
     }
