@@ -62,9 +62,9 @@ export default class SierpinskiTriangle extends Model
         }
         else
         {
-            this.addNestedModel(this.#subTriangles(n-1,  0.50,  0), 
-                                this.#subTriangles(n-1, -0.25,  0.433),
-                                this.#subTriangles(n-1, -0.25, -0.433));        
+            model.addNestedModel(this.#subTriangles(n-1,  0.50,  0), 
+                                 this.#subTriangles(n-1, -0.25,  0.433),
+                                 this.#subTriangles(n-1, -0.25, -0.433));        
         }
 
         return model;

@@ -73,7 +73,7 @@ export default class SierpinskiSponge extends Model
         }
         else
         {
-            this.addNestedModel(this.#subSponges(n-1,  1,  1,  1), 
+            model.addNestedModel(this.#subSponges(n-1,  1,  1,  1), 
                                 this.#subSponges(n-1, -1,  1, -1),
                                 this.#subSponges(n-1,  1, -1, -1),
                                 this.#subSponges(n-1, -1, -1,  1));

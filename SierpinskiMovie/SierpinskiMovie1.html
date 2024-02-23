@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <style>
+            #page
+            {
+                position: absolute;
+                left:0%;
+                top:0%;
+                width:100%;
+                height:100%;
+            }
+            #resizer
+            {
+                width:800px;
+                height:800px;
+                
+                margin-left: auto;
+                margin-right: auto;
+
+                resize:both;
+                overflow: hidden;
+            }
+            #pixels
+            {
+                width:100%;
+                height:100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id = page>
+            <div id = "resizer">
+                <canvas id = "pixels"></canvas>
+            </div>
+        </div>
+
+        <script src = "SierpinskiMovie.js" type = "module"></script>
+    </body>
+</html>
