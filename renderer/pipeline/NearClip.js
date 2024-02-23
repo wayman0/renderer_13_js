@@ -45,16 +45,6 @@ export function clipModel(model, camera)
         return model;
     }
 
-    // have to implement this way because if pass new array(model.colorList()) get an error
-    // if pass the reference to model.colorList() can mutate the color list
-    /*
-    const newColorList = new Array();
-    for (let x = 0; x < model.colorList.length; x += 1)
-    {
-        newColorList[x] = model.colorList[x];
-    }
-    */
-
     const newColorList = Array.from(model.colorList);
     const model2 = new Model(model.vertexList,
                              model.primitiveList,
@@ -64,66 +54,32 @@ export function clipModel(model, camera)
                              model.name,
                              model.visible);
 
-    //const newPrimitiveList = new Array();
-    //
-    //for (const p of model2.primitiveList)
-    //{
-    //    logPrimitive("3. Near_Clipping", model2, p);
-    //
-    //    let pClipped = undefined;
-    //    if (p instanceof LineSegment)
-    //    {
-    //        pClipped = NearLine(model2, p, camera);
-    //    }
-    //    else
-    //    {
-    //        pClipped = NearPoint(model2, /**@type{Point}*/(p), camera);
-    //    }
-    //
-    //    if (pClipped != undefined)
-    //    {
-    //        newPrimitiveList.push(pClipped);
-    //        logPrimitive("3. Near_Clipped (accept)", model2, pClipped);
-    //    }
-    //    else
-    //    {
-    //        logPrimitive("3. Near_Clipped (reject)", model2, p);
-    //    }
-    //}
-
-    // this method is slower
-    // use map to map which primitives should be clipped,
-    // however any primitive that is clipped is not returned
-    // by the callback function and therefore the new return 
-    // array at the clipped primitive index is set to be undefined by js
-    // so then have to use a filter to filter out the js set undefined primitives
+    const newPrimitiveList = new Array();
     
-    // I don't believe just filter can be used because filter returns a subarray
-    // which would cause mutative problems later on, whereas map returns a new array
-    // and is therefore nonmutative.  Using filter after map is ok, because map
-    // returns a new arrray and then filter returns a subarray of maps new array.
-    const newPrimitiveList = model2.primitiveList.map( 
-                             (p) => {
-                                        logPrimitive("3. Near_Clipping", model2, p);
+    for (const p of model2.primitiveList)
+    {
+        logPrimitive("3. Near_Clipping", model2, p);
     
-                                        let pClipped = undefined;
+        let pClipped = undefined;
+        if (p instanceof LineSegment)
+        {
+            pClipped = NearLine(model2, p, camera);
+        }
+        else
+        {
+            pClipped = NearPoint(model2, /**@type{Point}*/(p), camera);
+        }
     
-                                        if (p instanceof LineSegment)
-                                            pClipped = NearLine( model2, /**@type {LineSegment}*/(p), camera);
-                                        else if(p instanceof Point)
-                                            pClipped = NearPoint(model2, /**@type {Point}*/(p),       camera);
-    
-                                        if (pClipped != undefined)
-                                        {
-                                            logPrimitive("3. Near_Clipped (accept)", model2, pClipped);
-                                            return pClipped;
-                                        }
-                                        else
-                                        {
-                                            logPrimitive("3. Near_Clipped (reject)", model2, p);
-                                        }
-                                    })
-                                    .filter((p) => { return p != undefined && p != null});
+        if (pClipped != undefined)
+        {
+            newPrimitiveList.push(pClipped);
+            logPrimitive("3. Near_Clipped (accept)", model2, pClipped);
+        }
+        else
+        {
+            logPrimitive("3. Near_Clipped (reject)", model2, p);
+        }
+    }
 
     return new Model(model2.vertexList,
                     newPrimitiveList,
@@ -177,7 +133,7 @@ export function clipPosition(position, camera)
  * @param {Camera} camera  {@link Camera} that determines the near clipping plane
  * @return {Model} a tree of clipped {@link Model} objects
 */
-function clipNestedModel(model, camera)
+export function clipNestedModel(model, camera)
 {
     logMessage("==== 4. Near Clip model: " + model.name + " ====");
 

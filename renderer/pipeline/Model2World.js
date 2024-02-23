@@ -111,7 +111,7 @@ export function model2worldPosition(position, ctm)
  * @param {Matrix} ctm
  * @return {Model} a tree of transformed {@link Model} objects 
  */
-function model2worldNestedModel(model, ctm)
+export function model2worldNestedModel(model, ctm)
 {
    logMessage("====== 1. Modeltoworld transformation of: " + model.name + " ======");
    check(model);

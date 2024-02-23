@@ -78,30 +78,18 @@ import { logMessage, logVertexList } from "./PipelineLogger.js";
  */
 export function projectModel(model, camera)
 {
-   /*
-    const newVertexList = new Array();
-    for (let x = 0; x < model.vertexList.length; x += 1)
-    {
-        const v = model.vertexList[x];
-
-        if (camera.perspective)
-            newVertexList[x] = new Vertex(v.x/-v.z, v.y/-v.z, -1);
-        else
-            newVertexList[x] = new Vertex(v.x, v.y, 0);
-    }
-    */
-
-    
-    // this method is slower
-    const newVertexList = model.vertexList.map(
-                          (v) => {
-                                    if(camera.perspective)
-                                       return new Vertex(v.x/-v.z, v.y/-v.z, -1);
-                                    else
-                                       return new Vertex(v.x, v.y, 0);
-                                 });
-    
-
+   
+   const newVertexList = new Array();
+   for (let x = 0; x < model.vertexList.length; x += 1)
+   {
+       const v = model.vertexList[x];
+       
+       if (camera.perspective)
+           newVertexList[x] = new Vertex(v.x/-v.z, v.y/-v.z, -1);
+       else
+           newVertexList[x] = new Vertex(v.x, v.y, 0);
+   }
+   
     return new Model(newVertexList,
                      model.primitiveList,
                      model.colorList,
@@ -153,7 +141,7 @@ export function projectPosition(position, camera)
  * @param {Camera} camera  a reference to the {@link Scene}'s {@link Camera} object
  * @return {Model} a tree of projected {@link Model} objects
 */
-function projectNestedModel(model, camera)
+export function projectNestedModel(model, camera)
 {
    logMessage("==== 5. Project model: " + model.name + " ====");
 

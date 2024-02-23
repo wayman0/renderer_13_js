@@ -81,7 +81,7 @@ export function rasterizePosition(position, vp)
  * @param {Model} model  the current {@link Model} object to recursively rasterize
  * @param {Viewport} vp     {@link FrameBuffer.Viewport} to hold rendered image of the {@link Scene}
  */
-function rasterizeNestedModel(model, vp)
+export function rasterizeNestedModel(model, vp)
 {
     logMessage("==== 7. Rasterize model: " + model.name + " ====");
     

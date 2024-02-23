@@ -96,7 +96,7 @@ export function world2viewPosition(position, camera)
  * @param {Camera} camera the {@link Scene}'s {@link Camera} with the view volume data
  * @return {Model} a tree of transformed {@link Model} objects
  */
-function world2viewNestedModel(model, camera)
+export function world2viewNestedModel(model, camera)
 {
    logMessage("==== 2. World-to-View transformation of: " + model.name + " ====");
 
