@@ -203,7 +203,7 @@ function write2Canvas(scene)
 
    const fb = new FrameBuffer(w, h, Color.black);
 
-   renderFB1(scene, fb);
+   renderFB2(scene, fb);
    ctx.putImageData(new ImageData(fb.pixelBuffer,fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
 }
 

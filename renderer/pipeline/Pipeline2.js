@@ -47,7 +47,7 @@ import {clipPosition as clip, model2worldPosition as M2W, world2viewPosition as 
 /**@type {Scene} */export let scene6;
 
 /**
- *  Mutate the {@link FrameBuffer}'s default {@link FrameBuffer.Viewport}
+ *  Mutate the {@link FrameBuffer}'s default {@link Viewport}
     so that it holds the rendered image of the {@link Scene} object.
  * @param {Scene} scene the scene to be rendererd
  * @param {FrameBuffer} fb the parent framebuffer of the viewport to have the scene rendered into
@@ -82,10 +82,7 @@ export function render(scene, vp)
         setDebugPosition(pos.debug);
 
         if(pos.visible)
-        {
-            const m2wPos = M2W(pos, Matrix.identity());
-            scene1.addPosition(m2wPos);
-        }
+            scene1.addPosition((M2W(pos, Matrix.identity())));
         else
             logMessage("==== 1. Hidden Position: " + pos.name + " ====");
     }
