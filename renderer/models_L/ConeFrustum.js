@@ -47,7 +47,7 @@ export default class ConeFrustum extends Model
    */
    constructor(r1=1, h=.5, r2=.5, n=7, k=16)
    {
-      super(undefined, undefined, undefined, format("Cone Frustum(%.2f,%.2f,%.2f,%d,%d)", r1,  h,   r2,  n, k));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Cone Frustum(%.2f,%.2f,%.2f,%d,%d)", r1,  h,   r2,  n, k));
 
       if (n < 2)
          throw new Error("n must be greater than 1");

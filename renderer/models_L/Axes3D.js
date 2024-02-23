@@ -35,7 +35,7 @@ export default class Axes3D extends Model
                cY = Color.white, 
                cZ = Color.white)
    {
-      super(undefined, undefined, undefined, format("Axes 3D(%.2f,%.2f,%.2f,%.2f%.2f,%.2f)", xMin,xMax,yMin,yMax,zMin,zMax));
+      super(undefined, undefined, undefined, undefined, undefined, format("Axes 3D(%.2f,%.2f,%.2f,%.2f%.2f,%.2f)", xMin,xMax,yMin,yMax,zMin,zMax));
 
       this.addVertex(new Vertex(xMin, 0,    0),
                 new Vertex(xMax, 0,    0),

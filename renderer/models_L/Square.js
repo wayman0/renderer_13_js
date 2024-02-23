@@ -42,7 +42,7 @@ export default class Square extends Model
    */
    constructor(r=1)
    {
-      super(undefined, undefined, undefined, format("Square(%.2f)", r));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Square(%.2f)", r));
 
       if (r <= 0)
          throw new Error("r must be greater than 0");

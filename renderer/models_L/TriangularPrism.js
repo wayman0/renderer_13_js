@@ -110,7 +110,7 @@ export default class TriangularPrism extends Model
    */
    constructor(r=.5, h=.6, h2=r*Math.tan(Math.atan(Math.sqrt(2))), n=3, bothHalves=true)
    {
-      super(undefined, undefined, undefined, format("Triangular Prism(%.2f,%.2f,%.2f,%d)", r, h, h, n));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Triangular Prism(%.2f,%.2f,%.2f,%d)", r, h, h, n));
       
       if(n < 0)
          throw new Error("n must be greater than or equal to 0");

@@ -33,7 +33,7 @@ export default class BarycentricTriangle extends Model
    */
    constructor(n, theta = 0)
    {
-      super(undefined, undefined, undefined, 
+      super(undefined, undefined, undefined, undefined, undefined,  
             format("Barycentric Triangle(%.2f,%d)", theta, n),
             true);
 

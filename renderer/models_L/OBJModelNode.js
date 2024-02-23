@@ -75,7 +75,7 @@ export default async function buildOBJModel(fileName)
         }
     } 
 
-    return new Model(vList, pList, undefined, "OBJModel: " + fileName);
+    return new Model(vList, pList, undefined, undefined, undefined, "OBJModel: " + fileName);
 }
 
 /*

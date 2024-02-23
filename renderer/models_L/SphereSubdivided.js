@@ -36,7 +36,7 @@ export default class SphereSubdivided extends Model
    */
    constructor(n=4, hole=false, sierpinski=false)
    {
-      super(undefined, undefined, undefined, format("Sphere Subdivided(%d)", n));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Sphere Subdivided(%d)", n));
 
       if (n < 0)
          throw new Error("n must be greater than or equal to 0");

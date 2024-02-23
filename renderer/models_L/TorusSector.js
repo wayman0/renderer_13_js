@@ -108,7 +108,7 @@ export default class TorusSector extends Model
    */
    constructor(r1=.75, r2=.25, theta1=Math.PI/2, theta2=3*Math.PI/2, phi1=Math.PI, phi2 = 2*Math.PI, n=6, k=8)
    {
-      super(undefined, undefined, undefined, format("Torus Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)", r1, r2, theta1, theta2, phi1, phi2, n, k));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Torus Sector(%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d,%d)", r1, r2, theta1, theta2, phi1, phi2, n, k));
 
       if (n < 4)
          throw new Error("n must be greater than 3");

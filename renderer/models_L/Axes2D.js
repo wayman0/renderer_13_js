@@ -36,7 +36,7 @@ export default class Axes2D extends Model
    */
    constructor(xMin=-1, xMax=1, yMin=-1, yMax=1, xMarks=5, yMarks=5, cX= Color.white, cY=Color.white, z=0)
    {
-      super(undefined, undefined, undefined, format("Axes 2D(%.2f,%.2f,%.2f,%.2f)", xMin,xMax,yMin,yMax));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Axes 2D(%.2f,%.2f,%.2f,%.2f)", xMin,xMax,yMin,yMax));
 
       this.addColor(cX, cY);
 

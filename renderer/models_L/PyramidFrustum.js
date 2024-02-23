@@ -43,7 +43,7 @@ export default class PyramidFrustum extends Model
    */
    constructor(s1=2, s2=1, h=.5, n=7, k=4)
    {
-      super(undefined, undefined, undefined, format("Pyramid Frustum(%.2f,%.2f,%.2f,%d,%d)", s1,  s2,  h,   n, k));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Pyramid Frustum(%.2f,%.2f,%.2f,%d,%d)", s1,  s2,  h,   n, k));
 
       if (n < 0)
          throw new Error("n must be greater than or equal to 0");

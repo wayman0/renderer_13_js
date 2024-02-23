@@ -57,7 +57,7 @@ export default class Box extends Model
    */
    constructor(xs=1, ys=1, zs=1)
    {
-      super(undefined, undefined, undefined, format("Box(%.2f,%.2f,%.2f)", xs, ys, zs));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Box(%.2f,%.2f,%.2f)", xs, ys, zs));
 
       // Create 8 vertices.
       this.addVertex(new Vertex(0,    0,    0), // 4 vertices around the bottom face

@@ -25,7 +25,7 @@ export default class PanelXY extends Model
    */
    constructor(xMin=-1, xMax=1, yMin=-1, yMax=1, z=0)
    {
-      super(undefined, undefined, undefined, "PanelXY");
+      super(undefined, undefined, undefined, undefined, undefined,  "PanelXY");
 
       // Create the checkerboard panel's geometry.
 

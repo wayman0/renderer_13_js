@@ -44,7 +44,7 @@ export default class Dodecahedron extends Model
    */
    constructor()
    {
-      super(undefined, undefined, undefined, "Dodecahedron");
+      super(undefined, undefined, undefined, undefined, undefined,  "Dodecahedron");
 
       // Create the dodecahedron's geometry.
       // It has 20 vertices and 30 edges.

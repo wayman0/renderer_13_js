@@ -88,7 +88,7 @@ export default async function buildGRSModel(fileName)
         numVertexesUsed += numVertexesSet;
     }
 
-    return new Model(vList, pList, undefined, "GRS Model: " + fileName);
+    return new Model(vList, pList, undefined, undefined, undefined, "GRS Model: " + fileName);
 }
 
 /*

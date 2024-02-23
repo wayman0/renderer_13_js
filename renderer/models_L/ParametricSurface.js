@@ -70,7 +70,7 @@ export default class ParametricSurface extends Model
          typeof n  != "number" || typeof k  != "number")
             throw new Error("S1, S2, T1, T2, N and K must be numerical");
 
-      super(undefined, undefined, undefined, format("Parametric Surface(%d,%d)", n, k));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Parametric Surface(%d,%d)", n, k));
 
       if (n < 2)
          throw new Error("n must be greater than 1");

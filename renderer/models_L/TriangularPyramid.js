@@ -45,7 +45,7 @@ export default class TriangularPyramid extends Model
    */
    constructor(r=(Math.sqrt(3)/Math.sqrt(2))/Math.sqrt(3), h=(Math.sqrt(3)/Math.sqrt(2))*(Math.sqrt(2)/Math.sqrt(3)), n=1, k=1)
    {
-      super(undefined, undefined, undefined, format("Triangular_Pyramid(%.2f,%.2f,%d,%d)", r,   h,   n, k));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Triangular_Pyramid(%.2f,%.2f,%d,%d)", r,   h,   n, k));
 
       if (n < 1)
          throw new Error("n must be greater than 0");

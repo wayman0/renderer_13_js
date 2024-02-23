@@ -13,7 +13,7 @@ export default class SierpinskiTriangle extends Model
      */
     constructor(n = 7)
     {
-        super(undefined, undefined, undefined, 
+        super(undefined, undefined, undefined, undefined, undefined,  
             undefined, undefined, format("Sierpinski_Triangle(%d)", n));
 
         if(n < 0)

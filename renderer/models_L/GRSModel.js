@@ -15,7 +15,7 @@ export default async function buildGRSModel(fileName)
     if(typeof fileName != "string")
         throw new Error("Filename must be a string and include the path");
 
-    const model = new Model(undefined, undefined, undefined, 
+    const model = new Model(undefined, undefined, undefined, undefined, undefined,
         "GRS Model: " + fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length));
 
     // Make an AJAX request to retrieve the GRS file

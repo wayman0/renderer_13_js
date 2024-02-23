@@ -44,7 +44,7 @@ export default class Icosahedron extends Model
    */
    constructor()
    {
-      super(undefined, undefined, undefined, "Icosahedron");
+      super(undefined, undefined, undefined, undefined, undefined,  "Icosahedron");
 
       // Create the icosahedron's geometry.
       // It has 12 vertices and 30 edges.

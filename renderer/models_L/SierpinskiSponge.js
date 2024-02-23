@@ -13,7 +13,7 @@ export default class SierpinskiSponge extends Model
      */
     constructor(n = 5)
     {
-        super(undefined, undefined, undefined, 
+        super(undefined, undefined, undefined, undefined, undefined,  
             undefined, undefined, format("Sierpinski_Sponge(%d)", n));
 
         if(n < 0)

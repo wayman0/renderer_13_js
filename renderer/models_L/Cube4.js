@@ -64,7 +64,7 @@ export default class Cube4 extends Model
    */
    constructor(xCount=2, yGrid=1, zCount=2)
    {
-      super(undefined, undefined, undefined, format("Cube4(%d,%d,%d)", xCount, yGrid, zCount));
+      super(undefined, undefined, undefined, undefined, undefined,  format("Cube4(%d,%d,%d)", xCount, yGrid, zCount));
 
       if (xCount < 1)
          throw new Error("xCount must be greater than or equal to 1");

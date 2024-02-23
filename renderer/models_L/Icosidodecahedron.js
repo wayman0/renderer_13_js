@@ -44,7 +44,7 @@ export default class Icosidodecahedron extends Model
    */
    constructor()
    {
-      super(undefined, undefined, undefined, "Icosidodecahedron");
+      super(undefined, undefined, undefined, undefined, undefined,  "Icosidodecahedron");
 
       // Create the icosidodecahedron's geometry.
       // It has 30 vertices and 60 edges.

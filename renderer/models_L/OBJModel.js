@@ -15,7 +15,7 @@ export default async function buildOBJModel(fileName)
     if(typeof fileName != "string")
         throw new Error("Filename must be a string including the path");
 
-    const model = new Model(undefined, undefined, undefined, 
+    const model = new Model(undefined, undefined, undefined, undefined, undefined, 
         "OBJ Model: " + fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length));
 
     let xhttp = new XMLHttpRequest();

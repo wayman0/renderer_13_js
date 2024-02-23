@@ -48,7 +48,7 @@ export default class ParametricCurve extends Model
             typeof zFunc != "function" )
                 throw new Error("Xfunc, yFunc, and zFunc must be functions and take 1 parameter");
 
-        super(undefined, undefined, undefined, format("Parametric Curve(%d)", n));
+        super(undefined, undefined, undefined, undefined, undefined,  format("Parametric Curve(%d)", n));
 
         this.#t1 = t1;
         this.#t2 = t2;
