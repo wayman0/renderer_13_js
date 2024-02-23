@@ -14,6 +14,7 @@ import * as PipelineLoop from "./Pipeline-loop/PipelineExport.js";
 import * as PipelineStruc from "./Pipeline-struc/PipelineExport.js";
 import * as PipelineStatic1 from "./Pipeline-static-v1/PipelineExport.js";
 import * as PipelineStatic2 from "./Pipeline-static-v2/PipelineExport.js";
+import * as PipelineParFunc1 from "./Pipeline-Param+Func/PipelineExport.js";
 
 
 const funcRow = document.getElementById("Func");
@@ -36,7 +37,11 @@ const static2Row = document.getElementById("Static2");
 const static2CanvasArr = static2Row?.getElementsByClassName("image");
 const static2TextArr = static2Row?.getElementsByClassName("text");
 
-const numRows = 5;
+const parFuncRow = document.getElementById("ParFunc");
+const parFuncCanvasArr = parFuncRow?.getElementsByClassName("image");
+const parFuncTextArr = parFuncRow?.getElementsByClassName("text");
+
+const numRows = 6;
 const numScenes = 6;
 
 const funcTimers = new Array(numRows);
@@ -44,6 +49,7 @@ const loopTimers = new Array(numRows);
 const strucTimers = new Array(numRows);
 const static1Timers = new Array(numRows);
 const static2Timers = new Array(numRows);
+const parFuncTimers = new Array(numRows);
 
 const timingHandles = new Array(numScenes);
 const scenes = new Array(numScenes);
@@ -56,6 +62,7 @@ for(let x = 0; x < funcTimers.length; x += 1)
     strucTimers[x] = Array.from(zeros);
     static1Timers[x] = Array.from(zeros);
     static2Timers[x] = Array.from(zeros);
+    parFuncTimers[x] = Array.from(zeros);
 }
 
 await buildScene1();
@@ -281,6 +288,7 @@ function displayScene(sceneNumber)
     displayStruc(sceneNumber-1);
     displayStatic1(sceneNumber-1);
     displayStatic2(sceneNumber-1);
+    displayParFunc(sceneNumber-1);
 }
 
 function displayFunc(sceneIndex)
@@ -393,6 +401,28 @@ function displayStatic2(sceneIndex)
     static2Text.value = "Static 2 Avg: " + static2Timers[2][sceneIndex];
 }
 
+function displayParFunc(sceneIndex)
+{
+    const scene = scenes[sceneIndex];
+
+    const parFuncText = parFuncTextArr[sceneIndex];
+    const parFuncCanvas = parFuncCanvasArr[sceneIndex];
+    const parFuncWidth = parFuncCanvas.width;
+    const parFuncHeight = parFuncCanvas.height;
+    const parFuncFb = new FrameBuffer(parFuncWidth, parFuncHeight, Color.black);
+    
+    const parFuncStart = new Date().getTime();
+    PipelineParFunc1.renderFBv2(scene, parFuncFb);
+    const parFuncEnd = new Date().getTime();
+
+    parFuncTimers[0][sceneIndex] += (parFuncEnd - parFuncStart);// the running total of rendering time
+    parFuncTimers[1][sceneIndex] += 1;// the running total of times rendered
+    parFuncTimers[2][sceneIndex] = parFuncTimers[0][sceneIndex]/parFuncTimers[1][sceneIndex]; // the average rendering time
+
+    parFuncCanvas.getContext("2d").putImageData(new ImageData(parFuncFb.pixelBuffer, parFuncWidth, parFuncHeight), 0, 0);
+    parFuncText.value = "Par Func Avg: " + parFuncTimers[2][sceneIndex];
+
+}
 
 document.addEventListener("click", mousePress);
 function mousePress(e)

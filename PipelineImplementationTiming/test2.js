@@ -15,6 +15,7 @@ import * as PipelineLoop from "./Pipeline-loop/PipelineExport.js";
 import * as PipelineStruc from "./Pipeline-struc/PipelineExport.js";
 import * as PipelineStatic1 from "./Pipeline-static-v1/PipelineExport.js";
 import * as PipelineStatic2 from "./Pipeline-static-v2/PipelineExport.js";
+import * as PipelineParFunc1 from "./Pipeline-Param+Func/PipelineExport.js";
 
 //alert("Sphere Rotate 1 Degree for 360 Degrees");
 
@@ -53,6 +54,10 @@ let static2Timer = 0;
 let static2Start = 0;
 let static2Stop = 0;
 
+let parFuncTimer = 0;
+let parFuncStart = 0;
+let parFuncStop = 0;
+
 let fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
 {
@@ -82,6 +87,11 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStatic2.renderFB(scene, fb);
     static2Stop = new Date().getTime();
     static2Timer += static2Stop - static2Start;
+
+    parFuncStart = new Date().getTime();
+    PipelineParFunc1.renderFBv2(scene, fb);
+    parFuncStop = new Date().getTime();
+    parFuncTimer += parFuncStop - parFuncStart;
 }
 
 console.log("Sphere Rotation: ");
@@ -90,13 +100,14 @@ console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
 console.log("\tStatic 1 Avg: " + (static1Timer/360));
 console.log("\tStatic 2 Avg: " + (static2Timer/360));
+console.log("\tParFunc Avg:  " + (parFuncStop -parFuncStart)/360);
 
 
 
 //alert("Airplane Rotate 1 Degree 360 Degrees")
 scene = new Scene();
 
-const airplaneMod = new OBJ("../../../assets/cessna.obj");
+const airplaneMod = await OBJ("../../../assets/cessna.obj");
 const airplanePos = Position.buildFromModel(airplaneMod);
 const airplaneMat = Matrix.translate(0, 0, -3);
 
@@ -123,6 +134,10 @@ static1Stop = 0;
 static2Timer = 0;
 static2Start = 0;
 static2Stop = 0;
+
+parFuncTimer = 0;
+parFuncStart = 0;
+parFuncStop = 0;
 
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
@@ -153,6 +168,11 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStatic2.renderFB(scene, fb);
     static2Stop = new Date().getTime();
     static2Timer += static2Stop - static2Start;
+
+    parFuncStart = new Date().getTime();
+    PipelineParFunc1.renderFBv2(scene, fb);
+    parFuncStop = new Date().getTime();
+    parFuncTimer += parFuncStop - parFuncStart;
 }
 
 console.log("Airplane Rotation: ");
@@ -161,6 +181,7 @@ console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
 console.log("\tStatic 1 Avg: " + (static1Timer/360));
 console.log("\tStatic 2 Avg: " + (static2Timer/360));
+console.log("\tParFunc Avg:  " + (parFuncStop -parFuncStart)/360);
 
 
 scene = new Scene();
@@ -193,6 +214,10 @@ static2Timer = 0;
 static2Start = 0;
 static2Stop = 0;
 
+parFuncTimer = 0;
+parFuncStart = 0;
+parFuncStop = 0;
+
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
 {
@@ -222,6 +247,11 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStatic2.renderFB(scene, fb);
     static2Stop = new Date().getTime();
     static2Timer += static2Stop - static2Start;
+
+    parFuncStart = new Date().getTime();
+    PipelineParFunc1.renderFBv2(scene, fb);
+    parFuncStop = new Date().getTime();
+    parFuncTimer += parFuncStop - parFuncStart;
 }
 
 console.log("Cube Rotation: ");
@@ -230,9 +260,11 @@ console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
 console.log("\tStatic 1 Avg: " + (static1Timer/360));
 console.log("\tStatic 2 Avg: " + (static2Timer/360));
+console.log("\tParFunc Avg:  " + (parFuncStop -parFuncStart)/360);
+
 scene = new Scene();
 
-const cowMod = new OBJ("../../../assets/cow.obj");
+const cowMod = await OBJ("../../../assets/cow.obj");
 const cowPos = Position.buildFromModel(cowMod);
 const cowMat = Matrix.translate(0, 0, -3);
 
@@ -259,6 +291,10 @@ static1Stop = 0;
 static2Timer = 0;
 static2Start = 0;
 static2Stop = 0;
+
+parFuncTimer = 0;
+parFuncStart = 0;
+parFuncStop = 0;
 
 fb = new FrameBuffer(600, 600, Color.black);
 for(let rot = 0; rot < 360; rot += 1)
@@ -289,6 +325,11 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStatic2.renderFB(scene, fb);
     static2Stop = new Date().getTime();
     static2Timer += static2Stop - static2Start;
+
+    parFuncStart = new Date().getTime();
+    PipelineParFunc1.renderFBv2(scene, fb);
+    parFuncStop = new Date().getTime();
+    parFuncTimer += parFuncStop - parFuncStart;
 }
 
 console.log("Cow Rotation: ");
@@ -297,6 +338,7 @@ console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
 console.log("\tStatic 1 Avg: " + (static1Timer/360));
 console.log("\tStatic 2 Avg: " + (static2Timer/360));
+console.log("\tParFunc Avg:  " + (parFuncStop -parFuncStart)/360);
 
 scene = new Scene();
 
@@ -330,6 +372,10 @@ static2Timer = 0;
 static2Start = 0;
 static2Stop = 0;
 
+parFuncTimer = 0;
+parFuncStart = 0;
+parFuncStop = 0;
+
 for(let rot = 0; rot < 360; rot += 1)
 {
     spherePos.getMatrix().mult(Matrix.rotateY(1));
@@ -361,6 +407,11 @@ for(let rot = 0; rot < 360; rot += 1)
     PipelineStatic2.renderFB(scene, fb);
     static2Stop = new Date().getTime();
     static2Timer += static2Stop - static2Start;
+
+    parFuncStart = new Date().getTime();
+    PipelineParFunc1.renderFBv2(scene, fb);
+    parFuncStop = new Date().getTime();
+    parFuncTimer += parFuncStop - parFuncStart;
 }
 
 console.log("All four Rotation: ");
@@ -369,6 +420,7 @@ console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
 console.log("\tStatic 1 Avg: " + (static1Timer/360));
 console.log("\tStatic 2 Avg: " + (static2Timer/360));
+console.log("\tParFunc Avg:  " + (parFuncStop -parFuncStart)/360);
 
 scene = new Scene();
 const position = new Array(5);
@@ -382,13 +434,13 @@ position[0][1] = Position.buildFromModel(new Cylinder(.5, 1, 30, 30));
 ModelShading.setColor(position[0][1].getModel(), Color.blue);
 
 position[0][2] = Position.buildFromModel(
-    new OBJ("../../../assets/great_rhombicosidodecahedron.obj"));
+    await OBJ("../../../assets/great_rhombicosidodecahedron.obj"));
 ModelShading.setColor(position[0][2].getModel(), Color.red);
 
-position[1][0] = Position.buildFromModel(new GRS("../../../assets/grs/bronto.grs"));
+position[1][0] = Position.buildFromModel(await GRS("../../../assets/grs/bronto.grs"));
 ModelShading.setColor(position[1][0].getModel(), Color.red);
 
-position[1][1] = Position.buildFromModel(new OBJ("../../../assets/horse.obj"));
+position[1][1] = Position.buildFromModel(await OBJ("../../../assets/horse.obj"));
 ModelShading.setColor(position[1][1].getModel(), Color.pink);
 
 position[1][2] = Position.buildFromModel(new ConeFrustum(0.5, 1.0, 1.0, 10, 10));
@@ -408,7 +460,7 @@ ModelShading.setRandomPrimitiveColor(position[2][2].getModel());
 position[3][0] = Position.buildFromModel(new ParametricCurve());
 ModelShading.setRandomPrimitiveColor(position[3][0].getModel());
 
-position[3][1] = Position.buildFromModel(new OBJ("../../../assets/small_rhombicosidodecahedron.obj"));
+position[3][1] = Position.buildFromModel(await OBJ("../../../assets/small_rhombicosidodecahedron.obj"));
 ModelShading.setColor(position[3][1].getModel(), Color.magenta);
 
 position[3][2] = Position.buildFromModel(new SurfaceOfRevolution());
@@ -472,6 +524,10 @@ static2Timer = 0;
 static2Start = 0;
 static2Stop = 0;
 
+parFuncTimer = 0;
+parFuncStart = 0;
+parFuncStop = 0;
+
 for(let k = 0; k < 360; ++k)
 {
     for(let i = 0; i < position.length; ++i)
@@ -510,6 +566,11 @@ for(let k = 0; k < 360; ++k)
     static2Stop = new Date().getTime();
     static2Timer += static2Stop - static2Start;
 
+    parFuncStart = new Date().getTime();
+    PipelineParFunc1.renderFBv2(scene, fb);
+    parFuncStop = new Date().getTime();
+    parFuncTimer += parFuncStop - parFuncStart;
+
     topLevelP.getMatrix().mult(Matrix.rotateY(1));
 }
 
@@ -519,3 +580,4 @@ console.log("\tLoop Avg:  "  + (loopTimer/360));
 console.log("\tStruc Avg: "  + (strucTimer/360));
 console.log("\tStatic 1 Avg: " + (static1Timer/360));
 console.log("\tStatic 2 Avg: " + (static2Timer/360));
+console.log("\tParFunc Avg:  " + (parFuncStop -parFuncStart)/360);
