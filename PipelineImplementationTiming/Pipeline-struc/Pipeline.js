@@ -144,6 +144,8 @@ function renderPosition(scene, position, ctm, vp)
         const model1 = new Model(model.vertexList.map(M2V, {ctm:ctm2}),
                                  model.primitiveList,
                                  model.colorList,
+                                 undefined, 
+                                 undefined, 
                                  position.name + "::" + model.name,
                                  model.visible);
         logVertexList("1. View      ", model1);
@@ -152,6 +154,8 @@ function renderPosition(scene, position, ctm, vp)
         const model2 = new Model(model1.vertexList.map(V2C, {camera: scene.camera}),
                                  model1.primitiveList,
                                  model1.colorList,
+                                 undefined, 
+                                 undefined, 
                                  model1.name,
                                  model1.visible);
 
@@ -165,6 +169,8 @@ function renderPosition(scene, position, ctm, vp)
                                                                      model: model2})
                                                     .filter( (p) => {return p != undefined && p != null}),
                                  Array.from(model2.colorList),
+                                 undefined, 
+                                 undefined, 
                                  model2.name,
                                  model2.visible);
 
@@ -176,6 +182,8 @@ function renderPosition(scene, position, ctm, vp)
         const model4 = new Model(model3.vertexList.map(Project, {camera: scene.camera}),
                                  model3.primitiveList, 
                                  model3.colorList, 
+                                 undefined, 
+                                 undefined, 
                                  model3.name, 
                                  model3.visible);
         logVertexList("4. Projected  ", model4);
@@ -185,6 +193,8 @@ function renderPosition(scene, position, ctm, vp)
                                  model4.primitiveList.map(clip, {model: model4})
                                  .filter( (p) => {return p != undefined && p != null}),
                                  Array.from(model4.colorList), 
+                                 undefined, 
+                                 undefined, 
                                  model4.name, 
                                  model4.visible);
 

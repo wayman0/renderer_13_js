@@ -104,6 +104,8 @@ export default function project(model, camera)
     return new Model(newVertexList,
                      model.primitiveList,
                      model.colorList,
+                     undefined, 
+                     undefined, 
                      model.name,
                      model.visible);
 }

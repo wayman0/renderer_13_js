@@ -55,7 +55,7 @@ export function clipModel(prim)
         return pClipped;
     }
     else    
-        logPrimitive("5. Clipped (reject)", mod, pClipped);
+        logPrimitive("5. Clipped (reject)", mod, prim);
 }
 
 /**
@@ -102,9 +102,10 @@ export function clipNestedModel(model)
 {
     logMessage("==== 6. Clip Model: " + model.name + " ====");
 
+    mod = model;
     const mod2 = new Model(model.vertexList, 
                             model.primitiveList.map(clipModel)
-                                            .filter(() => {return p != undefined && p != null}),
+                                            .filter((p) => {return p != undefined && p != null}),
                             model.colorList, 
                             model.matrix, 
                             model.nestedModels, 

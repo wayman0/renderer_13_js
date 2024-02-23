@@ -44,6 +44,8 @@ export default function model2view(position, ctm)
     return new Model(newVertexList,
                      model.primitiveList,
                      model.colorList,
+                     undefined, 
+                     undefined, 
                      position.name + "::" + model.name,
                      model.visible);
 }

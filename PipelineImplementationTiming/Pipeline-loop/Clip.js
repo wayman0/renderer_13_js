@@ -53,6 +53,8 @@ export function clip(model)
     const model2 = new Model(model.vertexList,
                              model.primitiveList,
                              newColorList,
+                             undefined, 
+                             undefined, 
                              model.name,
                              model.visible);
 
@@ -119,6 +121,8 @@ export function clip(model)
     return new Model(model2.vertexList,
                      newPrimitiveList,
                      model2.colorList,
+                     undefined, 
+                     undefined, 
                      model2.name,
                      model2.visible);
 }

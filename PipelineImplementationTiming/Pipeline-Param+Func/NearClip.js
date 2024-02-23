@@ -112,7 +112,7 @@ export function clipNestedModel(model, camera)
 
     const mod2 = new Model( model.vertexList, 
                             model.primitiveList.map(clipModel)
-                                               .filter(() => {return p != undefined && p != null}), 
+                                               .filter((p) => {return p != undefined && p != null}), 
                             Array.from(model.colorList), 
                             model.matrix,
                             model.nestedModels, 

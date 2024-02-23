@@ -37,7 +37,7 @@ export function world2viewModel(vert)
 
     // Replace each Vertex object with one that
     // contains veiw coordinates
-    return negViewVector.plusVector(vert);
+    return negViewVector.plusVertex(vert);
 }
 
 /**

@@ -127,6 +127,8 @@ export default function view2camera(model, camera)
     return new Model(newVertexList,
                      model.primitiveList,
                      model.colorList,
+                     undefined, 
+                     undefined, 
                      model.name,
                      model.visible);
 }
