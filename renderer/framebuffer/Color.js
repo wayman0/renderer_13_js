@@ -221,6 +221,22 @@ export default class Color
         return this.#darklight(1+lightFactor);
     }
 
+    /**
+     * Brightens the given color by the given factor
+     * Does not mess with the alpha value
+     * 
+     * NON MUTATING, returns a new color
+     * 
+     * Uses the formula rgb * (1-lightFactor)
+     * 
+     * @param {number} lightFactor a decimal saying how much lighter the color should be
+     * @returns {Color} the new lighter color
+     */
+    brighter(lightFactor = .1)
+    {
+        return this.#darklight(1+lightFactor);
+    }
+
     #darklight(factor)
     {
         return new Color(this.#rgb[0] * factor, 

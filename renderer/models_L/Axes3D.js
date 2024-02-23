@@ -25,27 +25,28 @@ export default class Axes3D extends Model
       @param {number} [zMin=-1]  back endpoint of the z-axis
       @param {number} [zMax =1] front endpoint of the z-axis
       @param {Color} [cX = Color.white]      
-      @param {Color} [cY = Color.white]
-      @param {Color} [cZ = Color.white]
+      @param {Color} [cY = cX]
+      @param {Color} [cZ = cX]
    */
    constructor(xMin=-1, xMax=1, 
                yMin=-1, yMax=1, 
                zMin=-1, zMax=1,
                cX = Color.white, 
-               cY = Color.white, 
-               cZ = Color.white)
+               cY = cX, cZ = cX) 
    {
       super(undefined, undefined, undefined, undefined, undefined, format("Axes 3D(%.2f,%.2f,%.2f,%.2f%.2f,%.2f)", xMin,xMax,yMin,yMax,zMin,zMax));
 
       this.addVertex(new Vertex(xMin, 0,    0),
-                new Vertex(xMax, 0,    0),
-                new Vertex( 0,  yMin,  0),
-                new Vertex( 0,  yMax,  0),
-                new Vertex( 0,   0,   zMin),
-                new Vertex( 0,   0,   zMax));
+                     new Vertex(xMax, 0,    0),
+                     new Vertex( 0,  yMin,  0),
+                     new Vertex( 0,  yMax,  0),
+                     new Vertex( 0,   0,   zMin),
+                     new Vertex( 0,   0,   zMax));
 
       this.addPrimitive(LineSegment.buildVertexColor(0, 1, 0),
                         LineSegment.buildVertexColor(2, 3, 1),
                         LineSegment.buildVertexColor(4, 5, 2));
+
+      this.addColor(cX, cY, cZ);
    }
 }//Axes3D
