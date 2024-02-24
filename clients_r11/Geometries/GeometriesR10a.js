@@ -10,7 +10,7 @@ import {TriangularPrism, Cylinder, ConeFrustum, Octahedron, Box,
         ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ, PanelXY} from "../../renderer/models_L/ModelsExport.js";
 import {Scene, Position, Matrix, Camera} from "../../renderer/scene/SceneExport.js";
 import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
-import {renderFB, setDoAntiAliasing, setDoGamma, setRastDebug} from "../../renderer/pipeline/PipelineExport.js";
+import {renderFB1, setDoAntiAliasing, setDoGamma, setRastDebug} from "../../renderer/pipeline/PipelineExport.js";
 import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
 import {format} from "../../renderer/scene/util/UtilExport.js";
 
@@ -151,7 +151,7 @@ function runOnline()
        // @ts-ignore
        const fb = new FrameBuffer(w, h);
        
-       renderFB(scene, fb);
+       renderFB1(scene, fb);
        
        ctx.putImageData(new ImageData(fb.pixelBuffer,fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
    }
@@ -243,7 +243,7 @@ function runOffline()
       setDoGamma(true);
 
       fb.clearFB(Color.black);
-      renderFB(scene, fb);
+      renderFB1(scene, fb);
       fb.dumpFB2File(format("Geometries_R10a_Frame%03d.ppm", k));
 
       // Rotate the top level Position one degree (accumulate the rotations).

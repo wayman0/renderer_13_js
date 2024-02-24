@@ -10,7 +10,7 @@ import {TriangularPrism, Cylinder, ConeFrustum, Octahedron, Box,
     ParametricCurve, Cone, Tetrahedron, Sphere, Axes3D, PanelXZ, PanelXY} from "../../renderer/models_L/ModelsExport.js";
 import {Scene, Position, Matrix, Camera} from "../../renderer/scene/SceneExport.js";
 import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
-import {renderFB, setDoAntiAliasing, setDoGamma, setRastDebug} from "../../renderer/pipeline/PipelineExport.js";
+import {renderFB1, setDoAntiAliasing, setDoGamma, setRastDebug} from "../../renderer/pipeline/PipelineExport.js";
 import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
 import {format} from "../../renderer/scene/util/UtilExport.js";
 
@@ -137,7 +137,7 @@ function runOnline()
         // @ts-ignore
         const fb = new FrameBuffer(w, h);
         
-        renderFB(scene, fb);
+        renderFB1(scene, fb);
         
         ctx.putImageData(new ImageData(fb.pixelBuffer,fb.width, fb.height), fb.vp.vp_ul_x, fb.vp.vp_ul_y);
     }
@@ -205,7 +205,7 @@ function runOffline()
 {
     // create the framebuffer, render, and dump to file
     const fb = new FrameBuffer(1024, 1024, new Color(50, 50, 50));
-    renderFB(scene, fb);
+    renderFB1(scene, fb);
     fb.dumpFB2File("Geometries_R8b.ppm");
 
     const startTime = new Date().getTime();
@@ -248,7 +248,7 @@ function runOffline()
                   .mult(Matrix.rotateY(r)));
         }
 
-        renderFB(scene, fb);
+        renderFB1(scene, fb);
         fb.dumpFB2File(format("Geometries_R9b_Frame%03d.ppm", r));
     }
 
