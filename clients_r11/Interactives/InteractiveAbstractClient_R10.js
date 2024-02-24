@@ -10,7 +10,7 @@ import {Scene, Model, Position, Matrix, Camera, Vertex} from "../../../renderer/
 import {Point, LineSegment} from "../../../renderer/scene/primitives/PrimitiveExport.js";
 import {make as PointCloud} from "../../../renderer/scene/util/UtilExport.js";
 import * as ModelShading from "../../../renderer/scene/util/UtilExport.js";
-import {render, renderFB, clipDebug, setClipDebug, 
+import {render1 as render, renderFB1 as renderFB, clipDebug, setClipDebug, 
         rastDebug, setRastDebug, doAntiAliasing, setDoAntiAliasing, 
         doGamma, setDoGamma, doNearClipping, setDoNearClipping} from "../../../renderer/pipeline/PipelineExport.js"
 import {FrameBuffer, Viewport, Color} from "../../../renderer/framebuffer/FramebufferExport.js";

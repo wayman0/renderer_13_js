@@ -8,7 +8,7 @@
 
 import {Scene, Model, Position, Vertex, LineSegment, Matrix} from "../../renderer/scene/SceneExport.js";
 import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
-import {renderFB} from "../../renderer/pipeline/PipelineExport.js";
+import {renderFB1 as renderFB} from "../../renderer/pipeline/PipelineExport.js";
 import {format} from "../../renderer/scene/util/UtilExport.js";
 
 let scene = new Scene();

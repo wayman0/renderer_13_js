@@ -8,7 +8,7 @@
 
 import {Scene, Model, Position, Vertex, LineSegment} from "../renderer/scene/SceneExport.js";
 import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
-import {render, setClipDebug, setDoAntiAliasing, setDoGamma, setRastDebug} from "../renderer/pipeline/PipelineExport.js";
+import {render1 as render, setClipDebug, setDoAntiAliasing, setDoGamma, setRastDebug} from "../renderer/pipeline/PipelineExport.js";
 import {setRainbowPrimitiveColors} from "../renderer/scene/util/ModelShading.js";
 
 const scene = Scene.buildFromName("LinesInTwoViewports_R10");

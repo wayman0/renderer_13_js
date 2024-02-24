@@ -13,7 +13,7 @@
 
 import {Scene, Matrix, Model, Position, Vertex} from "../../renderer/scene/SceneExport.js";
 import {FrameBuffer, Viewport, Color} from "../../renderer/framebuffer/FramebufferExport.js";
-import {renderFB, setRastDebug, setDoAntiAliasing} from "../../renderer/pipeline/PipelineExport.js";
+import {renderFB1 as renderFB, setRastDebug, setDoAntiAliasing} from "../../renderer/pipeline/PipelineExport.js";
 import {Point} from "../../renderer/scene/primitives/PrimitiveExport.js";
 
 let ptMod = Model.buildName("Point Model");

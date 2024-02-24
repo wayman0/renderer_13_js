@@ -46,6 +46,8 @@ export function make(model, pointSize = 0)
     let pointCloud = new Model(newVertexList,
                                new Array(),
                                newColorList,
+                               undefined, 
+                               undefined, 
                                "PointCloud: " + model.getName(),
                                model.visible);
 
