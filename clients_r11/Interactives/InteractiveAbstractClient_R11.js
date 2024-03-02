@@ -32,11 +32,19 @@ export const scale = [1.0];
 export let numberOfInteractiveModels = 1;
 export let interactiveModelsAllVisible = false;
 export let debugWholeScene = true;
-let currentModel = 0;
+export let currentModel = 0;
 let savedModel;
 let pointSize = 0;
 
 let useRenderer1 = true;
+
+// create variables to allow the functions to be overriden
+export let printHelpMessage = helpMessage;
+export let handleKeyInput = keyInput;
+export let setTransformations = transformations;
+export let displayCamera = dispCamera;
+export let displayMatrix = dispMatrix;
+export let displayWindow = dispWindow;
 
 /**
  * 
@@ -79,6 +87,102 @@ export function setShowMatrix(val)
         throw new Error("Val needs to be a boolean");
 
     showMatrix = val;
+}
+
+export function projPersp(val)
+{
+    if(typeof val != "boolean")
+        throw new Error("Value must be a boolean");
+
+    scene.camera.perspective = val;
+}
+
+export function setNear(val)
+{
+    if(typeof val != "number")
+        throw new Error("Value must be a number");
+
+    near = val;
+}
+
+export function setNumInteractiveMod(val)
+{
+    if(typeof val != "number")
+        throw new Error("val must be a number");
+
+    numberOfInteractiveModels = val;
+}
+
+export function setInteractiveModelsAllVis(val)
+{
+    if(typeof val != "boolean")
+        throw new Error("Val must be a boolean");
+
+    interactiveModelsAllVisible = val;
+}
+
+export function setDebugWholeScene(val)
+{
+    if(typeof val != "boolean")
+        throw new Error("Val must be a boolean");
+
+    debugWholeScene = val;
+}
+
+export function setCurrentModel(val)
+{
+    if(typeof val != "number")
+        throw new Error("Val must be a number");
+
+    currentModel = val;
+}
+
+export function setPrintHelpMessageFunc(func)
+{
+    if(func instanceof Function == false)
+        throw new Error("Parameter must be a function");
+
+    printHelpMessage = func;
+}
+
+export function setHandleKeyInputFunc(func)
+{
+    if(func instanceof Function == false)
+        throw new Error("Parameter must be a function");
+
+    handleKeyInput = func;
+}
+
+export function setTransformationsFunc(func)
+{
+    if(func instanceof Function == false)
+        throw new Error("Parameter must be a function");
+
+    setTransformations = func;
+}
+
+export function setDisplayMatrixFunc(func)
+{
+    if(func instanceof Function == false)
+        throw new Error("Parameter must be a function");
+
+    displayMatrix = func;
+}
+
+export function setDisplayWindowFunc(func)
+{
+    if(func instanceof Function == false)
+        throw new Error("Parameter must be a function");
+
+    displayWindow = func;
+}
+
+export function setDisplayCameraFunc(func)
+{
+    if(func instanceof Function == false)
+        throw new Error("Parameter must be a function");
+
+    displayCamera = func;
 }
 
 export function setUpViewing()
@@ -141,7 +245,7 @@ export function display()
     ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), 0, 0);
 }
 
-export function handleKeyInput(e)
+export function keyInput(e)
 {    
     const keyCode = e.keyCode;
     const ctrl = e.ctrlKey;
@@ -315,7 +419,7 @@ export function handleKeyInput(e)
     display();
 }
 
-export function setTransformations(e)
+export function transformations(e)
 {
     const c = e.key;
 
@@ -370,7 +474,7 @@ export function setTransformations(e)
         scene.getPosition(currentModel).transform(matrix));
 }
 
-export function displayMatrix(e)
+export function dispMatrix(e)
 {
     const c = e.key;
 
@@ -393,7 +497,7 @@ export function displayMatrix(e)
     }
 }
 
-export function displayCamera(e)
+export function dispCamera(e)
 {
     const c = e.key;
 
@@ -421,7 +525,7 @@ export function displayCamera(e)
     }
 }
 
-export function displayWindow(e)
+export function dispWindow(e)
 {
     if(showWindow)
     {
@@ -468,7 +572,7 @@ export function displayWindow(e)
     }
 }
 
-export function printHelpMessage()
+export function helpMessage()
 {
     console.log("Use the 'd/D' keys to toggle debugging information on and off for the current model.");
     console.log("Use the 'Alt-d' key combination to print the current Model data structure.");
