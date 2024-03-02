@@ -513,7 +513,7 @@ export default class Model
      */
     setNestedModel(index, mod)
     {
-        if(typeof index == "number")
+        if(typeof index != "number")
             throw new Error("Index must be a number");
         
         if(mod instanceof Model == false)

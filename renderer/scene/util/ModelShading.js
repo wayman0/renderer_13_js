@@ -93,7 +93,7 @@ export function setRandomVertexColor(model)
     {
         for (let i = 0; i < p.getVertexIndexList().length; i += 1)
         {
-            p.getColorIndexList()[i] = p.getVertexIndexList[i];
+            p.getColorIndexList()[i] = p.getVertexIndexList()[i];
 		}
     }
 }

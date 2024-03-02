@@ -352,7 +352,7 @@ export default class Camera
                +  "  (fovy = " + fovy
                +  format(", aspect ratio = %.2f)", ratio )
                +  "Normalization Matrix\n"
-               +  this.getNormalizeMatrix().toString + "\n"
+               +  this.getNormalizeMatrix().toString() + "\n"
                +  "Translation Vector\n" 
                +  "  " + this.#viewVector.toString();
 
