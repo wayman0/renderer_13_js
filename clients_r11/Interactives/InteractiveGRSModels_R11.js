@@ -5,12 +5,13 @@ import {Scene, Position} from "../../renderer/scene/SceneExport.js";
 import { setRandomColor } from "../../renderer/scene/util/ModelShading.js";
 import { Color } from "../../renderer/framebuffer/FramebufferExport.js";
 import {Axes2D} from "../../renderer/models_L/ModelsExport.js";
-import {currentModel, display, handleKeyInput, numberOfInteractiveModels, printHelpMessage, 
+import {currentModel, display, handleKeyDown, handleKeyPress, numberOfInteractiveModels, printHelpMessage, 
+        scene, 
         setDebugWholeScene, setInteractiveModelsAllVis, setNumInteractiveMod, setScene} from "./InteractiveAbstractClient_R11.js";
 
 const assets = "../../assets/";
 
-const scene = Scene.buildFromName("InteractiveGRSModels_R11");
+setScene(Scene.buildFromName("InteractiveGRSModels_R11"));
 
 scene.addPosition(Position.buildFromModel(await GRS(assets + "grs/bronto_v2.grs")));
 scene.addPosition(Position.buildFromModel(await GRS(assets + "grs/rex_v2.grs")));
@@ -26,9 +27,7 @@ scene.addPosition(Position.buildFromModel(await GRS(assets + "grs/house.grs")));
 scene.addPosition(Position.buildFromModel(await GRS(assets + "grs/scene.grs")));
 
 for(const p of scene.positionList)
-{
     setRandomColor(p.model);
-}
 
 const axes = new Axes2D(-1, 1, -1, 1, 20, 20, Color.red);
 const axesP = Position.buildFromModel(axes);
@@ -42,8 +41,8 @@ scene.getPosition(currentModel).visible = true;
 
 setInteractiveModelsAllVis(false);
 setDebugWholeScene(false);
-setScene(scene);
-document.addEventListener("keydown", handleKeyInput);
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keypress", handleKeyPress);
 const resizer = new ResizeObserver(display);
 resizer.observe(document.getElementById("resizer"));
 

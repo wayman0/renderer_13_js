@@ -2,7 +2,8 @@
 import Color from "../../renderer/framebuffer/Color.js";
 import {Scene, Position, Model, Vertex, LineSegment} from "../../renderer/scene/SceneExport.js";
 import { setRandomColor } from "../../renderer/scene/util/ModelShading.js";
-import {setScene, scene, setShowCamera, setShowMatrix, setCameraZ, handleKeyInput, display, setPrintHelpMessageFunc, printHelpMessage} from "./InteractiveAbstractClient_R11.js";
+import {setScene, scene, setShowCamera, setShowMatrix, setCameraZ, handleKeyDown, 
+        handleKeyPress, display, setPrintHelpMessageFunc, printHelpMessage} from "./InteractiveAbstractClient_R11.js";
 
 /**
 <pre>{@code
@@ -53,7 +54,8 @@ model.addPrimitive( LineSegment.buildVertexColors(0, 1, 0, 1),
 setShowCamera(true);
 setShowMatrix(true);
 
-document.addEventListener("keydown", handleKeyInput);
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keypress", handleKeyPress);
 const resizer = new ResizeObserver(display);
 resizer.observe(document.getElementById('resizer'));
 

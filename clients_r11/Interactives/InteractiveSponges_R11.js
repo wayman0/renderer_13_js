@@ -3,7 +3,7 @@ import {Matrix, Model, Position, Scene} from "../../renderer/scene/SceneExport.j
 import {make} from '../../renderer/scene/util/PointCloud.js';
 import {SierpinskiSponge, SierpinskiTriangle} from '../../renderer/models_L/ModelsExport.js';
 import {setRandomColor, setRandomNestedModelColors} from "../../renderer/scene/util/ModelShading.js";
-import {currentModel, display, handleKeyInput, printHelpMessage, scale, 
+import {currentModel, display, handleKeyDown, handleKeyPress, printHelpMessage, scale, 
         scene, setCurrentModel, setDebugWholeScene, 
         setInteractiveModelsAllVis, setNumInteractiveMod, 
         setPrintHelpMessageFunc, setScene, setTransformationsFunc, 
@@ -38,7 +38,8 @@ scene.getPosition(currentModel).visible = true;
 setInteractiveModelsAllVis(false);
 setDebugWholeScene(true);
 
-document.addEventListener("keydown", handleKeyInput);
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keypress", handleKeyPress);
 const resizer = new ResizeObserver(display);
 resizer.observe(document.getElementById('resizer'));
 

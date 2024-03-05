@@ -441,6 +441,8 @@ export function defaultHandleKeyPress(e)
         showMatrix = !showMatrix;
     else if('c' == c)
         ModelShading.setRandomColor(scene.getPosition(currentModel).model);
+    else if('C' == c)
+        ModelShading.setRandomColors(scene.getPosition(currentModel).model);
     else if('e' == c && alt)
     {
         e.preventDefault();

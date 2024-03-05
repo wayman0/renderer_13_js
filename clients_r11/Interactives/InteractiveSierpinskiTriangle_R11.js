@@ -2,7 +2,7 @@
 import {Scene, Position, Camera, Matrix, Model} from "../../renderer/scene/SceneExport.js";
 import * as ModelShading from "../../renderer/scene/util/ModelShading.js";
 import {SierpinskiTriangle} from "../../renderer/models_L/ModelsExport.js"
-import {currentModel, display, handleKeyInput, printHelpMessage, scale, 
+import {currentModel, display, handleKeyDown, handleKeyPress, printHelpMessage, scale, 
         scene, setCurrentModel, setDebugWholeScene, setInteractiveModelsAllVis, 
         setNumInteractiveMod, setPrintHelpMessageFunc, setScene, setTransformationsFunc, 
         xRotation, xTranslation, yRotation, yTranslation, zRotation, zTranslation} from "./InteractiveAbstractClient_R11.js";
@@ -17,22 +17,23 @@ let zSubRotation2 = false;
 const cam = new Camera();
 cam.projOrtho();
 
-const sc = Scene.buildFromCameraName(cam, "InteractiveSierpinskitriangle_R11");
+setScene(Scene.buildFromCameraName(cam, "InteractiveSierpinskitriangle_R11"));
 const model = new SierpinskiTriangle(8);
-sc.addPosition(Position.buildFromModelName(model, "SierpinskiTriangle"));
+scene.addPosition(Position.buildFromModelName(model, "SierpinskiTriangle"));
 ModelShading.setRandomColor(model);
 
-setScene(sc);
+setScene(scene);
 setNumInteractiveMod(1);
 setCurrentModel(0);
-sc.getPosition(currentModel).visible = true;
+scene.getPosition(currentModel).visible = true;
 setInteractiveModelsAllVis(true);
 setDebugWholeScene(true);
 setPrintHelpMessageFunc(newPrintMessage);
 setTransformationsFunc(newTransformations);
 printHelpMessage();
 
-document.addEventListener("keydown", handleKeyInput);
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keypress", handleKeyPress);
 const resizer = new ResizeObserver(display);
 resizer.observe(document.getElementById("resizer"));
 
@@ -91,7 +92,7 @@ function newTransformations(e)
     else if ('%' == c)
        zSubRotation2 = true;
     else if ('6' == c)
-       ModelShading.setRandomNestedModelColors(sc.getPosition(0).model);
+       ModelShading.setRandomNestedModelColors(scene.getPosition(0).model);
     
     // Update the nested matrices within the hierarchical model.
     let mat = Matrix.identity();
@@ -115,7 +116,7 @@ function newTransformations(e)
     zSubRotation1 = false;
     zSubRotation2 = false;
 
-    updateNestedMatrices(sc.getPosition(0).model, mat);
+    updateNestedMatrices(scene.getPosition(0).model, mat);
 
     // Set the model-to-view transformation matrix.
     // The order of the transformations is very important!

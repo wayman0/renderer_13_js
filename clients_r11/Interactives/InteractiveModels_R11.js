@@ -3,7 +3,7 @@ import {Scene, Position, Matrix} from '../../renderer/scene/SceneExport.js';
 import {default as OBJ} from "../../renderer/models_L/OBJModel.js";
 import {Cube2, Cylinder, PanelXY, PanelXZ, Sphere, Torus} from "../../renderer/models_L/ModelsExport.js";
 import { setRandomColor } from '../../renderer/scene/util/ModelShading.js';
-import {currentModel, display, handleKeyInput, numberOfInteractiveModels, 
+import {currentModel, display, handleKeyDown, handleKeyPress, numberOfInteractiveModels, 
         printHelpMessage, scale, setCurrentModel, setDebugWholeScene, 
         setDisplayMatrixFunc, setInteractiveModelsAllVis, setNumInteractiveMod, 
         setPrintHelpMessageFunc, setScene, setTransformationsFunc, showMatrix, 
@@ -11,43 +11,43 @@ import {currentModel, display, handleKeyInput, numberOfInteractiveModels,
 
 const assets = "../../assets/";
 
-const sc = Scene.buildFromName("InteractiveModels_R11");
+setScene(Scene.buildFromName("InteractiveModels_R11"));
 
-sc.addPosition(Position.buildFromModel(await OBJ(assets + "apple.obj")));
-sc.addPosition(Position.buildFromModel(await OBJ(assets + "cow.obj")));
-sc.addPosition(Position.buildFromModel(await OBJ(assets + "teapot.obj")));
-sc.addPosition(Position.buildFromModel(await OBJ(assets + "galleon.obj")));
-sc.addPosition(Position.buildFromModel(await OBJ(assets + "stanford_bunny.obj")));
-sc.addPosition(Position.buildFromModel(await OBJ(assets + "cessna.obj")));
+scene.addPosition(Position.buildFromModel(await OBJ(assets + "apple.obj")));
+scene.addPosition(Position.buildFromModel(await OBJ(assets + "cow.obj")));
+scene.addPosition(Position.buildFromModel(await OBJ(assets + "teapot.obj")));
+scene.addPosition(Position.buildFromModel(await OBJ(assets + "galleon.obj")));
+scene.addPosition(Position.buildFromModel(await OBJ(assets + "stanford_bunny.obj")));
+scene.addPosition(Position.buildFromModel(await OBJ(assets + "cessna.obj")));
 
-sc.addPosition(Position.buildFromModel(new Sphere(1, 30, 30)));
-sc.addPosition(Position.buildFromModel(new Cylinder(0.5, 1.0, 20, 20)))
-sc.addPosition(Position.buildFromModel(new Torus(0.75, 0.25, 25, 25)));
-sc.addPosition(Position.buildFromModel(new Cube2(15, 15, 15)));
+scene.addPosition(Position.buildFromModel(new Sphere(1, 30, 30)));
+scene.addPosition(Position.buildFromModel(new Cylinder(0.5, 1.0, 20, 20)))
+scene.addPosition(Position.buildFromModel(new Torus(0.75, 0.25, 25, 25)));
+scene.addPosition(Position.buildFromModel(new Cube2(15, 15, 15)));
 
-sc.addPosition(Position.buildFromModel(await OBJ(assets + "small_rhombicosidodecahedron.obj")));
+scene.addPosition(Position.buildFromModel(await OBJ(assets + "small_rhombicosidodecahedron.obj")));
 
-sc.addPosition(Position.buildFromModel(new PanelXY(-7, 7, -1, 3)));
-sc.addPosition(Position.buildFromModel(new PanelXZ(-7, 7, -3, 1)));
+scene.addPosition(Position.buildFromModel(new PanelXY(-7, 7, -1, 3)));
+scene.addPosition(Position.buildFromModel(new PanelXZ(-7, 7, -3, 1)));
 
-sc.addPosition(Position.buildFromModel(await OBJ(assets + "cessna.obj")));
+scene.addPosition(Position.buildFromModel(await OBJ(assets + "cessna.obj")));
 
-for(const p of sc.positionList)
+for(const p of scene.positionList)
     setRandomColor(p.model);
 
-setNumInteractiveMod(sc.positionList.length - 3);
+setNumInteractiveMod(scene.positionList.length - 3);
 for(let i = 0; i < numberOfInteractiveModels; ++i)
-    sc.getPosition(i).visible = false;
+    scene.getPosition(i).visible = false;
 
 setCurrentModel(1);
-sc.getPosition(currentModel).visible = true;
+scene.getPosition(currentModel).visible = true;
 setInteractiveModelsAllVis(false);
 setDebugWholeScene(false);
 
-const size = sc.positionList.length;
-sc.setPosition(size-3, sc.getPosition(size-3).transform(Matrix.translate(0,  0, -3)));
-sc.setPosition(size-2, sc.getPosition(size-2).transform(Matrix.translate(0, -1,  0)));
-sc.setPosition(size-1, sc.getPosition(size-1).transform(Matrix.translate(3,  0,  0)));
+const size = scene.positionList.length;
+scene.setPosition(size-3, scene.getPosition(size-3).transform(Matrix.translate(0,  0, -3)));
+scene.setPosition(size-2, scene.getPosition(size-2).transform(Matrix.translate(0, -1,  0)));
+scene.setPosition(size-1, scene.getPosition(size-1).transform(Matrix.translate(3,  0,  0)));
 
 xTranslation.length = numberOfInteractiveModels;
 yTranslation.length = numberOfInteractiveModels;
@@ -68,15 +68,14 @@ for(let index = 0; index < numberOfInteractiveModels; index += 1)
     scale[index] = 1.0;   
 }
 
-
-setScene(sc);
 setTransformationsFunc(newTransformations);
 setDisplayMatrixFunc(newDisplayMatrix);
 setPrintHelpMessageFunc(newPrintHelp);
 
 printHelpMessage();
 
-document.addEventListener("keydown", handleKeyInput);
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keypress", handleKeyPress);
 const resizer = new ResizeObserver(display);
 resizer.observe(document.getElementById("resizer"));
 
@@ -133,12 +132,6 @@ function newTransformations(e)
                     .timesMatrix(Matrix.rotateY(yRotation[currentModel]))
                     .timesMatrix(Matrix.rotateX(xRotation[currentModel]))
                     .timesMatrix(Matrix.scale(scale[currentModel]));
-
-    // notice the use of 'scene' instead of 'sc', 
-    // even though the interactive scene is set to be the 
-    // models scene they are not equivalent!
-    // uncomment the statement below to discover this!
-    // alert(sc == scene);
     
     scene.setPosition(currentModel, scene.getPosition(currentModel).transform(matrix));
 }
@@ -155,7 +148,7 @@ function newDisplayMatrix(e)
         console.log("xRot = " + xRotation[currentModel]
                     + ", yRot = " + yRotation[currentModel]
                     + ", zRot = " + zRotation[currentModel]);
-        console.log( sc.getPosition(currentModel).matrix );
+        console.log( scene.getPosition(currentModel).matrix );
     }
 }
 
