@@ -39,12 +39,13 @@ let pointSize = 0;
 let useRenderer1 = true;
 
 // create variables to allow the functions to be overriden
-export let printHelpMessage = helpMessage;
-export let handleKeyInput = keyInput;
-export let setTransformations = transformations;
-export let displayCamera = dispCamera;
-export let displayMatrix = dispMatrix;
-export let displayWindow = dispWindow;
+export let printHelpMessage = defaultPrintHelpMessage;
+export let handleKeyDown = defaultHandleKeyDown;
+export let handleKeyPress = defaultHandleKeyPress;
+export let setTransformations = defaultSetTransformations;
+export let displayCamera = defaultDisplayCamera;
+export let displayMatrix = defaultDisplayMatrix;
+export let displayWindow = defaultDisplayWindow;
 
 /**
  * 
@@ -63,6 +64,30 @@ export function setFB(f)
 {
     if(f instanceof FrameBuffer)
         fb = f;
+}
+
+export function setCameraX(val)
+{
+    if(typeof val != "number")
+        throw new Error("val must be a number");
+
+    cameraX = val;
+}
+
+export function setCameraY(val)
+{
+    if(typeof val != "number")
+        throw new Error("val must be a number");
+
+    cameraY = val;
+}
+
+export function setCameraZ(val)
+{
+    if(typeof val != "number")
+        throw new Error("val must be a number");
+    
+    cameraZ = val;
 }
 
 export function setShowCamera(val)
@@ -145,12 +170,20 @@ export function setPrintHelpMessageFunc(func)
     printHelpMessage = func;
 }
 
-export function setHandleKeyInputFunc(func)
+export function setHandleKeydownFunc(func)
 {
     if(func instanceof Function == false)
         throw new Error("Parameter must be a function");
 
-    handleKeyInput = func;
+    handleKeyDown = func;
+}
+
+export function setHandleKeyPressFunc(func)
+{
+    if(func instanceof Function == false)
+        throw new Error("Parameter must be a function");
+
+    handleKeyPress = func;
 }
 
 export function setTransformationsFunc(func)
@@ -245,7 +278,7 @@ export function display()
     ctx.putImageData(new ImageData(fb.pixelBuffer, fb.width, fb.height), 0, 0);
 }
 
-export function keyInput(e)
+export function defaultHandleKeyDown(e)
 {    
     const keyCode = e.keyCode;
     const ctrl = e.ctrlKey;
@@ -279,6 +312,15 @@ export function keyInput(e)
         }
     }
 
+    setTransformations(e);
+    displayMatrix(e);
+    displayCamera(e);
+    displayWindow(e);
+    display();
+}
+
+export function defaultHandleKeyPress(e)
+{
     const c = e.key;
     const alt = e.altKey;
 
@@ -334,7 +376,7 @@ export function keyInput(e)
     else if('?' == c)
     {
         scene.getPosition(currentModel).visible = interactiveModelsAllVisible;
-        currentModel = (currentModel-1)%numberOfInteractiveModels;
+        currentModel == 0 ? currentModel = numberOfInteractiveModels-1:currentModel -= 1;
         scene.getPosition(currentModel).visible = true;
         savedModel = undefined;
         pointSize = 0;
@@ -415,11 +457,10 @@ export function keyInput(e)
     displayMatrix(e);
     displayCamera(e);
     displayWindow(e);
-    setUpViewing();
     display();
 }
 
-export function transformations(e)
+export function defaultSetTransformations(e)
 {
     const c = e.key;
 
@@ -474,7 +515,7 @@ export function transformations(e)
         scene.getPosition(currentModel).transform(matrix));
 }
 
-export function dispMatrix(e)
+export function defaultDisplayMatrix(e)
 {
     const c = e.key;
 
@@ -497,7 +538,7 @@ export function dispMatrix(e)
     }
 }
 
-export function dispCamera(e)
+export function defaultDisplayCamera(e)
 {
     const c = e.key;
 
@@ -525,7 +566,7 @@ export function dispCamera(e)
     }
 }
 
-export function dispWindow(e)
+export function defaultDisplayWindow(e)
 {
     if(showWindow)
     {
@@ -572,7 +613,7 @@ export function dispWindow(e)
     }
 }
 
-export function helpMessage()
+export function defaultPrintHelpMessage()
 {
     console.log("Use the 'd/D' keys to toggle debugging information on and off for the current model.");
     console.log("Use the 'Alt-d' key combination to print the current Model data structure.");
@@ -610,7 +651,7 @@ export function helpMessage()
  * @param {Model} model 
  * @return {Array} 
  */
-function modelInfo(model)
+export function modelInfo(model)
 {
     let verts = model.vertexList.length;
     let point = 0;
