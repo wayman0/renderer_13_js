@@ -75,5 +75,8 @@ export function make(model, pointSize = 0)
         /**@type {Point}*/(p).radius = pointSize;
     }
 
+    for(const m of model.nestedModels)
+        pointCloud.addNestedModel(make(m, pointSize));
+
     return pointCloud;
 }

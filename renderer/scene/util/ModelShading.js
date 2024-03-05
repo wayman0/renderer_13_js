@@ -42,6 +42,9 @@ export function setColor(model, color)
             model.getColorList()[i] = color;
 		}
 	}
+
+    for(const m of model.nestedModels)
+        setColor(m, color);
 }
 
 
@@ -52,25 +55,59 @@ export function setColor(model, color)
  */
 export function setRandomColor(model)
 {
-    if (model instanceof Model == false)
-        throw new Error("Model must be a Model");
-
-    if (model.getColorList().length == 0)
-    {
-        for (let i = 0; i < model.getVertexList().length; i += 1)
-        {
-            model.addColor(randomColor());
-		}
-	}
-    else
-    {
-        for (let i = 0; i < model.getColorList().length; i += 1)
-        {
-            model.getColorList()[i] = randomColor();
-		}
-	}
+    setColor(model, randomColor());
 }
 
+/**
+ * Set each {@link Color} in the {@link Model} color list 
+ * to a different random {@link Color}
+ * 
+ * @param {Model} model whose color list is being manipulated 
+ */
+export function setRandomColors(model)
+{
+    if(model instanceof Model == false)
+        throw new Error("Model must be a model");
+
+    if(model.colorList.length == 0)
+    {
+        for(let i = 0; i < model.vertexList.length; ++i)
+            model.colorList[i] = randomColor();
+    }
+    else
+    {
+        for(let i = 0; i < model.colorList.length; ++i)
+            model.colorList[i] = randomColor();
+    }
+
+    for(const m of model.nestedModels)
+        setRandomColors(m);
+}
+
+
+/**
+ * Give each of this kModels nested models a different random color
+ *
+ * @param {Model} model whose color list is being manipualted
+ */
+export function setRandomNestedModelColors(model)
+{
+    const c = randomColor();
+
+    if(model.colorList.length == 0)
+    {
+        for(let i = 0; i < model.vertexList.length; ++i)
+            model.colorList[i] = c;
+    }
+    else
+    {
+        for(let i = 0; i < model.colorList.length; ++i)
+            model.colorList[i] = c;
+    }
+
+    for(const m of model.nestedModels)
+        setRandomNestedModelColors(m);
+}
 
 /**
  * Set each vertex to have a different random color.
@@ -96,6 +133,9 @@ export function setRandomVertexColor(model)
             p.getColorIndexList()[i] = p.getVertexIndexList()[i];
 		}
     }
+
+    for(const m of model.nestedModels)
+        setRandomVertexColor(m);
 }
 
 
@@ -121,6 +161,9 @@ export function setRandomPrimitiveColor(model)
 		}
         ++cIndex;
     }
+
+    for(const m of model.nestedModels)
+        setRandomPrimitiveColor(m);
 }
 
 
@@ -147,6 +190,9 @@ export function setRainbowPrimitiveColors(model)
             ++cIndex;
         }
     }
+
+    for(const m of model.nestedModels)
+        setRainbowPrimitiveColors(m);
 }
 
 

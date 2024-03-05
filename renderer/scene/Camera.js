@@ -251,11 +251,11 @@ export default class Camera
         if (typeof fovy != "number" || typeof aspect != "number" || typeof near != "number")
             throw new Error("All parameters must be numerical");
 
-        this.top = near * Math.tan((Math.PI/180)*fovy/2);
+        this.top = Math.tan((Math.PI/180)*fovy/2);
         this.bottom = -1 * this.top;
         this.right = this.top * aspect;
         this.left = -1 * this.right;
-        this.n = -1 * near;
+        this.n = 1;
         this.#viewVector = new Vector(0, 0, 0);
         this.perspective = false;
 
