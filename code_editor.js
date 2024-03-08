@@ -264,7 +264,7 @@ function addExample()
     let exampleStr = "//@ts-check\n";
     exampleStr += "//Import what is necessary for your code\n"
     exampleStr += "import {Scene, Position, Matrix, Model, Vertex, LineSegment} from \"./renderer/scene/SceneExport.js\";\n";
-    exampleStr += "import {renderFB, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma} from \"./renderer/pipeline/PipelineExport.js\";\n";
+    exampleStr += "import {renderFB1 as renderFB, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma} from \"./renderer/pipeline/PipelineExport.js\";\n";
     exampleStr += "import {FrameBuffer, Viewport, Color} from \"./renderer/framebuffer/FramebufferExport.js\";\n";
     exampleStr += "import {Sphere} from \"./renderer/models_L/ModelsExport.js\";\n";
     exampleStr += "import * as ModelShading from \"./renderer/scene/util/UtilExport.js\";\n";

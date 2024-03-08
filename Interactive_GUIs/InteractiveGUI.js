@@ -2,7 +2,7 @@
 
 import {Scene, Position, Matrix} from ".././renderer/scene/SceneExport.js";
 import { FrameBuffer, Color } from ".././renderer/framebuffer/FramebufferExport.js";
-import { renderFB } from ".././renderer/pipeline/PipelineExport.js";
+import { renderFB1 as renderFB } from ".././renderer/pipeline/PipelineExport.js";
 import * as ModelShading from ".././renderer/scene/util/ModelShading.js";
 import {modArr, sphereCursor} from "./ModelList.js";
 
