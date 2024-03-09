@@ -116,7 +116,7 @@ try
     resizer.observe(document.getElementById("resizer"));    
 
     // set up the animation rate
-    timerHandle = setInterval(displayFunc, 1000/fps);
+    timerHandle = setInterval(updateParameters, 1000/fps);
 }
 catch(err)
 {
