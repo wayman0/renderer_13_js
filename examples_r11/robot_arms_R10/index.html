@@ -2,10 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title> Robot Arms Index</title>
+        <title> Robot Arms R10 Index</title>
         <link rel=""shortcut icon" href="#" />
         <style>
-            #section 
+            .section 
             {
                 width: 100%;
                 height: 300px;
@@ -15,7 +15,7 @@
                 align-items: center;
             }
             
-            #section div 
+            .section div 
             {
                 border-top: 3px solid black;
                 border-bottom: 3px solid black;
@@ -30,7 +30,7 @@
                 font-size: xx-large;
             }
 
-            #section div:last-of-type
+            .section div:last-of-type
             {
                 border-right: 3px solid black;
             }
@@ -39,16 +39,19 @@
 
     <body>
         <div style ="width: 100%; text-align: center; font-size: x-large; font-weight: bolder;"> Welcome to Robot Arms R10.  Click one of these Robot Arms</div>
-        <div id="section">
-            <div style="background-color: lightcoral;" onclick="location.href = 'RobotArm1.html';">Robot Arm 1</div>
-            <div style="background-color: olivedrab;" onclick="location.href = 'RobotArm2.html';">Robot Arm 2</div>
-            <div style="background-color: gold;" onclick="location.href = 'RobotArm3.html';">Robot Arm 3</div>
-            <div style="background-color: cornflowerblue;" onclick="location.href = 'RobotArm4.html';">Robot Arm 4</div>
-            
-            <div style="background-color: lightcoral;" onclick="location.href = 'RobotArms1.html';">Robot Arms 1</div>
-            <div style="background-color: olivedrab;" onclick="location.href = 'RobotArms2.html';">Robot Arms 2</div>
-            <div style="background-color: gold;" onclick="location.href = 'RobotArms3.html';">Robot Arms 3</div>
-            <div style="background-color: cornflowerblue;" onclick="location.href = 'RobotArms4.html';">Robot Arms 4</div>
+            <div id="robot arm" class = "section">
+                <div style="background-color:rgb(255, 000, 000);" onclick="location.href = 'RobotArm1.html';">Robot Arm 1</div>
+                <div style="background-color:rgb(255, 125, 000);" onclick="location.href = 'RobotArm2.html';">Robot Arm 2</div>
+                <div style="background-color:rgb(000, 255, 125);" onclick="location.href = 'RobotArm3.html';">Robot Arm 3</div>
+                <div style="background-color:rgb(000, 000, 255);" onclick="location.href = 'RobotArm4.html';">Robot Arm 4</div>
+            </div>
+
+            <div id = "robot arms" class = "section">
+                <div style="background-color:rgb(255, 000, 000);" onclick="location.href = 'RobotArms1.html';">Robot Arms 1</div>
+                <div style="background-color:rgb(255, 125, 000);" onclick="location.href = 'RobotArms2.html';">Robot Arms 2</div>
+                <div style="background-color:rgb(000, 255, 125);" onclick="location.href = 'RobotArms3.html';">Robot Arms 3</div>
+                <div style="background-color:rgb(000, 000, 255);" onclick="location.href = 'RobotArms4.html';">Robot Arms 4</div>
+            </div>
         </div>
     </body>
 </html>
