@@ -106,14 +106,15 @@ try
     displayFunc = write2Canvas;
 
     // add a key listener
-    document.addEventListener("keypress", handleKeyInput);
+    document.addEventListener("keydown", handleKeyInput);
     
     // add a click listener
     document.addEventListener("click", updateParameters);
 
     // create the resize observer
+    resizerEl = document.getElementById('resizer');
     resizer = new ResizeObserver(displayFunc);
-    resizer.observe(document.getElementById("resizer"));    
+    resizer.observe(resizerEl);    
 
     // set up the animation rate
     timerHandle = setInterval(updateParameters, 1000/fps);
@@ -152,6 +153,10 @@ function setUpViewing()
     {
         w = resizerEl.offsetWidth;
         h = resizerEl.offsetHeight;
+
+        const ctx = document.getElementById("pixels").getContext("2d");
+        ctx.canvas.width = w;
+        ctx.canvas.height = h;
     }
 
     fb = new FrameBuffer(w, h, Color.gray.darker().darker());
@@ -179,7 +184,7 @@ function setUpViewing()
     else
     {
         fb.setViewportDefault();
-        fb.vp.clearVP();
+        fb.vp.clearVP(Color.black);
     }
 }
 
@@ -214,7 +219,7 @@ function handleKeyInput(e)
 
     if('h' == c)
         printHelpMessage();
-    else if('d' == c && e.alt)
+    else if('d' == c && e.altKey)
     {
         e.preventDefault();
         console.log(scene.toString());
@@ -224,12 +229,21 @@ function handleKeyInput(e)
         scene.debug = !scene.debug;
         setClipDebug(scene.debug);
     }
-    else if('D')
+    else if('D' == c)
+    {
         setRastDebug(!rastDebug);
+        console.log("Rasterizer Debug: " + rastDebug);
+    }    
     else if('1' == c)
+    {    
         useRenderer1 = true;
+        console.log("Using Pipeline 1");
+    }
     else if('2' == c)
+    {
         useRenderer1 = false;
+        console.log("Using Pipeline 2");
+    }
     else if('a' == c)
     {
         setDoAntiAliasing(!doAntiAliasing);
@@ -293,7 +307,7 @@ function resetInterval(recreate)
     clearInterval(timerHandle);
 
     if(recreate)
-        timerHandle = setInterval(displayFunc, 1000/fps);
+        timerHandle = setInterval(updateParameters, 1000/fps);
 }
 function updateParameters()
 {
