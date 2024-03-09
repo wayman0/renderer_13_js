@@ -12,7 +12,7 @@ export default class Model1 extends Model
 {
     constructor()
     {
-      super(undefined, undefined, undefined, "Model_1 (basic model)");
+      super(undefined, undefined, undefined, undefined, undefined, "Model_1 (basic model)");
 
       // Create the model's geometry.
       const v0 = new Vertex( 1.0,  1.0, 0.0);  // a square

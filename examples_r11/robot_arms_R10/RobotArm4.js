@@ -5,7 +5,7 @@
 */
 
 import {Scene, Model, Position, Matrix, Vertex, LineSegment} from "../../renderer/scene/SceneExport.js";
-import {rastDebug, render, renderFB, setClipDebug, setRastDebug} from "../../renderer/pipeline/PipelineExport.js";
+import {rastDebug, render1 as render, renderFB1 as renderFB, setClipDebug, setRastDebug} from "../../renderer/pipeline/PipelineExport.js";
 import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
 import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
 import { format } from "../../renderer/scene/util/UtilExport.js";

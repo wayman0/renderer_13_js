@@ -10,7 +10,7 @@ import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
 import {Position, Scene, Matrix, Model, LineSegment, Vertex} from "../../renderer/scene/SceneExport.js";
 import {PanelXZ, TriangularPrism} from "../../renderer/models_L/ModelsExport.js";
 import {FrameBuffer, Color} from "../../renderer/framebuffer/FramebufferExport.js";
-import {renderFB} from "../../renderer/pipeline/PipelineExport.js";
+import {renderFB1 as renderFB} from "../../renderer/pipeline/PipelineExport.js";
 
 /**
    Here is a sketch of this program's scene graph.

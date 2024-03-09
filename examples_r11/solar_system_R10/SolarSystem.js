@@ -9,7 +9,7 @@ import {Color, FrameBuffer} from "../../renderer/framebuffer/FramebufferExport.j
 import {Sphere} from "../../renderer/models_L/ModelsExport.js";
 import * as ModelShading from "../../renderer/scene/util/UtilExport.js";
 import { format } from "../../renderer/scene/util/UtilExport.js";
-import { doAntiAliasing, doGamma, rastDebug, renderFB, setClipDebug, setDoAntiAliasing, setDoGamma, setRastDebug } from "../../renderer/pipeline/PipelineExport.js";
+import { doAntiAliasing, doGamma, rastDebug, renderFB1 as renderFB, setClipDebug, setDoAntiAliasing, setDoGamma, setRastDebug } from "../../renderer/pipeline/PipelineExport.js";
 
 /**
    Draw an animation of a solar system with a sun, planet, and moon.
