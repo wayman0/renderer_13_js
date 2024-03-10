@@ -77,7 +77,7 @@ try
     document.addEventListener("keydown", handleKeyEvent);
     document.addEventListener("click", handleMouseEvent);
 
-    timerHandle = setInterval(()  => {setUpViewing(); run();}, 1000/fps);
+    timerHandle = setInterval(handleMouseEvent, 1000/fps);
 }
 catch(e)
 {
@@ -194,8 +194,6 @@ function run()
 
     // Add the top level Position to the Scene.
     scene.addPosition( topLevel_p );
-
-    displayFunc();
 }
 
 function setUpViewing()
@@ -263,8 +261,6 @@ function write2Canvas()
 
 function write2File()
 {
-    setUpViewing();
-
     render1(scene, fb.vp);
     fb.dumpFB2File(format("GeometriesR11-Navigate-Frame%03d.ppm", angleNumber++));
 
@@ -276,7 +272,7 @@ function handleMouseEvent(e)
 {
     angleNumber = (angleNumber + 1) % 360;
 
-    setUpViewing();
+    run();
     displayFunc();
 }
 
@@ -367,10 +363,10 @@ function handleKeyEvent(e)
     else if('s' == c)
         clearInterval(timerHandle);
     else if('S' == c)
-        setInterval(run, 1000/fps);
+        timerHandle = setInterval(handleMouseEvent, 1000/fps);
 
-    // Render again.
-    setUpViewing();
+    handleMouseEvent(e);
+
     displayCamera(e);
     displayWindow(e);
     displayFunc();
