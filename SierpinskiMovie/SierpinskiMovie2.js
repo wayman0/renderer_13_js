@@ -13,6 +13,12 @@ const topP = Position.buildFromName("top");
 scene.addPosition(topP);
 topP.getMatrix().mult(Matrix.rotateZ(90));
 
+let sierTriangle = new SierpinskiTriangle(8);
+ModelShading.setColor(sierTriangle.nestedModels[0], Color.Magenta);
+ModelShading.setColor(sierTriangle.nestedModels[1], Color.red);
+ModelShading.setColor(sierTriangle.nestedModels[2], Color.Blue);
+topP.setModel(sierTriangle);
+
 const angle = 1;
 
 const vpW = 1024;
@@ -29,45 +35,44 @@ try
     const resizer = new ResizeObserver(write2Canvas);
     resizer.observe(resizerEl);
 
-    setInterval(run, 1000/25);
+    setInterval(runOnline, 1000/25);
 }
 catch(e)
 {
     displayFunc = write2File;
-    run();
+    runOffline();
 }
 
-function run()
+function runOnline()
 {
-    let sierTriangle = new SierpinskiTriangle(8);
-    ModelShading.setColor(sierTriangle.nestedModels[0], Color.blue);
-    ModelShading.setColor(sierTriangle.nestedModels[1], Color.red);
-    ModelShading.setColor(sierTriangle.nestedModels[2], Color.magenta);
+    updateNestedMatrices(sierTriangle);
+    displayFunc();
+}
 
-    topP.setModel(sierTriangle);
-
+function runOffline()
+{
     for(let k = 0; k < 720; ++k)
     {
         displayFunc(format("SierpinskiMovie2Frame%04d.ppm", k));
         updateNestedMatrices(sierTriangle);
     }
+}
 
-    function updateNestedMatrices(model)
+function updateNestedMatrices(model)
+{
+    if(model.nestedModels.length != 0)
     {
-        if(model.nestedModels.length != 0)
+        if(model.nestedModels[1].nestedModels.length != 0)
         {
-            if(model.nestedModels[1].nestedModels.length != 0)
-            {
-                model.nestedModels[1].nestedModels[1].setMatrix(
-                    model.nestedModels[1].nestedModels[1].getMatrix().timesMatrix(Matrix.rotateZ( 0.5)));
+            model.nestedModels[1].nestedModels[1].setMatrix(
+                model.nestedModels[1].nestedModels[1].getMatrix().timesMatrix(Matrix.rotateZ( 0.5)));
 
-                model.nestedModels[2].nestedModels[2].setMatrix(
-                    model.nestedModels[2].nestedModels[2].getMatrix().timesMatrix(Matrix.rotateZ(-0.5)));
-            }
-
-            for(const m of model.nestedModels)
-                updateNestedMatrices(m);
+            model.nestedModels[2].nestedModels[2].setMatrix(
+                model.nestedModels[2].nestedModels[2].getMatrix().timesMatrix(Matrix.rotateZ(-0.5)));
         }
+
+        for(const m of model.nestedModels)
+            updateNestedMatrices(m);
     }
 }
 
