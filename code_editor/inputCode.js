@@ -1,9 +1,9 @@
 //Import what is necessary for your code
-import {Scene, Position, Matrix, Model, Vertex, LineSegment} from "./renderer/scene/SceneExport.js";
-import {renderFB1 as renderFB, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma} from "./renderer/pipeline/PipelineExport.js";
-import {FrameBuffer, Viewport, Color} from "./renderer/framebuffer/FramebufferExport.js";
-import {Sphere} from "./renderer/models_L/ModelsExport.js";
-import * as ModelShading from "./renderer/scene/util/UtilExport.js";
+import {Scene, Position, Matrix, Model, Vertex, LineSegment} from "../renderer/scene/SceneExport.js";
+import {renderFB1 as renderFB, setDoAntiAliasing, doAntiAliasing, setDoGamma, doGamma} from "../renderer/pipeline/PipelineExport.js";
+import {FrameBuffer, Viewport, Color} from "../renderer/framebuffer/FramebufferExport.js";
+import {Sphere} from "../renderer/models_L/ModelsExport.js";
+import * as ModelShading from "../renderer/scene/util/UtilExport.js";
 
 //Create a default sphere from the Models import
 const sphereMod = new Sphere();
