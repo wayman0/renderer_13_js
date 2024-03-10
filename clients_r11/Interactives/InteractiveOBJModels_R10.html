@@ -3,42 +3,13 @@
     <head>
         <meta charset=utf-8>
         <title>Interactive OBJ Models R10</title>
-        <style>
-            body
-            {
-                margin: 0;
-                overflow: auto;
-            }
-            #resizer
-            {
-                float: left;
-                overflow: hidden;
-                resize: both;
-                width: 600px;
-                height: 600px;
-            }
-            button
-            {
-                cursor: pointer;
-            }
-            help
-            {
-                padding: 5px;
-                margin: 20px;
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                background-color: lightgray;
-                border: 2px solid black;
-            }
-        </style>
+        <link rel="stylesheet" href="../../fileHTML.css">
     </head>
     <body>
-        <div style="width: 100%;">
-            <div style="text-align: center; font-size: x-large;">Interactive OBJ Models R10</div>
-        </div>
+        <div id = "title">Interactive OBJ Models R10</div>
+        
         <div id="resizer">
-            <canvas id="pixels" width=600 height=600></canvas>
+            <canvas id="pixels"></canvas>
         </div>
 
         <script src="InteractiveOBJModels_R10.js", type = "module"></script>
