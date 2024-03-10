@@ -1,0 +1,28 @@
+.section 
+{
+    width: 100%;
+    height: 300px;
+    margin-top: 100px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+            
+.section div 
+{
+    border-top: 3px solid black;
+    border-bottom: 3px solid black;
+    border-left: 3px solid black;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: xx-large;
+}
+.section div:last-of-type
+{
+    border-right: 3px solid black;
+}

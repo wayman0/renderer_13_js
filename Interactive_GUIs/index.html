@@ -4,42 +4,12 @@
         <meta charset="utf-8">
         <title> Interactive Guis Index</title>
         <link rel=""shortcut icon" href="#" />
-        <style>
-            #section 
-            {
-                width: 100%;
-                height: 300px;
-                margin-top: 100px;
-                display: flex;
-                justify-content: space-evenly;
-                align-items: center;
-            }
-            
-            #section div 
-            {
-                border-top: 3px solid black;
-                border-bottom: 3px solid black;
-                border-left: 3px solid black;
-                width: 100%;
-                height: 100%;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
-                font-size: xx-large;
-            }
-
-            #section div:last-of-type
-            {
-                border-right: 3px solid black;
-            }
-        </style>
+        <link rel="stylesheet" href="../index.css">
     </head>
 
     <body>
         <div style ="width: 100%; text-align: center; font-size: x-large; font-weight: bolder;"> Welcome to Interactive Guis.  Click one of these links </div>
-        <div id="section">
+        <div id="interactiveguis" class = "section">
             <div style="background-color:rgb(255, 000, 000);" onclick="location.href = 'InteractiveGUI.html';">   Interactive Gui    </div>
             <div style="background-color:rgb(255, 125, 000);" onclick="location.href = 'InteractiveGUIv2.html';"> Interactive Gui v2 </div>        
             <div style="background-color:rgb(000, 255, 125);" onclick="location.href = 'InteractiveGUIv3.html';"> Interactive Gui v3 </div>                
