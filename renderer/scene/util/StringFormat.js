@@ -43,14 +43,6 @@ export function format(str, ... values)
         }
     }
 
-    if(newStr.includes("-"))
-    {   
-        // remove the minus sign
-        newStr.replace("-", "");
-        //append the minus sign to the front
-        newStr = "-" + newStr;
-    }
-
     return newStr;
 }
 
@@ -100,7 +92,10 @@ function replace(format, value)
 
                 x += 1;
                 while (format.charAt(x) != 'd' && format.charAt(x) != 'f')
-                {    end += 1; x += 1; }
+                {    
+                    end += 1; 
+                    x += 1; 
+                }
 
                 form += handlePrecision(format.substring(x, end), value);
                 x += 1;
@@ -112,10 +107,34 @@ function replace(format, value)
         }
     }
 
+    if(value < 0)
+    {        
+        if(form.charAt(0) != '-')
+        {
+            if(form.includes('-'))
+            {
+                let minusIndex = form.indexOf('-');
+                let beforeMinus = form.substring(0, minusIndex);
+                let afterMinus = form.substring(minusIndex+1, form.length);
+
+                form = beforeMinus + "0" + afterMinus;
+            }
+
+            form = '-' + form.substring(1, form.length);
+        }
+
+    }
+    
+
     return form;
 }
 
 
+/**
+ * @param {string} format
+ * @param {number} value
+ * @param {boolean} truncate
+ */
 function handleWidth(format, value, truncate) // goes from 0 to numbers, no decimal so when reach end thats it
 {
     let endStr = "";
@@ -128,10 +147,22 @@ function handleWidth(format, value, truncate) // goes from 0 to numbers, no deci
 
     if (valueStr.length < width)
     {
-        for (let x = 0; x < width - valueStr.length; x += 1)
-        {
-            endStr += '0';
-		}
+
+        //if(value < 0)
+        //{
+        //    endStr += '-';
+        //    for (let x = 0; x < width - valueStr.length-1; x += 1)
+        //    {
+        //        endStr += '0';
+        //    }
+        //}
+        //else
+        //{
+            for (let x = 0; x < width - valueStr.length; x += 1)
+            {
+                endStr += '0';
+            }
+        //}
 
         endStr += valueStr;
     }
