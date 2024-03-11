@@ -44,6 +44,8 @@ export function model2viewModel(position, ctm)
     return new Model(newVertexList,
                      model.primitiveList,
                      model.colorList,
+                     model.matrix,
+                     model.nestedModels, 
                      position.name + "::" + model.name,
                      model.visible);
 }

@@ -73,11 +73,11 @@ export function model2worldPosition(position, ctm)
    const ctm2 = ctm.timesMatrix(position.matrix);
 
    // create a new position to hold the newly rendered model and sub positions
-   let pos2; //= Position.buildFromModelName(position.model, position.name);
+   let pos2 = Position.buildFromModelName(position.model, position.name);
    if(position.model.visible)
       // if this model is visible then render it
-      //pos2.model = model2worldNestedModel(position.model, ctm2);
-      pos2 = Position.buildFromModelName(model2worldNestedModel(position.model, ctm2), position.name);   
+      pos2.model = model2worldNestedModel(position.model, ctm2);
+      //pos2 = Position.buildFromModelName(model2worldNestedModel(position.model, ctm2), position.name);   
    else
    {   
       logMessage("====== 1. Hidden model: " + position.model.name + " ======");
@@ -157,7 +157,7 @@ export function model2worldNestedModel(model, ctm)
                     mod2.primitiveList, 
                     mod2.colorList, 
                     Matrix.identity(),
-                    mod2.nestedModels,
+                    newNestedModelList,
                     mod2.name, 
                     mod2.visible);
 }
