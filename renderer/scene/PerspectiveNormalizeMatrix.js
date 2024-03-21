@@ -100,13 +100,12 @@ import {Camera, Matrix, Model, OrthoNorm, Position, Scene, Vector, Vertex} from 
  * @param {number} near the distance from the origin to the near plane
  * @returns {Matrix} a new matrix containing the perspective nomarlization matrix
  */
-export default function build(l, r, b, t, near)
+export default function build(l, r, b, t)
 {
    if (typeof l != "number" ||
        typeof r != "number" ||
        typeof b != "number" ||
-       typeof t != "number" ||
-       typeof near != "number")
+       typeof t != "number")
            throw new Error("L, R, B, T, and near must be numerical");
 
    let m1, m2;

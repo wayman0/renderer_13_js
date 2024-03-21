@@ -470,7 +470,7 @@ export default class Camera
     getNormalizeMatrix()
     {
         if (this.perspective)
-           return PerspNorm(this.left, this.right, this.bottom, this.top, this.n);
+           return PerspNorm(this.left, this.right, this.bottom, this.top);
         else
            return OrthoNorm(this.left, this.right, this.bottom, this.top);
     }
