@@ -77,7 +77,7 @@ export default class Camera
     /**@type {number} top the top wall of the view valumne*/ top;
     /**@type {number} n the front wall of the view valumne*/ n;
     /**@type {boolean} perspective whether the camera is projecting ortho or perspective*/ perspective;
-    /**@type {Vector} the vector to determine the camera's location in world space */ #viewVector;
+    /**@type {Matrix} the vector to determine the camera's location in world space */ #viewMatrix;
 
     /**
      * Set up this {@code Camera}'s view volume as a specified by {@param} persp
@@ -88,17 +88,17 @@ export default class Camera
      * @param {number} [t=1] the top edge of view rectangle in the near plane
      * @param {number} [near=1] the front edge of view rectangle in the near plane, distance from origin to view plane
      * @param {boolean} [persp=true] whether to project perspective or orthographic
-     * @param {Vector} [viewVect=new Vector(0, 0, 0)] the vector determining the cameras location in world space 
+     * @param {Matrix} [viewMat = Matrix.identity()] the matrix determining the cameras location in world space 
     */
-    constructor(l = -1, r = -l, b = -1, t = -b, near = 1, persp = true, viewVect = new Vector(0, 0, 0))
+    constructor(l = -1, r = -l, b = -1, t = -b, near = 1, persp = true, viewMat = Matrix.identity())
     {
         if (typeof persp != "boolean")
             throw new Error("Perspective must be a boolean");
 
         if(persp)
-            this.projPerspective(l, r, b, t, near, viewVect);
+            this.projPerspective(l, r, b, t, near, viewMat);
         else
-            this.projOrtho(l, r, b, t, near, viewVect);
+            this.projOrtho(l, r, b, t, near, viewMat);
     }
 
 
@@ -111,9 +111,9 @@ export default class Camera
      * @param {number} [bottom=-1] the bottom edge of view rectangle in the near plane
      * @param {number} [top=-1*bottom] the top edge of view rectangle in the near plane
      * @param {number} [near=1] the front edge of view rectangle in the near plane, distance from origin to view plane
-     * @param {Vector} [viewVect=new Vector(0, 0, 0)] the vector to determine this camears location in world space
+     * @param {Matrix} [viewMat=Matrix.identy()] the Matrix to determine this camears location in world space
      */
-    projPerspective(left = -1, right = -1 * left, bottom = -1, top = -1 * bottom, near = 1, viewVect = new Vector(0, 0, 0))
+    projPerspective(left = -1, right = -1 * left, bottom = -1, top = -1 * bottom, near = 1, viewMat = Matrix.identity())
     {
         if (typeof left != "number"   ||
             typeof right != "number"  ||
@@ -122,15 +122,15 @@ export default class Camera
             typeof near != "number")
                 throw new Error("All parameters must be numerical");
 
-        if(viewVect instanceof Vector == false)
-            throw new Error("View Vector must be a Vector");
+        if(viewMat instanceof Matrix == false)
+            throw new Error("View Matrix must be a Matrix");
 
         this.left = left;
         this.right = right;
         this.bottom = bottom;
         this.top = top;
         this.n = -1 * near;
-        this.#viewVector = viewVect;
+        this.#viewMatrix = viewMat;
 
         this.perspective = true;
     }
@@ -159,7 +159,7 @@ export default class Camera
         this.right = this.top * aspect;
         this.left = -1 * this.right;
         this.n = -1 * near;
-        this.#viewVector = new Vector(0, 0, 0);
+        this.#viewMatrix = Matrix.identity();
         this.perspective = true;
 
         // why do we call this fucntion? the only difference is the one line this.perspective = true?
@@ -198,7 +198,7 @@ export default class Camera
         this.bottom = b/fLength;    
         this.top = t/fLength;   
         this.n = -.1;
-        this.#viewVector = new Vector(0, 0, 0); 
+        this.#viewMatrix = Matrix.identity(); 
     }
 
     /**
@@ -211,9 +211,9 @@ export default class Camera
      * @param {number} [bottom=-1] bottom edge of view rectangle in the xy-plane
      * @param {number} [top=-1] top edge of view rectangle in the xy-plane
      * @param {number} [near=-1] distance from the origin to the near plane
-     * @param {Vector} [viewVect=new Vector(0, 0, 0)]  this cameras location in world space
+     * @param {Matrix} [viewMat =Matrix.identity()]  this cameras location in world space
      */
-    projOrtho(left = -1, right = 1, bottom = -1, top = 1, near = -1, viewVect = new Vector(0, 0, 0))
+    projOrtho(left = -1, right = 1, bottom = -1, top = 1, near = -1, viewMat = Matrix.identity())
     {
         if (typeof left != "number"   ||
             typeof right != "number"  ||
@@ -222,15 +222,15 @@ export default class Camera
             typeof near != "number")
                 throw new Error("All parameters must be numerical");
 
-        if(viewVect instanceof Vector == false)
-            throw new Error("View Vector must be a Vector");
+        if(viewMat instanceof Matrix == false)
+            throw new Error("View Matrix must be a Matrix");
 
         this.left = left;
         this.right = right;
         this.bottom = bottom;
         this.top = top;
         this.n = -1 * near;
-        this.#viewVector = viewVect;
+        this.#viewMatrix = viewMat;
         this.perspective = false;
     }
 
@@ -256,7 +256,7 @@ export default class Camera
         this.right = this.top * aspect;
         this.left = -1 * this.right;
         this.n = 1;
-        this.#viewVector = new Vector(0, 0, 0);
+        this.#viewMatrix = Matrix.identity();
         this.perspective = false;
 
         // why do we call this fucntion? the only difference is the one line this.perspective = false?
@@ -283,7 +283,7 @@ export default class Camera
                          this.top,
                          -near,
                          this.perspective,
-                         this.#viewVector);
+                         this.#viewMatrix);
     }
 
     /**
@@ -303,7 +303,7 @@ export default class Camera
                         this.top,
                         this.n,
                         this.perspective,
-                        new Vector(x, y, z));  // viewVector
+                        Matrix.translate(-x, -y, -z));  // viewMatrix
     }
 
     /**
@@ -313,10 +313,155 @@ export default class Camera
     */
     getViewVector()
     {
-       return this.#viewVector;
+       return new Vector(this.#viewMatrix.v4.x, this.#viewMatrix.v4.y, this.#viewMatrix.v4.z);
     }
    
+    /**
+     * Get a reference to this {@code Camera}'s view {@link Matrix}.
+     * 
+     * @return {Matrix} a reference to this {@code Camera}'s {@link Matrix} object
+    */
+    getViewMatrix()
+    {
+       return this.#viewMatrix;
+    }
    
+    /**
+      Set the location and orientation of this (@code Camera} in the world
+      coordinate system.
+    <p>
+      Compare with
+      <a href="https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml" target="_top">
+               https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml</a>
+
+      @param {number} eyex     x-coordinate of the camera's location
+      @param {number} eyey     y-coordinate of the camera's location
+      @param {number} eyez     z-coordinate of the camera's location
+      @param {number} centerx  x-coordinate of the camera's look-at point
+      @param {number} centery  y-coordinate of the camera's look-at point
+      @param {number} centerz  z-coordinate of the camera's look-at point
+      @param {number} upx      x-component of the camera's up vector
+      @param {number} upy      y-component of the camera's up vector
+      @param {number} upz      z-component of the camera's up vector
+    */
+    viewLookAt( eyex,    eyey,    eyez,
+                centerx, centery, centerz,
+                upx,     upy,     upz)
+    {
+        const F  = new Vector(centerx - eyex, centery - eyey, centerz - eyez);
+        const UP = new Vector(upx, upy, upz);
+        const f  = F.normalize();
+        const up = UP.normalize();
+        const s  = f.crossProduct(up);
+        const u  = s.crossProduct(f);
+        const viewMat = Matrix.buildFromColumns(new Vector(s.x, u.x, -f.x, 0.0),
+                                                new Vector(s.y, u.y, -f.y, 0.0),
+                                                new Vector(s.z, u.z, -f.z, 0.0),
+                                                new Vector(0.0, 0.0,  0.0, 1.0)); 
+
+        this.#viewMatrix = viewMat.timesMatrix( Matrix.translate(-eyex, -eyey, -eyez) );
+    }
+
+    /**
+       Set this (@code Camera}'s view matrix to the identity {@link Matrix}.
+    <p>
+       This places the camera at the origin of world coordinates,
+       looking down the negative z-axis.
+    */
+    view2Identity()
+    {
+       this.#viewMatrix = Matrix.identity();
+    }
+   
+    /**
+       Translate this (@code Camera} in world coordinates by the amount of
+       the given translation vector.
+    <p>
+       This means that we should left-multiply this camera's view matrix
+       with a translation {@link Matrix} that is the inverse of the
+       given translation.
+       @param {number} x  x-component of the Camera's translation vector
+       @param {number} y  y-component of the Camera's translation vector
+       @param {number} z  z-component of the Camera's translation vector
+    */
+    viewTranslate(x, y, z)
+    {
+       // Notice that the order of the multiplication is the oppposite
+       // of what we usually use. This is because the viewMatrix should
+       // be the inverse of the matrix that would position the camera
+       // in world coordinates. If A*B would be the position matrix,
+       // its inverse (A*B)^(-1) = B^(-1) * A^(-1), so we see a reversal
+       // in the order of multiplication.
+       this.#viewMatrix = (Matrix.translate(-x, -y, -z)).timesMatrix(this.#viewMatrix);
+    }
+
+    /**
+       Rotate this {@code Camera} in world coordinates by the given angle
+       around the given axis vector.
+    <p>
+       This means that we should left-multiply this {@code Camera}'s view
+       matrix with a rotation {@link Matrix} that is the inverse of
+       the given rotation.
+
+       @param {number} theta  angle, in degrees, to rotate the Camera by
+       @param {number} x      x-component of the axis vector for the Camera's rotation
+       @param {number} y      y-component of the axis vector for the Camera's rotation
+       @param {number} z      z-component of the axis vector for the Camera's rotation
+    */
+    viewRotate(theta, x, y, z)
+    {
+        // See the comment in the viewTranslate() method.
+        this.#viewMatrix = (Matrix.rotate(-theta, x, y, z)).timesMatrix(this.#viewMatrix);
+    }
+
+    /**
+        Rotate this {@code Camera} in world coordinates by the given angle
+        around the x-axis.
+        <p>
+        This means that we should left-multiply this {@code Camera}'s view
+        matrix with a rotation {@link Matrix} that is the inverse of
+        the given rotation.
+
+        @param {number} theta  angle, in degrees, to rotate the Camera by
+    */
+    viewRotateX(theta)
+    {
+        // See the comment in the viewTranslate() method.
+        this.viewMatrix = (Matrix.rotate(-theta, 1, 0, 0)).timesMatrix(this.#viewMatrix);
+    }
+
+    /**
+        Rotate this {@code Camera} in world coordinates by the given angle
+        around the y-axis.
+        <p>
+        This means that we should left-multiply this {@code Camera}'s view
+        matrix with a rotation {@link Matrix} that is the inverse of
+        the given rotation.
+
+        @param {number} theta  angle, in degrees, to rotate the Camera by
+    */
+    viewRotateY(theta)
+    {
+        // See the comment in the viewTranslate() method.
+        this.#viewMatrix = (Matrix.rotate(-theta, 0, 1, 0)).timesMatrix(this.#viewMatrix);
+    }
+
+    /**
+        Rotate this {@code Camera} in world coordinates by the given angle
+        around the z-axis.
+        <p>
+        This means that we should left-multiply this {@code Camera}'s view
+        matrix with a rotation {@link Matrix} that is the inverse of
+        the given rotation.
+
+        @param {number} theta  angle, in degrees, to rotate the Camera by
+    */
+    viewRotateZ(theta)
+    {
+        // See the comment in the viewTranslate() method.
+        this.#viewMatrix = (Matrix.rotate(-theta, 0, 0, 1)).timesMatrix(this.#viewMatrix);
+    }
+
     /**
        Get a reference to this {@code Camera}'s normalization {@link Matrix}.
 
@@ -353,8 +498,8 @@ export default class Camera
                +  format(", aspect ratio = %.2f)", ratio )
                +  "Normalization Matrix\n"
                +  this.getNormalizeMatrix().toString() + "\n"
-               +  "Translation Vector\n" 
-               +  "  " + this.#viewVector.toString();
+               +  "View Matrix\n" 
+               +  "  " + this.#viewMatrix.toString();
 
         return result;
     }
