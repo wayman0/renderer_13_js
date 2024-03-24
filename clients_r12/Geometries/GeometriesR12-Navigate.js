@@ -278,7 +278,7 @@ function handleKeyDown(e)
             cameraRotZ += 1;
    
         handleMouseEvent(e);
-        displayCamera();
+        displayCamera(e);
     }
 }
 
