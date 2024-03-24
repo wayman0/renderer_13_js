@@ -128,7 +128,7 @@ export default class FrameBuffer
        NOTE: THIS CODE IS ASYNCHRONOUS, MUST USE AWAIT!!!
 
        @param {string} fileName  must name a PPM image file with magic number P6.
-       @returns {Promise<FrameBuffer>}
+       @returns {Promise<FrameBuffer|undefined>}
     */
     static async buildFile(fileName)
     {        
@@ -142,7 +142,7 @@ export default class FrameBuffer
         }
         catch(e)
         {
-            return await FrameBuffer.#buildFileOffline(fileName);
+            //return await FrameBuffer.#buildFileOffline(fileName);
         }
     }
 
@@ -154,17 +154,17 @@ export default class FrameBuffer
         return FrameBuffer.interpretData(new Uint8Array(data));
     }
 
-    /**
-     * @param {string} fileName 
-     * @returns {Promise<FrameBuffer>}
-     */
-    static async #buildFileOffline(fileName)
-    {
-        const fs = await import("node:fs");
-        const buffer = fs.readFileSync(fileName);
-
-        return FrameBuffer.interpretData(Uint8Array.from(buffer));
-    }
+    ///**
+    // * @param {string} fileName 
+    // * @returns {Promise<FrameBuffer>}
+    // */
+    //static async #buildFileOffline(fileName)
+    //{
+    //    const fs = await import("node:fs");
+    //    const buffer = fs.readFileSync(fileName);
+    //
+    //    return FrameBuffer.interpretData(Uint8Array.from(buffer));
+    //}
 
     /**
      * @param {Uint8Array} data 
@@ -581,79 +581,79 @@ export default class FrameBuffer
     }
 
 
-    /**
-    Write this {@code FrameBuffer} to the specified PPM file.
-    <p>
-    <a href="https://en.wikipedia.org/wiki/Netpbm_format" target="_top">
-            https://en.wikipedia.org/wiki/Netpbm_format</a>
-
-    @param {string} filename  name of PPM image file to hold {@code FrameBuffer} data
-    */
-    dumpFB2File(filename)
-    {
-        if (typeof filename != "string")
-            throw new Error("Filename must be a string");
-
-        this.dumpPixels2File(0, 0, this.getWidthFB(), this.getHeightFB(), filename);
-    }
-
-
-    /**
-    Write a rectangular sub array of pixels from this {@code FrameBuffer}
-    to the specified PPM file.
-    <p>
-    <a href="https://en.wikipedia.org/wiki/Netpbm_format#PPM_example" target="_top">
-            https://en.wikipedia.org/wiki/Netpbm_format#PPM_example</a>
-    <p>
-    <a href="http://stackoverflow.com/questions/2693631/read-ppm-file-and-store-it-in-an-array-coded-with-c" target="_top">
-      http://stackoverflow.com/questions/2693631/read-ppm-file-and-store-it-in-an-array-coded-with-c</a>
-
-    @param {number} upperLeftX      upper left hand x-coordinate of pixel data rectangle
-    @param {number} upperLeftY      upper left hand y-coordinate of pixel data rectangle
-    @param {number} lowerRightX      lower right hand x-coordinate of pixel data rectangle
-    @param {number} lowerRightY      lower right hand y-coordinate of pixel data rectangle
-    @param {string} filename  name of PPM image file to hold pixel data
-    */
-    dumpPixels2File(upperLeftX, upperLeftY, lowerRightX, lowerRightY, filename)
-    {
-        if ( typeof upperLeftX != "number" || typeof upperLeftY != "number" ||
-            typeof lowerRightX != "number" || typeof lowerRightY != "number")
-                throw new Error("upperLeftX, upperLeftY, lowerRightX, lowerRightY must be numerical");
-
-        if (typeof filename != "string")
-            throw new Error("Filename must be a String");
-
-        let pWidth  = lowerRightX - upperLeftX;
-        let pHeight = lowerRightY - upperLeftY;
-
-        const format = "P6\n" + pWidth + " " + pHeight + "\n" + 255 + "\n"
-        const colorData = new Uint8Array(pWidth * pHeight * 3);
-
-        let index = 0;
-        for(let y = upperLeftY; y < lowerRightY; y += 1)
-        {
-            for(let x = upperLeftX; x < lowerRightX; x += 1)
-            {
-                const rgba = this.getPixelFB(x, y).rgb;
-
-                colorData[index+ 0] = rgba[0];
-                colorData[index+ 1] = rgba[1];
-                colorData[index+ 2] = rgba[2];
-                index += 3;
-            }
-        }
-
-        // Use dynamic import and then
-        // use synchronous API to avoid file corruption.
-        import('node:fs').then(fs => {
-          fs.writeFileSync(filename, format, //@ts-ignore
-                       err => {if (err) throw err;});
-        });
-        import('node:fs').then(fs => {
-          fs.appendFileSync(filename, Buffer.from(colorData), //@ts-ignore
-                       err => {if (err) throw err;});
-        });
-    }
+    ///**
+    //Write this {@code FrameBuffer} to the specified PPM file.
+    //<p>
+    //<a href="https://en.wikipedia.org/wiki/Netpbm_format" target="_top">
+    //        https://en.wikipedia.org/wiki/Netpbm_format</a>
+    //
+    //@param {string} filename  name of PPM image file to hold {@code FrameBuffer} data
+    //*/
+    //dumpFB2File(filename)
+    //{
+    //    if (typeof filename != "string")
+    //        throw new Error("Filename must be a string");
+    //
+    //    this.dumpPixels2File(0, 0, this.getWidthFB(), this.getHeightFB(), filename);
+    //}
+    //
+    //
+    ///**
+    //Write a rectangular sub array of pixels from this {@code FrameBuffer}
+    //to the specified PPM file.
+    //<p>
+    //<a href="https://en.wikipedia.org/wiki/Netpbm_format#PPM_example" target="_top">
+    //        https://en.wikipedia.org/wiki/Netpbm_format#PPM_example</a>
+    //<p>
+    //<a href="http://stackoverflow.com/questions/2693631/read-ppm-file-and-store-it-in-an-array-coded-with-c" target="_top">
+    //  http://stackoverflow.com/questions/2693631/read-ppm-file-and-store-it-in-an-array-coded-with-c</a>
+    //
+    //@param {number} upperLeftX      upper left hand x-coordinate of pixel data rectangle
+    //@param {number} upperLeftY      upper left hand y-coordinate of pixel data rectangle
+    //@param {number} lowerRightX      lower right hand x-coordinate of pixel data rectangle
+    //@param {number} lowerRightY      lower right hand y-coordinate of pixel data rectangle
+    //@param {string} filename  name of PPM image file to hold pixel data
+    //*/
+    //dumpPixels2File(upperLeftX, upperLeftY, lowerRightX, lowerRightY, filename)
+    //{
+    //    if ( typeof upperLeftX != "number" || typeof upperLeftY != "number" ||
+    //        typeof lowerRightX != "number" || typeof lowerRightY != "number")
+    //            throw new Error("upperLeftX, upperLeftY, lowerRightX, lowerRightY must be numerical");
+    //
+    //    if (typeof filename != "string")
+    //        throw new Error("Filename must be a String");
+    //
+    //    let pWidth  = lowerRightX - upperLeftX;
+    //    let pHeight = lowerRightY - upperLeftY;
+    //
+    //    const format = "P6\n" + pWidth + " " + pHeight + "\n" + 255 + "\n"
+    //    const colorData = new Uint8Array(pWidth * pHeight * 3);
+    //
+    //    let index = 0;
+    //    for(let y = upperLeftY; y < lowerRightY; y += 1)
+    //    {
+    //        for(let x = upperLeftX; x < lowerRightX; x += 1)
+    //        {
+    //            const rgba = this.getPixelFB(x, y).rgb;
+    //
+    //            colorData[index+ 0] = rgba[0];
+    //            colorData[index+ 1] = rgba[1];
+    //            colorData[index+ 2] = rgba[2];
+    //            index += 3;
+    //        }
+    //    }
+    //
+    //    // Use dynamic import and then
+    //    // use synchronous API to avoid file corruption.
+    //    import('node:fs').then(fs => {
+    //      fs.writeFileSync(filename, format, //@ts-ignore
+    //                   err => {if (err) throw err;});
+    //    });
+    //    import('node:fs').then(fs => {
+    //      fs.appendFileSync(filename, Buffer.from(colorData), //@ts-ignore
+    //                   err => {if (err) throw err;});
+    //    });
+    //}
 
     static main()
     {   
