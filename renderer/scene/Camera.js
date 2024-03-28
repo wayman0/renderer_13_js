@@ -427,7 +427,7 @@ export default class Camera
     viewRotateX(theta)
     {
         // See the comment in the viewTranslate() method.
-        this.viewMatrix = (Matrix.rotate(-theta, 1, 0, 0)).timesMatrix(this.#viewMatrix);
+        this.#viewMatrix = (Matrix.rotate(-theta, 1, 0, 0)).timesMatrix(this.#viewMatrix);
     }
 
     /**
@@ -495,7 +495,7 @@ export default class Camera
                +  "  top = "    + this.top + "\n"
                +  "  near = "   + -1 * this.n + "\n"
                +  "  (fovy = " + fovy
-               +  format(", aspect ratio = %.2f)", ratio )
+               +  format(", aspect ratio = %2.2f)", ratio )
                +  "Normalization Matrix\n"
                +  this.getNormalizeMatrix().toString() + "\n"
                +  "View Matrix\n" 
