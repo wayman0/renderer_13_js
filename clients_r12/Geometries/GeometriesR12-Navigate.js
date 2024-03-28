@@ -276,9 +276,7 @@ function handleKeyDown(e)
             cameraRotZ -= 1;
         else if('Z' == c)
             cameraRotZ += 1;
-   
-        console.log(cameraRotX);
-        
+           
         handleMouseEvent(e);
         displayCamera(e);
     }

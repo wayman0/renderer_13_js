@@ -16,7 +16,7 @@ const right = 2;
 const left = -right;
 const top = 1;
 const bottom = -top;
-const cam = new Camera(left, right, bottom, left);
+const cam = new Camera(left, right, bottom, top);
 const scene = Scene.buildFromCameraName(cam, "Geometries_R12a");
 
 const xyzAxes = new Axes3D(-6, 6, -6, 0, -7, 7, Color.red);
@@ -134,16 +134,16 @@ async function buildModelArray()
 function run()
 {
     scene.camera.view2Identity();
-    //scene.camera.viewRotateY(-rot);
-    scene.camera.viewTranslate(0, 5, 10);
+    scene.camera.viewRotateY(-rot);
+    scene.camera.viewTranslate(0, 3, 10);
 
     for(let i = model.length - 1; i >= 0; --i)
     {
         for(let j = 0; j < model[i].length; ++j)
         {
             const mat = Matrix.translate(-4+4*j, 0, 6-3*i)
-                            //.timesMatrix(Matrix.rotateX(3*rot))
-                            //.timesMatrix(Matrix.rotateY(3*rot));
+                            .timesMatrix(Matrix.rotateX(3*rot))
+                            .timesMatrix(Matrix.rotateY(3*rot));
 
             model[i][j].matrix = mat;
         }
