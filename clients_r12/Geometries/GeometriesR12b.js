@@ -16,7 +16,7 @@ const right = 2;
 const left = -right;
 const top = 1;
 const bottom = -top;
-const cam = new Camera(left, right, bottom, left);
+const cam = new Camera(left, right, bottom, top);
 const scene = Scene.buildFromCameraName(cam, "Geometries_R12a");
 
 const xyzAxes = new Axes3D(-6, 6, -6, 0, -7, 7, Color.red);
