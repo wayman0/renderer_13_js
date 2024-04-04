@@ -370,7 +370,7 @@ export function defaultHandleKeyDown(e)
             eyeY = 0;
             eyeZ = cameraDistance;
             eyeRotX = 0;
-            eyeRotX = 0;
+            eyeRotY = 0;
             eyeRotZ = 0;
             eyeZoom = 1;
         }
