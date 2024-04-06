@@ -1,7 +1,16 @@
-import {Scene, Camera, Position, Model, Matrix, Vertex, LineSegment} from "./renderer/scene/SceneExport.js";
+import {Scene, Camera, Position, Model, Matrix, Vertex, LineSegment, Vector} from "./renderer/scene/SceneExport.js";
 import {FrameBuffer, Color} from "./renderer/framebuffer/FramebufferExport.js";
-import {model2viewModel, render1} from "./renderer/pipeline/PipelineExport.js";
+import {render1, setDoNearClipping} from "./renderer/pipeline/PipelineExport.js";
 import { format } from "./renderer/scene/util/StringFormat.js";
+
+                // neg model             axis color              pos model
+const xColors = [new Color(50, 0, 0), new Color(125, 0, 0), new Color(255, 0, 0)]; // x axis colors
+const yColors = [new Color(0, 50, 0), new Color(0, 125, 0), new Color(0, 255, 0)]; // y axis colors
+const zColors = [new Color(0, 0, 50), new Color(0, 0, 125), new Color(0, 0, 255)]; // z axis colors
+
+const xVList = [new Vertex(-5, 0, 0), new Vertex(5, 0, 0)];
+const yVList = [new Vertex(0, -5, 0), new Vertex(0, 5, 0)];
+const zVList = [new Vertex(0, 0, -5), new Vertex(0, 0, 5)];
 
 const vList = [ new Vertex(-0.5, -0.5, -0.5), 
                 new Vertex(-0.5,  0.5, -0.5), 
@@ -11,6 +20,10 @@ const vList = [ new Vertex(-0.5, -0.5, -0.5),
                 new Vertex(-0.5,  0.5,  0.5), 
                 new Vertex( 0.5,  0.5,  0.5), 
                 new Vertex( 0.5, -0.5,  0.5)];
+
+const xPList = [LineSegment.buildVertexColor(0, 1, 0)];
+const yPList = [LineSegment.buildVertexColor(0, 1, 0)];
+const zPList = [LineSegment.buildVertexColor(0, 1, 0)];
 
 const pList = [ LineSegment.buildVertexColor(0, 1, 0), 
                 LineSegment.buildVertexColor(1, 2, 0), 
@@ -25,42 +38,58 @@ const pList = [ LineSegment.buildVertexColor(0, 1, 0),
                 LineSegment.buildVertexColor(2, 6, 0),
                 LineSegment.buildVertexColor(3, 7, 0)];
 
-const mat1 = Matrix.translate(0,  0, -3);
-const mat2 = Matrix.translate(-3, 0,  0);
-const mat3 = Matrix.translate( 0, 0,  3);
-const mat4 = Matrix.translate( 3, 0,  0);
+const mat1 = Matrix.translate(0,   0, -3);
+const mat2 = Matrix.translate(-3,  0,  0);
+const mat3 = Matrix.translate( 0,  0,  3);
+const mat4 = Matrix.translate( 3,  0,  0);
+const mat5 = Matrix.translate( 0, -3,  0);
+const mat6 = Matrix.translate( 0,  3,  0);
 
-const mod1 = new Model(vList, pList, [Color.red],   mat1)
-const mod2 = new Model(vList, pList, [Color.green], mat2);
-const mod3 = new Model(vList, pList, [Color.blue],  mat3);
-const mod4 = new Model(vList, pList, [Color.white], mat4);
+const mod1 = new Model(vList, pList, [zColors[0]], mat1)
+const mod2 = new Model(vList, pList, [xColors[0]], mat2);
+const mod3 = new Model(vList, pList, [zColors[2]], mat3);
+const mod4 = new Model(vList, pList, [xColors[2]], mat4);
+const mod5 = new Model(vList, pList, [yColors[0]], mat5);
+const mod6 = new Model(vList, pList, [yColors[2]], mat6);
+
+const xAxisMod = new Model(xVList, xPList, [xColors[1]]);
+const yAxisMod = new Model(yVList, yPList, [yColors[1]]);
+const zAxisMod = new Model(zVList, zPList, [zColors[1]]);
 
 const pos1 = new Position(mod1);
 const pos2 = new Position(mod2);
 const pos3 = new Position(mod3);
-const pos4 = new Position(mod4)
+const pos4 = new Position(mod4);
+const pos5 = new Position(mod5);
+const pos6 = new Position(mod6);
+
+const xAxisPos = new Position(xAxisMod);
+const yAxisPos = new Position(yAxisMod);
+const zAxisPos = new Position(zAxisMod)
 
 const camera = new Camera(-1, 1, -1, 1);
-const scene = new Scene(camera, [pos1, pos2, pos3, pos4]);
+const scene = new Scene(camera, [pos1, pos2, pos3, pos4, pos5, pos6, xAxisPos, yAxisPos, zAxisPos]);
 
+let xRot = 0, yRot = 0, zRot = 0; // rotations
+let    eyeX = 0,    eyeY = 0,    eyeZ = 0; // camera location
+let centerX = 0, centerY = 0, centerZ = -3; // where the camera is looking
+let     upX = 0,     upY = 1,     upZ = 0; // what up is
 
-let xRot = 0, yRot = 0, zRot = 0;
-let eyeX = 0, eyeY = 0, eyeZ = 0; // eyeZ = 2;
-let centerX = 0, centerY = 0, centerZ = 0.0;
-let upX = 0, upY = 1, upZ = 0.0;
+const radian90 = 90 * Math.PI / 180;
 
 let run = rotateAroundX;
 document.addEventListener("keypress", keyPress);
-//let timerHandle = setInterval(run, 1000/20);
+let timerHandle = setInterval(run, 1000/20);
 
-display();
+document.addEventListener("mousedown", rotateAroundZ);
+//display();
 
 function resetLookAt()
 {
     xRot = 0, yRot = 0, zRot = 0;
 
     eyeX = 0, eyeY = 0, eyeZ = 0;// eyeZ = 2;
-    centerX = 0, centerY = 0, centerZ = 0;
+    centerX = 0, centerY = 0, centerZ = -3;
     upX = 0, upY = 1, upZ = 0.0;   
 }
 
@@ -95,14 +124,19 @@ function rotateAroundX()
     /*
     // this code moves the camera in a circle
     xRot += Math.PI/180; // increase by 1 radian
-    eyeY = Math.cos(xRot);
-    eyeZ = Math.sin(xRot);
+    eyeY = Math.sin(xRot);
+    eyeZ = Math.cos(xRot);
     */
 
     // this code rotates where the camera is looking
-    xRot += Math.PI/180;
-    centerY = Math.cos(xRot);
-    centerZ = Math.sin(xRot);
+    // but we need to keep the up vector at a 90 degree angle 'before' the look vector
+    xRot += 1 * Math.PI/180;
+
+    centerY = Math.sin(xRot);
+    centerZ = Math.cos(xRot);
+
+    upY = Math.sin(radian90 + xRot);
+    upZ = Math.cos(radian90 + xRot);
 
     /*
     // this changes what 'up' is to the camera and doesn't do a rotation
@@ -124,6 +158,7 @@ function rotateAroundY()
     */
 
     // this code rotates where the camera is looking
+    // we don't need to update the up vector because we never change the look y
     yRot += Math.PI/180;
     centerX = Math.sin(yRot);
     centerZ = Math.cos(yRot);
@@ -147,10 +182,15 @@ function rotateAroundZ()
     eyeY = Math.sin(zRot);
     */
 
-    // this code rotates where the camera is looking
-    zRot += Math.PI/180;
-    centerX = Math.cos(zRot);
-    centerY = Math.sin(zRot);
+    // this code rotates where the camera is looking 
+    // but if we rotate around z we don't look anywhere other than z
+    //centerX = Math.sin(zRot);
+    //centerY = Math.cos(zRot);
+
+    zRot += Math.PI/180; // increment by 1 degree
+    // instead we need to change what 'up' is to the camera
+    upX = Math.sin(zRot);
+    upY = Math.cos(zRot);
 
     /*
     // this changes what 'up' is to the camera and doesn't do a rotation
@@ -198,12 +238,29 @@ function lookDownPosX()
     display();
 }
 
+function lookDownNegY()
+{
+    centerX = 0;
+    centerY = -3;
+    centerZ = 0;
+
+    display();
+}
+
+function lookDownPosY()
+{
+    centerX = 0; 
+    centerY = 3;
+    centerZ = 0;
+
+    display();
+}
 
 function keyPress(e)
 {
     const c = e.key;
 
-    /*
+    
     if('x' == c)
         run = rotateAroundX;
     else if('y' == c)
@@ -215,13 +272,14 @@ function keyPress(e)
         clearInterval(timerHandle);
     else
     {
-        resetLookAt();
+        //resetLookAt();
 
         clearInterval(timerHandle);
         timerHandle = setInterval(run, 1000/20);
     }
-    */
+    
 
+    /*
     if('1' == c)
         lookDownNegZ();
     else if('2' == c)
@@ -230,4 +288,9 @@ function keyPress(e)
         lookDownPosZ();
     else if('4' == c)
         lookDownPosX();
+    else if('5' == c)
+        lookDownNegY();
+    else if('6' == c)
+        lookDownPosY();
+    */
 }
