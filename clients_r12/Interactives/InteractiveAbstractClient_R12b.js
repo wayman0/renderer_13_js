@@ -17,7 +17,9 @@ export let centerZ = 0.0;
 export let upX = 0.0;
 export let upY = 1.0;
 export let upZ = 0.0;
-
+export let eyeRotX = 0; 
+export let eyeRotY = 0; 
+export let eyeRotZ = 0;
 
 export let letterbox = false;
 export let aspectRatio = 1.0;
@@ -75,7 +77,7 @@ export function setFB(f)
         fb = f;
 }
 
-export function setEyeX(val)
+export function setCameraX(val)
 {
     if(typeof val != "number")
         throw new Error("val must be a number");
@@ -83,7 +85,7 @@ export function setEyeX(val)
     eyeX = val;
 }
 
-export function setEyeY(val)
+export function setCameraY(val)
 {
     if(typeof val != "number")
         throw new Error("val must be a number");
@@ -91,7 +93,7 @@ export function setEyeY(val)
     eyeY = val;
 }
 
-export function setEyeZ(val)
+export function setCameraZ(val)
 {
     if(typeof val != "number")
         throw new Error("val must be a number");
@@ -99,52 +101,28 @@ export function setEyeZ(val)
     eyeZ = val;
 }
 
-export function setCenterX(val)
+export function setCameraRotX(val)
 {
     if(typeof val != "number")
         throw new Error("val must be a number");
 
-    centerX = val;
+    eyeRotX = val;
 }
 
-export function setCenterY(val)
+export function setCameraRotY(val)
 {
     if(typeof val != "number")
         throw new Error("val must be a number");
 
-    centerY = val;
+    eyeRotY = val;
 }
 
-export function setCenterZ(val)
+export function setCameraRotZ(val)
 {
     if(typeof val != "number")
         throw new Error("val must be a number");
     
-    centerZ = val;
-}
-
-export function setUpX(val)
-{
-    if(typeof val != "number")
-        throw new Error("val must be a number");
-
-    upX = val;
-}
-
-export function setUpY(val)
-{
-    if(typeof val != "number")
-        throw new Error("val must be a number");
-
-    upY = val;
-}
-
-export function setUpZ(val)
-{
-    if(typeof val != "number")
-        throw new Error("val must be a number");
-
-    upZ = val;
+    eyeRotZ = val;
 }
 
 export function setCameraZoom(val)
@@ -367,6 +345,8 @@ export function defaultHandleKeyDown(e)
             eyeZoom += .1;
         else if('x' == c)
         {
+            // move the location of the camera and the where the camera is looking
+            // to do a translation using the viewLookAt function
             eyeX += .1;
             centerX += .1
         }
@@ -396,17 +376,52 @@ export function defaultHandleKeyDown(e)
             centerZ -= .1;
         }
         else if('u' == c)
-            centerX += .1;
+        {   
+            // rotate the camera around the scene
+            // have to also update what 'up' is to keep the 
+            // up vector to be 90 degrees 'before' the camera
+            eyeRotX += 1;
+            eyeY += eyeZ * Math.sin(eyeRotX);
+            eyeZ += eyeZ * Math.cos(eyeRotX);
+
+            upY += Math.sin(Math.PI/4 + eyeRotX);
+            upZ += Math.cos(Math.PI/4 + eyeRotX);
+        }
         else if('U' == c)
-            centerX -= .1;
+        {    
+            eyeRotX -= 1;
+            eyeY += eyeZ * Math.sin(eyeRotX);
+            eyeZ += eyeZ * Math.cos(eyeRotX);
+
+            upY += Math.sin(Math.PI/4 + eyeRotX);
+            upZ += Math.cos(Math.PI/4 + eyeRotX);
+        }
         else if('v' == c)
-            centerY += .1;
+        {    
+            // we don't need to update what up is in a y rotation because
+            // the camera's y doesn't change
+            eyeRotY += 1;
+            eyeX = eyeZ * Math.sin(eyeRotY);
+            eyeZ = eyeZ * Math.cos(eyeRotY);
+        }
         else if('V' == c)
-            centerY -= .1;
+        {    
+            eyeRotY -= 1;
+            eyeX = eyeZ * Math.sin(eyeRotY);
+            eyeZ = eyeZ * Math.cos(eyeRotY);
+        }
         else if('w' == c)
-            centerZ += .1;
+        {   
+            eyeRotZ += 1;
+            upX = Math.cos(Math.PI/4 + eyeRotZ);
+            upY = Math.sin(Math.PI/4 + eyeRotZ);
+        }
         else if('W' == c)
-            centerZ -= .1;
+        {    
+            eyeRotZ -= 1;
+            upX = Math.cos(Math.PI/4 + eyeRotZ);
+            upY = Math.sin(Math.PI/4 + eyeRotZ);
+        }
         else if('=' == c)
         {
             eyeX = 0;
