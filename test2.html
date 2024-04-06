@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset=utf-8>
+        <title>View Look At Test 2</title>
+
+        <style> 
+            body
+            {
+                width:95%;
+                height:95%;
+            
+                margin-left: 2.5%;
+                margin-right: 2.5%;
+            }
+
+            button
+            {
+                cursor: pointer;
+            }
+
+            #title
+            {
+                width:100%;
+                text-align: center;
+                font-size: x-large;
+            }
+
+            #resizer
+            {
+                width:1500px;
+                height:500px;
+            
+                margin-left:auto;
+                margin-right:auto;
+            
+                resize:both;
+                overflow: hidden;
+            }
+
+            #pixels1
+            {
+                float: left;
+                width:32%;
+                height:100%;
+            }
+
+            #pixels2
+            {
+                float: left;
+                width:32%;
+                height:100%;
+            }
+
+            #pixels3
+            {
+                float: left;
+                width:32%;
+                height:100%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id = "title">View Look At Test 2</div>
+        
+        <div id="resizer">
+            <canvas id="pixels1"></canvas>
+            <canvas id="pixels2"></canvas>
+            <canvas id="pixels3"></canvas>
+        </div>
+
+        <script src="test2.js", type = "module"></script>
+    </body>
+</html>
