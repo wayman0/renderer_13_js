@@ -380,45 +380,49 @@ export function defaultHandleKeyDown(e)
             // rotate the camera around the scene
             // have to also update what 'up' is to keep the 
             // up vector to be 90 degrees 'before' the camera
-            eyeRotX += 1;
-            eyeY += eyeZ * Math.sin(eyeRotX);
-            eyeZ += eyeZ * Math.cos(eyeRotX);
-
-            upY += Math.sin(Math.PI/4 + eyeRotX);
-            upZ += Math.cos(Math.PI/4 + eyeRotX);
+            //eyeRotX += 1;
+            //eyeY += eyeZ * Math.sin(eyeRotX);
+            //eyeZ += eyeZ * Math.cos(eyeRotX);
+//
+            //upY += Math.sin(Math.PI/4 + eyeRotX);
+            //upZ += Math.cos(Math.PI/4 + eyeRotX);
+            centerY -= .1;
         }
         else if('U' == c)
         {    
-            eyeRotX -= 1;
-            eyeY += eyeZ * Math.sin(eyeRotX);
-            eyeZ += eyeZ * Math.cos(eyeRotX);
-
-            upY += Math.sin(Math.PI/4 + eyeRotX);
-            upZ += Math.cos(Math.PI/4 + eyeRotX);
+            //eyeRotX -= 1;
+            //eyeY += eyeZ * Math.sin(eyeRotX);
+            //eyeZ += eyeZ * Math.cos(eyeRotX);
+//
+            //upY += Math.sin(Math.PI/4 + eyeRotX);
+            //upZ += Math.cos(Math.PI/4 + eyeRotX);
+            centerY += .1;
         }
         else if('v' == c)
         {    
             // we don't need to update what up is in a y rotation because
             // the camera's y doesn't change
-            eyeRotY += 1;
-            eyeX = eyeZ * Math.sin(eyeRotY);
-            eyeZ = eyeZ * Math.cos(eyeRotY);
+            //eyeRotY += 1;
+            //eyeX = eyeZ * Math.sin(eyeRotY);
+            //eyeZ = eyeZ * Math.cos(eyeRotY);
+            centerX -= .1;
         }
         else if('V' == c)
         {    
-            eyeRotY -= 1;
-            eyeX = eyeZ * Math.sin(eyeRotY);
-            eyeZ = eyeZ * Math.cos(eyeRotY);
+            //eyeRotY -= 1;
+            //eyeX = eyeZ * Math.sin(eyeRotY);
+            //eyeZ = eyeZ * Math.cos(eyeRotY);
+            centerX += .1;
         }
         else if('w' == c)
         {   
-            eyeRotZ += 1;
+            eyeRotZ += Math.PI/180; // 1 radian
             upX = Math.cos(Math.PI/4 + eyeRotZ);
             upY = Math.sin(Math.PI/4 + eyeRotZ);
         }
         else if('W' == c)
         {    
-            eyeRotZ -= 1;
+            eyeRotZ -= Math.PI/180; // 1 radian
             upX = Math.cos(Math.PI/4 + eyeRotZ);
             upY = Math.sin(Math.PI/4 + eyeRotZ);
         }
