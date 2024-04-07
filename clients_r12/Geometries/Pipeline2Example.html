@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset=utf-8>
+        <title>Pipeline 2 Example </title>
+
+        <style>
+            body
+            {
+                width:95%;
+                height:95%;
+            
+                margin-left: 2.5%;
+                margin-right: 2.5%;
+            }
+
+            button
+            {
+                cursor: pointer;
+            }
+
+            #title
+            {
+                width:100%;
+                text-align: center;
+                font-size: x-large;
+            }
+
+            #resizer
+            {
+                width:500px;
+                height:500px;
+            
+                margin-left:auto;
+                margin-right:auto;
+            
+                resize:both;
+                overflow: hidden;
+
+                background-color: black;
+            }
+
+            #pixels
+            {
+                width:100%;
+                height:100%;
+            }
+
+            .res
+            {
+                float:left;
+                width: 16%;
+                height: 300px;
+
+                margin: 3pt;
+                font-size: large;
+                text-align: center;
+            }
+
+            .pix
+            {
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id = "title">Pipeline 2 Example</div>
+
+        <div id="resizer">
+            <canvas id="pixels"></canvas>
+        </div>
+
+        <div id = "res1", class = "res"> Stage 1 M2W
+            <canvas id="scene1", class = "pix"></canvas>
+        </div>
+
+        <div id = "res2", class = "res"> Stage 2 W2V
+            <canvas id="scene2", class = "pix"></canvas>
+        </div>
+
+        <div id = "res3", class = "res"> Stage 3 V2C
+            <canvas id="scene3", class = "pix"></canvas>
+        </div>
+
+        <div id = "res4", class = "res"> Stage 4 Near Clip
+            <canvas id="scene4", class = "pix"></canvas>
+        </div>
+
+        <div id = "res5", class = "res"> Stage 5 Project
+            <canvas id="scene5", class = "pix"></canvas>
+        </div>
+
+        <div id = "res6", class = "res"> Stage 6 Clip
+            <canvas id="scene6", class = "pix"></canvas>
+        </div>
+
+        <script src = "Pipeline2Example.js", type = "module"></script>
+    </body>
+</html>
