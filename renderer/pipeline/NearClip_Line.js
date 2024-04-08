@@ -116,12 +116,12 @@ function interpolateNewVertex(model, ls, n)
     const y = (1-t) * v1y + t * v0y;
     const z = n;
 
-    let t_ = undefined;
+    let t_ = t;//undefined;
 
-    if (t > 1)
-        t_ = 1/t;
-    else
-        t_ = t;
+    //if (t > 1)
+    //    t_ = 1/t;
+    //else
+    //    t_ = t;
 
     // can we just use blend function in color?
     const r = (1-t_) * c1[0] + t_ * c0[0];

@@ -240,10 +240,10 @@ export default function clip(model, ls)
 
         return ls;
     }
-    else if ( (x0 >  1 && x1 >  1) ||
-              (x0 < -1 && x1 < -1) ||
-              (y0 >  1 && y1 >  1) ||
-              (y0 < -1 && y1 < -1))
+    else if ( (x0 >  1 && x1 >  1) || // to the right of the line x = 1
+              (x0 < -1 && x1 < -1) || // to the left of the line x = -1
+              (y0 >  1 && y1 >  1) || // above the line y = 1
+              (y0 < -1 && y1 < -1))   // below the line y = -1
     {
         if (clipDebug)
             logMessage("-- Trivial delete.");
@@ -289,14 +289,14 @@ function clipOneTime(model, ls)
     const x0 = vertex0.x, y0 = vertex0.y;
     const x1 = vertex1.x, y1 = vertex1.y;
 
-    let equation = "";
-    let vOutside;
-    let vOx; let vOy;
-    let vIx; let vIy;
-    let t = undefined;
-    let x = undefined;
-    let y = undefined;
-    let vIndexNew = undefined;
+    let equation = ""; // keep track of which edge is crossed
+    let vOutside;      // keep track of which vertex is on the outsize
+    let vOx; let vOy;  // "O" for outside x and outside y 
+    let vIx; let vIy;  // "I" for inside x and inside y
+    let t = undefined; // when we cross the clipping line
+    let x = undefined; // x coordinate of where we cross the clipping line
+    let y = undefined; // y coordinate of where we cross the clipping line
+    let vIndexNew = undefined; // index for the new interpolated vertex
 
     if (x0 > 1)
     {
@@ -397,11 +397,11 @@ function clipOneTime(model, ls)
     let cO = model.colorList[cIndexO].getRGBComponents();
 
     // since t is already a float we dont need to cast it
-    let t_ = undefined;
-    if (t > 1)
-        t_ = 1/t;
-    else
-        t_ = t;
+    let t_ = t;//undefined;
+    //if (t > 1)
+    //    t_ = 1/t;
+    //else
+    //    t_ = t;
 
     // this looks like blending code,
     // can we just use a blend function in

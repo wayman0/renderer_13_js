@@ -42,6 +42,7 @@ export function clipModel(model, camera)
 {
     if (!doNearClipping)
     {
+        console.log("Not Clipping");
         return model;
     }
 
@@ -63,7 +64,7 @@ export function clipModel(model, camera)
         let pClipped = undefined;
         if (p instanceof LineSegment)
         {
-            pClipped = NearLine(model2, p, camera);
+            pClipped = NearLine(model2, /**@type {LineSegment}*/(p), camera);
         }
         else
         {
@@ -73,10 +74,12 @@ export function clipModel(model, camera)
         if (pClipped != undefined)
         {
             newPrimitiveList.push(pClipped);
+            //console.log("Not CLIPPED")
             logPrimitive("3. Near_Clipped (accept)", model2, pClipped);
         }
         else
         {
+            //console.log("CLIPPED")
             logPrimitive("3. Near_Clipped (reject)", model2, p);
         }
     }
