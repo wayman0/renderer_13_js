@@ -180,6 +180,9 @@ function run()
    // build the scene
    scene = Scene.buildFromCameraName(camera, "Geometries_R11_frame_"+k);
 
+   console.log("Before changeNear: \n", camera.toString());
+   console.log("After  changeNear: \n", camera.changeNear(1).toString());
+
    // Add the top level Position to the Scene.
    scene.addPosition( topLevel_p );
 

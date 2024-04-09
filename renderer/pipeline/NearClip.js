@@ -42,7 +42,6 @@ export function clipModel(model, camera)
 {
     if (!doNearClipping)
     {
-        console.log("Not Clipping");
         return model;
     }
 

@@ -86,11 +86,11 @@ export default class Camera
      * @param {number} [r=1] the right edge of view rectangle in the near plane
      * @param {number} [b=-1] the bottom edge of view rectangle in the near plane
      * @param {number} [t=1] the top edge of view rectangle in the near plane
-     * @param {number} [near=1] the front edge of view rectangle in the near plane, distance from origin to view plane
+     * @param {number} [near=-1] the front edge of view rectangle in the near plane, distance from origin to view plane
      * @param {boolean} [persp=true] whether to project perspective or orthographic
      * @param {Matrix} [viewMat = Matrix.identity()] the matrix determining the cameras location in world space 
     */
-    constructor(l = -1, r = -l, b = -1, t = -b, near = 1, persp = true, viewMat = Matrix.identity())
+    constructor(l = -1, r = -l, b = -1, t = -b, near = -1, persp = true, viewMat = Matrix.identity())
     {
         if (typeof persp != "boolean")
             throw new Error("Perspective must be a boolean");
@@ -113,7 +113,7 @@ export default class Camera
      * @param {number} [near=1] the front edge of view rectangle in the near plane, distance from origin to view plane
      * @param {Matrix} [viewMat=Matrix.identy()] the Matrix to determine this camears location in world space
      */
-    projPerspective(left = -1, right = -1 * left, bottom = -1, top = -1 * bottom, near = 1, viewMat = Matrix.identity())
+    projPerspective(left = -1, right = -1 * left, bottom = -1, top = -1 * bottom, near = -1, viewMat = Matrix.identity())
     {
         if (typeof left != "number"   ||
             typeof right != "number"  ||
@@ -129,7 +129,7 @@ export default class Camera
         this.right = right;
         this.bottom = bottom;
         this.top = top;
-        this.n = -1 * near;
+        this.n = near;
         this.#viewMatrix = viewMat;
 
         this.perspective = true;
@@ -493,7 +493,7 @@ export default class Camera
                +  "  right = "  + this.right + "\n"
                +  "  bottom = " + this.bottom + ", "
                +  "  top = "    + this.top + "\n"
-               +  "  near = "   + -1 * this.n + "\n"
+               +  "  near = "   + this.n + "\n"
                +  "  (fovy = " + fovy
                +  format(", aspect ratio = %2.2f)", ratio )
                +  "Normalization Matrix\n"

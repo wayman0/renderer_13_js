@@ -86,7 +86,7 @@ const right  = 2.0;
 const left   = -right;
 const top    = 1.0;
 const bottom = -top;
-const near   = 1.0;
+const near   = -1.0;
 scene.getCamera().projPerspective(left, right, bottom, top, near);
 /*
 const fov    = 90.0;
