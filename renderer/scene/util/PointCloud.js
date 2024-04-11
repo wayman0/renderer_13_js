@@ -5,7 +5,7 @@
 */
 
 import {Camera, Matrix, Model, OrthoNorm, PerspNorm, Position, Scene, Vector, Vertex} from "../SceneExport.js";
-import {Primitive, Point, LineSegment} from "../primitives/PrimitiveExport.js";
+import {Primitive, Point, LineSegment, Points} from "../primitives/PrimitiveExport.js";
 import {Color} from "../../framebuffer/FramebufferExport.js";
 
 /**
@@ -51,29 +51,11 @@ export function make(model, pointSize = 0)
                                "PointCloud: " + model.getName(),
                                model.visible);
 
-    /**@type {boolean[]} */ let vIndices = new Array(model.getVertexList().length);
-    /**@type {number[]}  */ let cIndices = new Array(model.getVertexList().length);
-    for (let p of model.getPrimitiveList())
-    {
-        for (let i = 0; i < p.getVertexIndexList().length; i += 1)
-        {
-            vIndices[p.getVertexIndexList()[i]] = true;
-            cIndices[p.getVertexIndexList()[i]] = p.getColorIndexList()[i];
-        }
-    }
+    for(const p of model.primitiveList)
+        pointCloud.addPrimitive(new Points(p.vIndexList, p.cIndexList));
 
-    for (let i = 0; i < vIndices.length; i += 1)
-    {
-        if (vIndices[i])
-        {
-            pointCloud.addPrimitive(new Point(i, cIndices[i]));
-		}
-    }
-
-    for (let p of pointCloud.getPrimitiveList())
-    {
-        /**@type {Point}*/(p).radius = pointSize;
-    }
+    for(const p of pointCloud.primitiveList)
+        /**@type {Points}*/ (p).radius = pointSize;
 
     for(const m of model.nestedModels)
         pointCloud.addNestedModel(make(m, pointSize));
