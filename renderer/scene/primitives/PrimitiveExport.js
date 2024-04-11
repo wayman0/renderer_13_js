@@ -19,3 +19,4 @@ export {default as Points} from "./Points.js";
 export {default as LineSegment} from "./LineSegment.js";
 export {default as Lines} from "./Lines.js";
 export {default as LineStrip} from "./LineStrip.js";
+export {default as LineFan} from "./LineFan.js";
