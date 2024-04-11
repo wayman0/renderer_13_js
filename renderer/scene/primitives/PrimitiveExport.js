@@ -20,3 +20,4 @@ export {default as LineSegment} from "./LineSegment.js";
 export {default as Lines} from "./Lines.js";
 export {default as LineStrip} from "./LineStrip.js";
 export {default as LineFan} from "./LineFan.js";
+export {default as LineLoop} from "./LineLoop.js";
