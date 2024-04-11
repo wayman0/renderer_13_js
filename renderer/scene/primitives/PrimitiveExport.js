@@ -15,4 +15,6 @@ export var LineSegment;
 */
 export {default as Primitive} from "./Primitive.js";
 export {default as Point} from "./Point.js";
+export {default as Points} from "./Points.js";
 export {default as LineSegment} from "./LineSegment.js";
+export {default as Lines} from "./Lines.js";
