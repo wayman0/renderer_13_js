@@ -35,3 +35,5 @@ export {default as SierpinskiTriangle} from "./SierpinskiTriangle.js";
 export {default as Sphere} from "./Sphere.js";
 export {default as SphereSector} from "./SphereSector.js";
 export {default as SphereSubdivided} from "./SphereSubdivided.js";
+export {default as Square} from "./Square.js";
+export {default as SquareGrid} from "./SquareGrid.js";
