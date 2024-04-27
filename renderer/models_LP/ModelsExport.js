@@ -41,3 +41,4 @@ export {default as Torus} from "./Torus.js";
 export {default as TorusSector} from "./TorusSector.js";
 export {default as TriangularPrism} from "./TriangularPrism.js"
 export {default as TriangularPyramid} from "./TriangularPyramid.js"
+export {default as ViewFrustumModel} from "./ViewFrustumModel.js";
