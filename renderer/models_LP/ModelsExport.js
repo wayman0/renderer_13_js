@@ -15,3 +15,4 @@ export {default as Cylinder} from "./Cylinder.js";
 export {default as CylinderSector} from "./CylinderSector.js";
 export {default as Disk} from "./Disk.js";
 export {default as DiskSector} from "./DiskSector.js";
+export {default as Dodecahedron} from "./Dodecahedron.js";
