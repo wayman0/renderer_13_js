@@ -37,3 +37,5 @@ export {default as SphereSector} from "./SphereSector.js";
 export {default as SphereSubdivided} from "./SphereSubdivided.js";
 export {default as Square} from "./Square.js";
 export {default as SquareGrid} from "./SquareGrid.js";
+export {default as Torus} from "./Torus.js";
+export {default as TorusSector} from "./TorusSector.js";
