@@ -23,3 +23,6 @@ export {default as Tetrahedron} from "./Tetrahedron.js";
 export {default as PanelXY} from "./PanelXY.js";
 export {default as PanelXZ} from "./PanelXZ.js";
 export {default as PanelYZ} from "./PanelYZ.js";
+export {default as ParametricCurve} from "./ParametricCurve.js";
+export {default as ParametricSurface} from "./ParametricSurface.js";
+export {default as SurfaceOfRevolution} from "./SurfaceOfRevolution.js";
