@@ -28,3 +28,5 @@ export {default as ParametricSurface} from "./ParametricSurface.js";
 export {default as SurfaceOfRevolution} from "./SurfaceOfRevolution.js";
 export {default as Pyramid} from "./Pyramid.js";
 export {default as PyramidFrustum} from "./PyramidFrustum.js";
+export {default as Ring} from "./Ring.js";
+export {default as RingSector} from "./RingSector.js";
