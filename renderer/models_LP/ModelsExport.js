@@ -39,3 +39,5 @@ export {default as Square} from "./Square.js";
 export {default as SquareGrid} from "./SquareGrid.js";
 export {default as Torus} from "./Torus.js";
 export {default as TorusSector} from "./TorusSector.js";
+export {default as TriangularPrism} from "./TriangularPrism.js"
+export {default as TriangularPyramid} from "./TriangularPyramid.js"
