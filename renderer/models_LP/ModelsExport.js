@@ -20,3 +20,6 @@ export {default as Icosahedron} from "./Icosahedron.js";
 export {default as Icosidodecahedron} from "./Icosidodecahedron.js";
 export {default as Octahedron} from "./Octahedron.js";
 export {default as Tetrahedron} from "./Tetrahedron.js";
+export {default as PanelXY} from "./PanelXY.js";
+export {default as PanelXZ} from "./PanelXZ.js";
+export {default as PanelYZ} from "./PanelYZ.js";
