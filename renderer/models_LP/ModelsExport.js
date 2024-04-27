@@ -30,3 +30,5 @@ export {default as Pyramid} from "./Pyramid.js";
 export {default as PyramidFrustum} from "./PyramidFrustum.js";
 export {default as Ring} from "./Ring.js";
 export {default as RingSector} from "./RingSector.js";
+export {default as SierpinskiSponge} from "./SierpinskiSponge.js";
+export {default as SierpinskiTriangle} from "./SierpinskiTriangle.js";
