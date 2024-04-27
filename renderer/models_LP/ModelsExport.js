@@ -13,3 +13,5 @@ export {default as Cube3} from "./Cube3.js";
 export {default as Cube4} from "./Cube4.js";
 export {default as Cylinder} from "./Cylinder.js";
 export {default as CylinderSector} from "./CylinderSector.js";
+export {default as Disk} from "./Disk.js";
+export {default as DiskSector} from "./DiskSector.js";
