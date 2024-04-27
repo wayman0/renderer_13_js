@@ -17,4 +17,6 @@ export {default as Disk} from "./Disk.js";
 export {default as DiskSector} from "./DiskSector.js";
 export {default as Dodecahedron} from "./Dodecahedron.js";
 export {default as Icosahedron} from "./Icosahedron.js";
-export {default as icosidodecahedron} from "./Icosidodecahedron.js";
+export {default as Icosidodecahedron} from "./Icosidodecahedron.js";
+export {default as Octahedron} from "./Octahedron.js";
+export {default as Tetrahedron} from "./Tetrahedron.js";
