@@ -13,7 +13,7 @@
 
 //@ts-check
 import {LineClip, PointClip, logColorList, logMessage, logPrimitive, logPrimitiveList, logVertexList} from "./PipelineExport.js";
-import {Model, Primitive, LineSegment, Point, Position} from "../scene/SceneExport.js";
+import {Model, Primitive, LineSegment, Point, Position, Points} from "../scene/SceneExport.js";
 
 export var /**@type {boolean} whether to debug clipping */clipDebug = false;
 
@@ -60,7 +60,7 @@ export function clipModel(model)
         }
         else
         {
-            pClipped = PointClip(model2, /**@type {Point}*/ (p));
+            pClipped = PointClip(model2, /**@type {Points}*/ (p));
         }
     
         if (pClipped != undefined)

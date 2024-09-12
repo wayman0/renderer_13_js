@@ -20,3 +20,4 @@ export {default as RastLine} from "./Rasterize_AntiAlias_Line.js";
 export {default as RastPoint} from "./Rasterize_Clip_Point.js";
 export * from "./Rasterize.js";
 export * from "./View2Camera.js";
+export * from "./PrimitiveAssembly.js";

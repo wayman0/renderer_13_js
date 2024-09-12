@@ -10,8 +10,9 @@
 */
 
 //@ts-check
-import {Model, Vertex, Point, Camera} from "../scene/SceneExport.js";
-
+import {Model, Vertex, Point, Camera, Points} from "../scene/SceneExport.js";
+import { nearDebug } from "./NearClip.js";
+import { logMessage } from "./PipelineLogger.js";
 /**
  *    If the {@link Vertex} used by the {@link Point} is on the camera
       side of the near plane, then return an empty {@link Optional}
@@ -30,14 +31,39 @@ import {Model, Vertex, Point, Camera} from "../scene/SceneExport.js";
 export default function clip(model, pt, camera)
 {
     let result = undefined;
-    const vIndex = pt.vIndexList[0];
-    const v = model.vertexList[vIndex];
-    const z = v.z;
 
-    if (z <= camera.n)
+    const clippedvIndexList = new Array();
+    const clippedcIndexList = new Array();
+
+    for(let i = 0; i < pt.vIndexList.length; ++i)
     {
-        result = pt;
+        const vIndex = pt.vIndexList[i];
+        const cIndex = pt.cIndexList[i];
+
+        const v = model.vertexList[vIndex];
+        const z = v.z;
+
+        if(z <= camera.n)
+        {
+            clippedvIndexList.push(vIndex);
+            clippedcIndexList.push(cIndex);
+
+            if(nearDebug) logMessage("-- Trivial accept: " + vIndex);
+        }
+        else
+        {
+            if(nearDebug) logMessage("-- Trivial delete: " + vIndex);
+        }
     }
 
+    if(clippedvIndexList.length <= 0)
+        result = undefined;
+    else
+    {
+        const pts2 = new Points(clippedvIndexList, clippedcIndexList);
+        pts2.radius = pt.radius;
+        result = pts2;
+    }
+    
     return result;
 }

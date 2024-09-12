@@ -11,7 +11,7 @@
 
 //@ts-check
 import {RastLine, RastPoint, logMessage, logPrimitive} from "./PipelineExport.js";
-import {Model, LineSegment, Primitive, Point, Position} from "../scene/SceneExport.js";
+import {Model, LineSegment, Primitive, Point, Position, Points} from "../scene/SceneExport.js";
 import {Viewport} from "../framebuffer/FramebufferExport.js";
 
 /**@type {boolean} */export var rastDebug = false;
@@ -35,7 +35,7 @@ export function rasterizeModel(model, vp)
         {
             RastLine(model, p, vp);
         }
-        else if (p instanceof Point)
+        else if (p instanceof Points)
         {
             RastPoint(model, p, vp);
         }

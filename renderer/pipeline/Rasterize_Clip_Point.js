@@ -12,18 +12,18 @@
 */
 
 //@ts-check
-import {rastDebug, doGamma, logMessage, logPixelMessage} from "./PipelineExport.js";
-import {Model, Point, LineSegment, Primitive} from "../scene/SceneExport.js";
+import {rastDebug, doGamma, logMessage, logPixelMessage, GAMMA} from "./PipelineExport.js";
+import {Model, Point, LineSegment, Primitive, Points} from "../scene/SceneExport.js";
 import {Viewport, Color} from "../framebuffer/FramebufferExport.js";
 import {format} from "../scene/util/UtilExport.js";
 
 /**
  * rasterize a point into shaded pixels in a viewport
  * @param {Model} model the model containing the point
- * @param {Point} pt the point to be rasterized
+ * @param {Points} pts the point to be rasterized
  * @param {Viewport} vp the viewport to recieve the rasterized point
  */
-export default function rasterize(model, pt, vp)
+export default function rasterize(model, pts, vp)
 {
     const CLIPPED = " : Clipped";
     const NOT_CLIPPED = "";
@@ -31,56 +31,52 @@ export default function rasterize(model, pt, vp)
     const w = vp.width;
     const h = vp.height;
 
-    const vIndex = pt.vIndexList[0];
-    const v = model.vertexList[vIndex];
-
-    const cIndex = pt.cIndexList[0];
-    const c = model.colorList[cIndex].rgb;
-    let r = c[0], g = c[1], b = c[2];
-
-    if (doGamma)
+    for(let i = 0; i < pts.vIndexList.length; ++i)
     {
-        let newC = (Color.applyGamma(model.colorList[cIndex])).getRGBComponents();
+        const vIndex = pts.vIndexList[i];
+        const cIndex = pts.cIndexList[i];
+        const v = model.vertexList[vIndex];
+        const c = model.colorList[cIndex].getRGBComponents();
+        let r = c[0], g = c[1], b = c[2];
 
-        r = newC[0];
-        g = newC[1];
-        b = newC[2];
-    }
-
-    let x = .5 + w/2.001 * (v.x + 1);
-    let y = .5 + h/2.001 * (v.y + 1);
-
-    if (rastDebug)
-    {
-        logMessage(format("(x_pp, y_pp) = (%9.4f, %9.4f)", x, y));
-    }
-
-    x = Math.round(x);
-    y = Math.round(y);
-
-    const radius = pt.radius;
-
-    //for( let y_ = Math.trunc(y - radius); y_ <= Math.trunc(y + radius); ++y_)
-    //for (let x_ = Math.trunc(x - radius); x_ <= Math.trunc(x + radius); ++x_)
-
-    for(let y_ = Math.trunc(y) - radius; y_ <= Math.trunc(y) + radius; ++y_)
-    {
-        for(let x_ = Math.trunc(x) - radius; x_ <= Math.trunc(x) + radius; ++x_)
+        if(doGamma)
         {
-            if (rastDebug)
-            {
-                let clippedMessage;
-
-                if (x_ > 0 && x_ <= w && y_ > 0 && y_ <= h)
-                    clippedMessage = NOT_CLIPPED;
-                else
-                    clippedMessage = CLIPPED;
-
-                logPixelMessage(clippedMessage, x, y, x_-1, h -y_, r, g, b, vp);
-            }
-
-            if (x_ > 0 && x_ <= w && y_ > 0 && y_ <= h)
-                vp.setPixelVP(x_-1, h-y_, new Color(r, g, b));
+            const gammaInv = 1/GAMMA;
+            r = Math.pow(r, gammaInv);
+            g = Math.pow(g, gammaInv);
+            b = Math.pow(b, gammaInv);
         }
-    }
+
+        let x = 0.5 + w/2.001 * (v.x + 1);
+        let y = 0.5 + h/2.001 * (v.y + 1);
+
+        if(rastDebug)
+            logMessage(format("(x_pp, y_pp) = (%9.4f, %9.4f)", x, y));
+    
+        x = Math.round(x);
+        y = Math.round(y);
+
+        const radius = pts.radius;
+
+        for(let y_ = Math.trunc(y) - radius; y_ <= Math.trunc(y) + radius; ++y_)
+        {
+            for(let x_ = Math.trunc(x) - radius; x_ <= Math.trunc(x) + radius; ++x_)
+            {
+                if (rastDebug)
+                {
+                    let clippedMessage;
+    
+                    if (x_ > 0 && x_ <= w && y_ > 0 && y_ <= h)
+                        clippedMessage = NOT_CLIPPED;
+                    else
+                        clippedMessage = CLIPPED;
+    
+                    logPixelMessage(clippedMessage, x, y, x_-1, h -y_, r, g, b, vp);
+                }
+    
+                if (x_ > 0 && x_ <= w && y_ > 0 && y_ <= h)
+                    vp.setPixelVP(x_-1, h-y_, new Color(r, g, b));
+            }
+        }
+    }    
 }
